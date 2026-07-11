@@ -8,7 +8,7 @@ import Icon from '@/components/ui/Icon';
 import Badge from '@/components/ui/Badge';
 import ItineraryDay from '@/components/tour/ItineraryDay';
 import PackageCard from '@/components/tour/PackageCard';
-import TourWalkthrough from '@/components/map/TourWalkthrough';
+import RouteExperience from '@/components/tour/RouteExperience';
 import Reveal from '@/components/motion/Reveal';
 import TimelineRail from '@/components/motion/TimelineRail';
 import { getTour } from '@/lib/content';
@@ -147,7 +147,7 @@ export default function TourDetailPage() {
                   This itinerary travels through {coveredRegions.length} of Iceland's regions - step through it day by day on the map.
                 </p>
                 <div className="route-map">
-                  <TourWalkthrough tours={[tour]} />
+                  <RouteExperience tour={tour} />
                 </div>
               </div>
 
