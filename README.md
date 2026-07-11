@@ -23,19 +23,24 @@ pnpm dev                  # http://localhost:5173
 pnpm build && pnpm preview
 ```
 
+For the admin backend and protected inbox, use `vercel dev` locally so the `api/`
+routes run alongside the frontend. Plain `pnpm dev` keeps the site fast for design
+work, but falls back to demo submission behavior because Vite does not serve the
+serverless functions.
+
 ## Editing content
 
 All client-editable content lives under `src/content/` (one folder per collection),
 validated by the schemas in `src/lib/content.ts`:
 
-| Collection      | Location                                   | What it is |
-|-----------------|--------------------------------------------|------------|
-| `tours`         | `src/content/tours/*.md`                   | The 6 tour packages incl. day-by-day itinerary |
-| `regions`       | `src/content/regions/*.json`               | The 8 map regions (name, colour, blurb) |
-| `destinations`  | `src/content/destinations/destinations.json` | Map pins |
-| `services`      | `src/content/services/*.md`                | FIT / Group Tours / MICE |
-| `testimonials`  | `src/content/testimonials/testimonials.json` | Partner quotes |
-| `offices`       | `src/content/offices/offices.json`         | Reykjavik + Kuala Lumpur |
+| Collection     | Location                                     | What it is                                     |
+| -------------- | -------------------------------------------- | ---------------------------------------------- |
+| `tours`        | `src/content/tours/*.md`                     | The 6 tour packages incl. day-by-day itinerary |
+| `regions`      | `src/content/regions/*.json`                 | The 8 map regions (name, colour, blurb)        |
+| `destinations` | `src/content/destinations/destinations.json` | Map pins                                       |
+| `services`     | `src/content/services/*.md`                  | FIT / Group Tours / MICE                       |
+| `testimonials` | `src/content/testimonials/testimonials.json` | Partner quotes                                 |
+| `offices`      | `src/content/offices/offices.json`           | Reykjavik + Kuala Lumpur                       |
 
 Site-wide config (brand, nav, contact email, form provider) is in `src/config/site.ts`.
 
@@ -62,20 +67,32 @@ the exact geometry of the 8 regions as an accessible, keyboard-operable hotspot 
 (`src/components/map/IcelandMap.tsx`). Re-run `pnpm gen:map` if the artwork changes
 (expects the raw SVG at `/tmp/iceland-raw.svg`).
 
-## Inquiry form
+## Inquiry form and admin backend
 
-`src/components/react/InquiryForm.tsx` posts through `src/lib/formProvider.ts`, which is
-**provider-swappable**. The default adapter is Web3Forms; set `PUBLIC_WEB3FORMS_KEY` in
-`.env` to enable real delivery. To move to a serverless endpoint later, change only
-`formProvider.ts`.
+`src/components/react/InquiryForm.tsx` posts through `src/lib/formProvider.ts` to the
+project's own Vercel function at `/api/form-submissions`. Submissions are stored for
+review in `/admin`.
+
+Environment required for production:
+
+- `ADMIN_PASSWORD`: password for the `/admin` login
+- `ADMIN_SESSION_SECRET`: recommended signing secret for admin sessions
+- A **private Vercel Blob store** connected to the project so `BLOB_READ_WRITE_TOKEN`
+  (or Blob OIDC envs) are available to the serverless functions
+
+Storage behavior:
+
+- Local non-Vercel runs fall back to `.context/admin-data/submissions/*.json`
+- Vercel production requires persistent Blob storage; without it the API returns a
+  clear configuration error instead of pretending to save data
 
 ## Scripts
 
-| Command | Description |
-|---|---|
+| Command                                    | Description                                        |
+| ------------------------------------------ | -------------------------------------------------- |
 | `pnpm dev` / `pnpm build` / `pnpm preview` | Vite dev / TypeScript + production build / preview |
-| `pnpm gen:map`    | Rebuild the interactive map from the raw SVG |
-| `pnpm format`     | Prettier |
+| `pnpm gen:map`                             | Rebuild the interactive map from the raw SVG       |
+| `pnpm format`                              | Prettier                                           |
 
 ## Out of scope (future phases)
 

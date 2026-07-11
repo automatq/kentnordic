@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { submitInquiry, type InquiryPayload } from '@/lib/formProvider';
+import { useEffect, useRef, useState } from "react";
+import { submitInquiry, type InquiryPayload } from "@/lib/formProvider";
 
 interface PackageOption {
   code: string;
@@ -8,49 +8,55 @@ interface PackageOption {
 interface Props {
   packages: PackageOption[];
   endpoint: string;
-  accessKey: string;
 }
 
-type Status = 'idle' | 'submitting' | 'success' | 'error';
+type Status = "idle" | "submitting" | "success" | "error";
 
-const REQUIRED: (keyof InquiryPayload)[] = ['agency', 'contact', 'email', 'message'];
+const REQUIRED: (keyof InquiryPayload)[] = [
+  "agency",
+  "contact",
+  "email",
+  "message",
+];
 const LABELS: Record<string, string> = {
-  agency: 'Agency / company',
-  contact: 'Contact name',
-  email: 'Work email',
-  message: 'Message',
+  agency: "Agency / company",
+  contact: "Contact name",
+  email: "Work email",
+  message: "Message",
 };
 
 const inputCls =
-  'w-full rounded-md border border-charcoal/15 bg-white px-3.5 py-2.5 text-charcoal outline-none transition focus:border-accent focus:shadow-[0_0_0_3px_var(--color-accent-100)] aria-[invalid=true]:border-error';
-const labelCls = 'mb-1.5 block text-sm font-medium text-charcoal';
+  "w-full rounded-md border border-charcoal/15 bg-white px-3.5 py-2.5 text-charcoal outline-none transition focus:border-accent focus:shadow-[0_0_0_3px_var(--color-accent-100)] aria-[invalid=true]:border-error";
+const labelCls = "mb-1.5 block text-sm font-medium text-charcoal";
 
-export default function InquiryForm({ packages, endpoint, accessKey }: Props) {
-  const [status, setStatus] = useState<Status>('idle');
+export default function InquiryForm({ packages, endpoint }: Props) {
+  const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [serverError, setServerError] = useState('');
-  const [pkg, setPkg] = useState('');
+  const [serverError, setServerError] = useState("");
+  const [pkg, setPkg] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
 
   // Pre-fill package from ?package=CODE
   useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get('package');
+    const code = new URLSearchParams(window.location.search).get("package");
     if (code && packages.some((p) => p.code === code)) setPkg(code);
   }, [packages]);
 
   function validate(data: Record<string, string>) {
     const next: Record<string, string> = {};
-    for (const f of REQUIRED) if (!data[f]?.trim()) next[f] = `${LABELS[f]} is required.`;
+    for (const f of REQUIRED)
+      if (!data[f]?.trim()) next[f] = `${LABELS[f]} is required.`;
     if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))
-      next.email = 'Enter a valid email address.';
-    if (!data.consent) next.consent = 'Please accept so we can reply to your inquiry.';
+      next.email = "Enter a valid email address.";
+    if (!data.consent)
+      next.consent = "Please accept so we can reply to your inquiry.";
     return next;
   }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setServerError('');
+    setServerError("");
     const fd = new FormData(e.currentTarget);
     const data = Object.fromEntries(fd.entries()) as Record<string, string>;
 
@@ -61,7 +67,7 @@ export default function InquiryForm({ packages, endpoint, accessKey }: Props) {
       return;
     }
 
-    setStatus('submitting');
+    setStatus("submitting");
     const payload: InquiryPayload = {
       agency: data.agency,
       contact: data.contact,
@@ -73,35 +79,51 @@ export default function InquiryForm({ packages, endpoint, accessKey }: Props) {
       pax: data.pax,
       groupType: data.groupType,
       message: data.message,
-      sourcePage: typeof window !== 'undefined' ? window.location.pathname : '',
+      consent: data.consent,
+      sourcePage: typeof window !== "undefined" ? window.location.pathname : "",
       botField: data.company_website, // honeypot
     };
     const res = await submitInquiry(payload);
     if (res.ok) {
-      setStatus('success');
+      setStatus("success");
       formRef.current?.reset();
     } else {
-      setStatus('error');
-      setServerError(res.error || 'Something went wrong.');
+      setStatus("error");
+      setServerError(res.error || "Something went wrong.");
     }
   }
 
-  if (status === 'success') {
+  if (status === "success") {
     return (
-      <div className="rounded-xl border border-accent/25 bg-accent-50 p-8 text-center" role="status">
+      <div
+        className="rounded-xl border border-accent/25 bg-accent-50 p-8 text-center"
+        role="status"
+      >
         <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-accent text-white">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M20 6 9 17l-5-5" />
           </svg>
         </div>
-        <h3 className="font-display text-2xl text-ink">Thank you — inquiry received</h3>
+        <h3 className="font-display text-2xl text-ink">
+          Thank you — inquiry received
+        </h3>
         <p className="mx-auto mt-2 max-w-md text-charcoal-soft">
-          Our team will get back to you with a tailored quote, usually within one business day.
+          Our team will get back to you with a tailored quote, usually within
+          one business day.
         </p>
         <button
           type="button"
           className="mt-6 rounded-pill border border-charcoal/20 px-5 py-2.5 text-sm font-medium transition hover:bg-charcoal hover:text-white"
-          onClick={() => setStatus('idle')}
+          onClick={() => setStatus("idle")}
         >
           Send another inquiry
         </button>
@@ -120,8 +142,6 @@ export default function InquiryForm({ packages, endpoint, accessKey }: Props) {
       noValidate
       className="flex flex-col gap-5"
     >
-      {/* Native fallback fields (used only if JS is disabled) */}
-      <input type="hidden" name="access_key" value={accessKey} />
       <input
         type="text"
         name="company_website"
@@ -148,9 +168,25 @@ export default function InquiryForm({ packages, endpoint, accessKey }: Props) {
       )}
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field name="agency" label="Agency / company" required error={errors.agency} />
-        <Field name="contact" label="Contact name" required error={errors.contact} />
-        <Field name="email" label="Work email" type="email" required error={errors.email} />
+        <Field
+          name="agency"
+          label="Agency / company"
+          required
+          error={errors.agency}
+        />
+        <Field
+          name="contact"
+          label="Contact name"
+          required
+          error={errors.contact}
+        />
+        <Field
+          name="email"
+          label="Work email"
+          type="email"
+          required
+          error={errors.email}
+        />
         <Field name="phone" label="Phone" type="tel" />
         <Field name="country" label="Country / market" />
         <div>
@@ -172,7 +208,11 @@ export default function InquiryForm({ packages, endpoint, accessKey }: Props) {
             ))}
           </select>
         </div>
-        <Field name="travelDates" label="Preferred travel dates" placeholder="e.g. March 2026" />
+        <Field
+          name="travelDates"
+          label="Preferred travel dates"
+          placeholder="e.g. March 2026"
+        />
         <Field name="pax" label="Group size (pax)" placeholder="e.g. 25" />
       </div>
 
@@ -180,7 +220,12 @@ export default function InquiryForm({ packages, endpoint, accessKey }: Props) {
         <label htmlFor="groupType" className={labelCls}>
           Type of travel
         </label>
-        <select id="groupType" name="groupType" className={inputCls} defaultValue="">
+        <select
+          id="groupType"
+          name="groupType"
+          className={inputCls}
+          defaultValue=""
+        >
           <option value="">Not sure yet</option>
           <option>Group tour</option>
           <option>FIT (independent)</option>
@@ -198,7 +243,7 @@ export default function InquiryForm({ packages, endpoint, accessKey }: Props) {
           rows={5}
           required
           aria-invalid={!!errors.message}
-          aria-describedby={errors.message ? 'err-message' : undefined}
+          aria-describedby={errors.message ? "err-message" : undefined}
           className={inputCls}
           placeholder="Tell us about your group, preferred dates and any special requests."
         />
@@ -210,10 +255,17 @@ export default function InquiryForm({ packages, endpoint, accessKey }: Props) {
       </div>
 
       <label className="flex items-start gap-3 text-sm text-charcoal-soft">
-        <input type="checkbox" name="consent" value="yes" className="mt-1 size-4 accent-[var(--color-accent)]" />
+        <input
+          type="checkbox"
+          name="consent"
+          value="yes"
+          className="mt-1 size-4 accent-[var(--color-accent)]"
+        />
         <span>
           I agree to Idcibidci contacting me about this inquiry.
-          {errors.consent && <span className="mt-1 block text-error">{errors.consent}</span>}
+          {errors.consent && (
+            <span className="mt-1 block text-error">{errors.consent}</span>
+          )}
         </span>
       </label>
 
@@ -225,10 +277,10 @@ export default function InquiryForm({ packages, endpoint, accessKey }: Props) {
 
       <button
         type="submit"
-        disabled={status === 'submitting'}
+        disabled={status === "submitting"}
         className="inline-flex items-center justify-center gap-2 self-start rounded-pill bg-accent px-7 py-3 font-medium text-white shadow-soft transition hover:bg-accent-600 disabled:pointer-events-none disabled:opacity-60"
       >
-        {status === 'submitting' ? 'Sending…' : 'Send inquiry'}
+        {status === "submitting" ? "Sending…" : "Send inquiry"}
       </button>
     </form>
   );
@@ -237,7 +289,7 @@ export default function InquiryForm({ packages, endpoint, accessKey }: Props) {
 function Field({
   name,
   label,
-  type = 'text',
+  type = "text",
   required = false,
   error,
   placeholder,
