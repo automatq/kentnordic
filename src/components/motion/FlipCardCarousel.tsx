@@ -20,14 +20,24 @@ interface FlipCardCarouselProps {
 export default function FlipCardCarousel({ cards, className }: FlipCardCarouselProps) {
   const [angle, setAngle] = useState(0);
   const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
-  const [radius, setRadius] = useState(380);
+  const [radius, setRadius] = useState(440);
   const touchStartX = useRef(0);
   const theta = 360 / cards.length;
   const normalized = ((angle % 360) + 360) % 360;
   const activeIndex = Math.round((360 - normalized) / theta) % cards.length;
 
   useEffect(() => {
-    const updateRadius = () => setRadius(window.innerWidth < 640 ? 250 : 380);
+    const updateRadius = () => {
+      if (window.innerWidth < 640) {
+        setRadius(270);
+        return;
+      }
+      if (window.innerWidth < 1024) {
+        setRadius(360);
+        return;
+      }
+      setRadius(440);
+    };
     updateRadius();
     window.addEventListener('resize', updateRadius);
     return () => window.removeEventListener('resize', updateRadius);
