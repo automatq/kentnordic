@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import baseSvg from '@/data/map-base.svg?raw';
 import mapData from '@/data/map-regions.json';
 import Icon from '@/components/ui/Icon';
+import IcelandMap3D from '@/components/three/IcelandMap3D';
 import { cn } from '@/lib/classNames';
 import { getRegions, nightsLabel, toursForRegion } from '@/lib/packages';
 
@@ -10,6 +11,65 @@ interface IcelandMapProps {
   interactive?: boolean;
   highlight?: string[];
   className?: string;
+}
+
+interface SvgStageProps {
+  regionData: Array<{ id: string; name: string; color: string; tours: unknown[] }>;
+  geo: Map<string, string>;
+  interactive: boolean;
+  highlight: string[];
+  active: string | null;
+  setActive: (id: string) => void;
+}
+
+/** The original 2D map stage (decorative artwork + SVG hotspots) — the full
+    experience wherever the 3D relief doesn't qualify. */
+function SvgStage({ regionData, geo, interactive, highlight, active, setActive }: SvgStageProps) {
+  return (
+    <>
+      <div className="map-base" aria-hidden="true" dangerouslySetInnerHTML={{ __html: baseSvg }} />
+      <svg
+        className="map-hotspots"
+        viewBox={mapData.viewBox}
+        role={interactive ? 'group' : 'img'}
+        aria-label={interactive ? 'Interactive map of Iceland - select a region to see its tours' : 'Map of Iceland highlighting the regions this tour visits'}
+      >
+        {regionData.map((r) => {
+          const d = geo.get(r.id);
+          if (!d) return null;
+          if (!interactive) {
+            return <path key={r.id} className={cn('hotspot-static', highlight.includes(r.id) && 'is-on')} d={d} style={{ '--rc': r.color } as React.CSSProperties} />;
+          }
+          return (
+            <a
+              key={r.id}
+              className={cn('hotspot', active === r.id && 'is-active')}
+              id={`hot-${r.id}`}
+              data-region={r.id}
+              href={`#region-${r.id}`}
+              role="button"
+              aria-label={`${r.name} - ${r.tours.length} tour ${r.tours.length === 1 ? 'package' : 'packages'}`}
+              style={{ '--rc': r.color } as React.CSSProperties}
+              onClick={(event) => {
+                event.preventDefault();
+                setActive(r.id);
+              }}
+              onMouseEnter={() => setActive(r.id)}
+              onFocus={() => setActive(r.id)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  setActive(r.id);
+                }
+              }}
+            >
+              <path d={d} />
+            </a>
+          );
+        })}
+      </svg>
+    </>
+  );
 }
 
 export default function IcelandMap({ interactive = true, highlight = [], className = '' }: IcelandMapProps) {
@@ -45,50 +105,24 @@ export default function IcelandMap({ interactive = true, highlight = [], classNa
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
+  const stage = (
+    <SvgStage regionData={regionData} geo={geo} interactive={interactive} highlight={highlight} active={active} setActive={setActive} />
+  );
+
   return (
     <div className={cn('map', className)} data-interactive={interactive ? 'true' : 'false'} data-map>
       <div className="map-stage" onMouseLeave={() => setActive(null)}>
-        <div className="map-base" aria-hidden="true" dangerouslySetInnerHTML={{ __html: baseSvg }} />
-        <svg
-          className="map-hotspots"
-          viewBox={mapData.viewBox}
-          role={interactive ? 'group' : 'img'}
-          aria-label={interactive ? 'Interactive map of Iceland - select a region to see its tours' : 'Map of Iceland highlighting the regions this tour visits'}
-        >
-          {regionData.map((r) => {
-            const d = geo.get(r.id);
-            if (!d) return null;
-            if (!interactive) {
-              return <path key={r.id} className={cn('hotspot-static', highlight.includes(r.id) && 'is-on')} d={d} style={{ '--rc': r.color } as React.CSSProperties} />;
-            }
-            return (
-              <a
-                key={r.id}
-                className={cn('hotspot', active === r.id && 'is-active')}
-                id={`hot-${r.id}`}
-                data-region={r.id}
-                href={`#region-${r.id}`}
-                role="button"
-                aria-label={`${r.name} - ${r.tours.length} tour ${r.tours.length === 1 ? 'package' : 'packages'}`}
-                style={{ '--rc': r.color } as React.CSSProperties}
-                onClick={(event) => {
-                  event.preventDefault();
-                  setActive(r.id);
-                }}
-                onMouseEnter={() => setActive(r.id)}
-                onFocus={() => setActive(r.id)}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    setActive(r.id);
-                  }
-                }}
-              >
-                <path d={d} />
-              </a>
-            );
-          })}
-        </svg>
+        {interactive ? (
+          <IcelandMap3D
+            regions={regionData}
+            activeRegion={active}
+            onSelect={setActive}
+            onHover={(slug) => slug && setActive(slug)}
+            fallback={stage}
+          />
+        ) : (
+          stage
+        )}
       </div>
 
       {interactive && (
@@ -114,7 +148,7 @@ export default function IcelandMap({ interactive = true, highlight = [], classNa
           {regionData.map((r) =>
             active === r.id ? (
               <div key={r.id} className="rpanel" id={`region-${r.id}`} data-panel={r.id}>
-                <p className="u-eyebrow" style={{ color: r.color, filter: 'saturate(1.4) brightness(0.7)' }}>
+                <p className="u-eyebrow" style={{ color: `color-mix(in srgb, ${r.color} 45%, var(--color-ink))` }}>
                   {r.tagline}
                 </p>
                 <h3 className="rpanel-title">{r.name}</h3>
