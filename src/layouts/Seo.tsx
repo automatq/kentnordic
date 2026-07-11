@@ -19,7 +19,6 @@ export default function Seo({ title, description = site.description, image = sit
 
   return (
     <Helmet>
-      <html lang={site.locale} />
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       {noindex && <meta name="robots" content="noindex,nofollow" />}

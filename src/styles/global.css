@@ -166,10 +166,15 @@
     }
   }
 
-  /* Italic accent-serif flourish word, trailing a heading. */
+  /* Italic accent-serif flourish word, trailing a heading. Fjord teal on
+     light surfaces (3:1+ at display sizes); dark sections lift it back to
+     the pale aurora tint. */
   .u-flourish {
     font-family: var(--font-accent-serif);
     font-style: italic;
+    color: var(--color-accent);
+  }
+  :is(.bg-ink, .home-cta, .pgallery) .u-flourish {
     color: var(--color-accent-300);
   }
 

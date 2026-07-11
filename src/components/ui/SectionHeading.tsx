@@ -26,7 +26,7 @@ export default function SectionHeading({
   const leadTone = tone === 'light' ? 'text-white/75' : 'text-charcoal-soft';
   return (
     <div className={cn('flex flex-col gap-4 max-w-2xl', alignCls, className)}>
-      {eyebrow && <span className="u-eyebrow">{eyebrow}</span>}
+      {eyebrow && <span className={cn('u-eyebrow', tone === 'light' && 'is-on-dark')}>{eyebrow}</span>}
       <Heading className={cn('text-3xl', tone === 'light' && 'text-white')}>
         {title}
         {flourish && <span className="u-flourish"> {flourish}</span>}

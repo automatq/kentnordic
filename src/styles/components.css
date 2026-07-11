@@ -61,7 +61,8 @@ main {
   font-weight: 300;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-accent-300);
+  /* Deep fjord: the pale aurora tint failed contrast on the birch paper. */
+  color: var(--color-accent-600);
 }
 .wordmark-sub {
   position: relative;
@@ -3600,6 +3601,8 @@ section.bg-ink {
   flex-direction: column;
   font-size: clamp(1.85rem, 2.5vw + 1rem, 2.75rem);
   line-height: 1.1;
+  /* Headings default to ink — restate white on the dark glass panel. */
+  color: var(--color-white);
   margin-block: 1rem;
 }
 .pgallery-title span:nth-child(2) {

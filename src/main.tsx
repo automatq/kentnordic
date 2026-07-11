@@ -11,6 +11,11 @@ import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 import App from '@/App';
+import { site } from '@/config/site';
+
+// Set once, outside Helmet's management — react-helmet-async drops managed
+// html attributes on StrictMode remounts, which failed axe's html-has-lang.
+document.documentElement.lang = site.locale;
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
