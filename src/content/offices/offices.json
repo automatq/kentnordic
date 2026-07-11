@@ -1,0 +1,28 @@
+[
+  {
+    "id": "reykjavik",
+    "name": "Reykjavik — Head Office",
+    "isHQ": true,
+    "role": "Operations & ground handling",
+    "addressLines": ["Idcibidci ehf", "Borgartun 00"],
+    "city": "105 Reykjavik",
+    "country": "Iceland",
+    "phone": "+354 555 0100",
+    "email": "reykjavik@idcibidci.is",
+    "hours": "Mon–Fri, 09:00–17:00 GMT",
+    "order": 1
+  },
+  {
+    "id": "kuala-lumpur",
+    "name": "Kuala Lumpur — Sales Office",
+    "isHQ": false,
+    "role": "Asia Pacific sales & partnerships",
+    "addressLines": ["Idcibidci Sales", "Jalan Ampang 00"],
+    "city": "50450 Kuala Lumpur",
+    "country": "Malaysia",
+    "phone": "+60 3-2856 0100",
+    "email": "asia@idcibidci.is",
+    "hours": "Mon–Fri, 09:00–18:00 MYT",
+    "order": 2
+  }
+]

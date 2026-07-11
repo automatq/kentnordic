@@ -1,0 +1,111 @@
+/*
+ * Design tokens — single source of truth for the Idcibidci design system.
+ * Defined as Tailwind v4 @theme so every value is available BOTH as a utility
+ * class (bg-cream, text-ink, py-section…) AND as a CSS custom property
+ * (var(--color-cream)) for scoped styles and the interactive SVG map.
+ *
+ * Nordic palette: cool paper white, slate ink, and a glacier-blue accent —
+ * restoring the direction of the original PRD proposal (white/beige/grey with
+ * a muted glacier-blue accent) after an interim warm "preet/cambridge"
+ * cream-and-terracotta palette was tried and superseded. Region colours
+ * mirror the Iceland map artwork and stay independent — the `regions`
+ * content collection remains authoritative and injects its exact hex inline
+ * on the map.
+ */
+
+@theme {
+  /* ---- Core palette ---- */
+  --color-white: #ffffff;
+  --color-cream: #f5f7f8; /* cool paper/mist background */
+  --color-beige: #eceef0; /* secondary background / card wash */
+  --color-beige-deep: #dde2e5; /* deeper layering */
+  --color-line: #dde2e5; /* dividers, card borders */
+  --color-grey: #dde2e5; /* alias of line, kept for existing call sites */
+  --color-grey-soft: #eceef0;
+  --color-charcoal: #262a2d; /* body text, headings ("ink") */
+  --color-charcoal-soft: #636c72; /* secondary text ("ink-muted") */
+  --color-ink: #262a2d; /* near-black for display headings */
+  --color-ink-2: #14171a; /* deepest panels (footer, CTA bands) */
+
+  /* ---- Accent: glacier blue ---- */
+  --color-accent: #57717c;
+  --color-accent-600: #455960; /* hover/active */
+  --color-accent-700: #374850; /* AA-contrast text on light surfaces */
+  --color-accent-300: #b7c9ce; /* accent-soft */
+  --color-accent-100: #e2ebed; /* tint backgrounds, badges */
+  --color-accent-50: #f2f6f7; /* faintest tint */
+
+  /* ---- Natural support accents ---- */
+  --color-moss: #7c8a6b;
+  --color-moss-deep: #4f5a3e; /* AA-contrast text on light surfaces */
+  --color-lava: #5c6469; /* basalt-grey */
+
+  /* ---- Feedback ---- */
+  --color-success: #4f7a5b;
+  --color-error: #a4493f;
+
+  /* ---- Region colours (sampled from the map artwork — unrelated to brand palette) ---- */
+  --color-region-reykjavik: #e8908a;
+  --color-region-golden-circle: #ecd4a2;
+  --color-region-south-coast: #aecb9f;
+  --color-region-jokulsarlon: #e6a9d1;
+  --color-region-akureyri: #f0c39c;
+  --color-region-myvatn: #a7dacf;
+  --color-region-eastfjords: #aab5cd;
+  --color-region-snaefellsnes: #c7b9dd;
+
+  /* ---- Typography ---- */
+  --font-sans:
+    'Geist Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-copy: 'Montserrat Variable', 'Geist Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Playfair Display Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-accent-serif: 'Instrument Serif', 'Playfair Display Variable', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Fluid type scale */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.55;
+  --text-base: 1rem;
+  --text-base--line-height: 1.7;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.65;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.55;
+  --text-2xl: clamp(1.5rem, 1.2rem + 1.3vw, 2rem);
+  --text-2xl--line-height: 1.3;
+  --text-3xl: clamp(1.85rem, 1.4rem + 2.1vw, 2.7rem);
+  --text-3xl--line-height: 1.2;
+  --text-4xl: clamp(2.3rem, 1.7rem + 3vw, 3.5rem);
+  --text-4xl--line-height: 1.1;
+  --text-hero: clamp(4rem, 2.4rem + 6vw, 7.75rem);
+  --text-hero--line-height: 1.03;
+
+  /* ---- Spacing (semantic, on top of Tailwind's default scale) ---- */
+  --spacing-section: clamp(4rem, 3rem + 5vw, 7.5rem);
+  --spacing-section-sm: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+  --spacing-gutter: clamp(1.25rem, 0.5rem + 3vw, 2.5rem);
+
+  /* ---- Radii (generous, editorial) ---- */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-pill: 999px;
+
+  /* ---- Shadows (subtle — cards lean on --color-line borders, not shadow) ---- */
+  --shadow-soft: 0 1px 2px rgb(15 15 15 / 0.03), 0 4px 10px rgb(15 15 15 / 0.03);
+  --shadow-card: 0 1px 2px rgb(15 15 15 / 0.04), 0 6px 20px rgb(15 15 15 / 0.05);
+  --shadow-lift: 0 2px 6px rgb(15 15 15 / 0.05), 0 16px 36px rgb(15 15 15 / 0.09);
+
+  /* ---- Motion ---- */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ---- Layout ---- */
+  --container-page: 80rem; /* 1280px content max */
+  --container-prose: 44rem; /* readable measure */
+}

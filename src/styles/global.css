@@ -1,0 +1,212 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+/*
+ * Base layer — global element defaults for the Idcibidci design system.
+ */
+@layer base {
+  :root {
+    color-scheme: light;
+    --focus-ring: 0 0 0 3px var(--color-accent-100), 0 0 0 5px var(--color-accent);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background: var(--color-cream);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html, body {
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-charcoal);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    letter-spacing: -0.005em;
+    font-synthesis-weight: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    color: var(--color-ink);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-underline-offset: 0.2em;
+  }
+
+  img,
+  picture,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Accessible, visible focus for keyboard users only */
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--radius-sm);
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+  }
+
+  /* Tabular figures for distances, durations and stats. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Subtle paper grain on the warm background — fixed so it reads as one
+     continuous surface rather than repeating per-section. */
+  .grain::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.06 0 0 0 0 0.06 0 0 0 0 0.04 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Respect reduced-motion globally as a safety net (JS also checks it directly). */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/*
+ * Component/utility helpers used across React components.
+ */
+@layer components {
+  /* Page container */
+  .u-container {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  .u-container-narrow {
+    max-width: var(--container-prose);
+  }
+
+  /* Eyebrow pill badge */
+  .u-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent-700);
+    background-color: var(--color-accent-100);
+    padding: 0.35rem 1rem;
+    border-radius: var(--radius-pill);
+  }
+
+  /* Eyebrows placed on dark/photo surfaces (hero overlays) read as a plain
+     tracked label instead of a light pill, so they don't fight the image
+     beneath them or trap white text on a pale badge. */
+  .u-eyebrow.text-white\/80,
+  .u-eyebrow.is-on-dark {
+    background-color: transparent;
+    color: rgb(255 255 255 / 0.8);
+    padding: 0;
+    letter-spacing: 0.14em;
+  }
+
+  /* Reveal-on-scroll initial state (activated by lib/motion.ts). Gated on the
+     `.js` class so content is fully visible when JavaScript is unavailable. */
+  .js .u-reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(18px);
+    will-change: transform, opacity;
+  }
+
+  .u-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.7s var(--ease-out-quint),
+      transform 0.7s var(--ease-out-quint);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js .u-reveal:not(.is-visible) {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Italic accent-serif flourish word, trailing a heading. */
+  .u-flourish {
+    font-family: var(--font-accent-serif);
+    font-style: italic;
+    color: var(--color-accent-300);
+  }
+
+  /* Soft attention-drawing pulse for a primary CTA. */
+  @keyframes u-pulse-soft {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 40%, transparent);
+    }
+    70% {
+      box-shadow: 0 0 0 14px color-mix(in srgb, var(--color-accent) 0%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 0%, transparent);
+    }
+  }
+  .btn-pulse {
+    animation: u-pulse-soft 2.5s infinite;
+  }
+  .btn-pulse:hover {
+    animation: none;
+  }
+
+  /* Screen-reader only */
+  .u-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}

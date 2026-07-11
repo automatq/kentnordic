@@ -1,0 +1,26 @@
+[
+  {
+    "id": "wanderlust-sg",
+    "quote": "Idcibidci handled a 40-pax group across the full Ring Road without a single hiccup. Their drivers-guides and hotel network are exactly what we need in a ground partner.",
+    "author": "Serene Tan",
+    "agency": "Wanderlust Holidays",
+    "country": "Singapore",
+    "order": 1
+  },
+  {
+    "id": "apex-my",
+    "quote": "Clear itineraries, fast quotes and genuinely local knowledge. Our clients came back raving about the South Coast and the ice cave add-on.",
+    "author": "Faizal Rahman",
+    "agency": "Apex Travel",
+    "country": "Malaysia",
+    "order": 2
+  },
+  {
+    "id": "sakura-jp",
+    "quote": "As a MICE operator we value reliability above all. Idcibidci's team pre-empted weather changes and kept our incentive group on schedule the entire week.",
+    "author": "Kenji Watanabe",
+    "agency": "Sakura Incentives",
+    "country": "Japan",
+    "order": 3
+  }
+]

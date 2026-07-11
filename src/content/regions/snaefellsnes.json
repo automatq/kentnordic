@@ -1,0 +1,14 @@
+{
+  "name": "Snaefellsnes Peninsula",
+  "order": 8,
+  "color": "#c7b9dd",
+  "svgId": "region-snaefellsnes",
+  "tagline": "Iceland in miniature",
+  "blurb": "A peninsula that packs the whole country into a day: the glacier-capped Snaefellsjokull volcano, the photogenic peak of Kirkjufell, seal-strewn beaches and tiny black churches.",
+  "highlights": [
+    "Kirkjufell & Kirkjufellsfoss",
+    "Arnarstapi coastal cliffs",
+    "Budakirkja black church",
+    "Ytri Tunga seal beach"
+  ]
+}

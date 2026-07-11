@@ -1,0 +1,29 @@
+[
+  {
+    "id": "quote-speed",
+    "question": "How quickly can you quote?",
+    "heading": "Timeline",
+    "answer": "Share dates, group size, budget, hotel level and preferred route. We usually return a structured proposal quickly, then refine it around availability, seasonality and partner feedback.",
+    "icon": "calendar",
+    "photoKey": "tour-std02r7",
+    "order": 1
+  },
+  {
+    "id": "package-inclusions",
+    "question": "What is included in a package?",
+    "heading": "Inclusions",
+    "answer": "Published itineraries can include coach, driver-guide, accommodation, key sightseeing and selected meals. We keep optional activities, upgrades and extensions separate so your agency can sell clearly.",
+    "icon": "tag",
+    "photoKey": "tour-std02s6",
+    "order": 2
+  },
+  {
+    "id": "tailoring",
+    "question": "Can itineraries be adjusted?",
+    "heading": "Tailoring",
+    "answer": "Yes. We can adjust length, hotel tier, seasonality, meal plans, optional activities and route direction. Our team will flag where weather, daylight or driving time makes a request impractical.",
+    "icon": "pen",
+    "photoKey": "tour-std02r8",
+    "order": 3
+  }
+]

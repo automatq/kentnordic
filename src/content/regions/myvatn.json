@@ -1,0 +1,14 @@
+{
+  "name": "Lake Myvatn",
+  "order": 6,
+  "color": "#a7dacf",
+  "svgId": "region-myvatn",
+  "tagline": "Volcanic wonderland",
+  "blurb": "A geothermal theatre around a birdlife-rich lake: pseudo-craters, the otherworldly lava pillars of Dimmuborgir, and the steaming, sulphur-hued mud pools of Hverir.",
+  "highlights": [
+    "Skutustadagigar pseudo-craters",
+    "Dimmuborgir lava field",
+    "Hverir mud pools",
+    "Views of Hverfjall volcano"
+  ]
+}
