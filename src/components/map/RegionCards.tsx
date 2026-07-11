@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Icon from '@/components/ui/Icon';
 import Reveal from '@/components/motion/Reveal';
-import { getPhoto } from '@/lib/photos';
+import Pic from '@/components/ui/Pic';
 import { getRegions, nightsLabel, toursForRegion } from '@/lib/packages';
 
 export default function RegionCards() {
@@ -15,7 +15,7 @@ export default function RegionCards() {
       {data.map(({ region, tours }, i) => (
         <Reveal as="article" key={region.id} delay={(i % 4) * 80} className="region-card" id={`region-card-${region.id}`}>
           <div className="rc-media">
-            <img src={getPhoto(region.data.image ?? `region-${region.id}`)} alt={`${region.data.name} region of Iceland`} className="rc-img" loading="lazy" />
+            <Pic photoKey={region.data.image ?? `region-${region.id}`} alt={`${region.data.name} region of Iceland`} className="rc-img" sizes="(min-width: 1024px) 23vw, 46vw" />
             <span className="rc-band" style={{ background: region.data.color }} />
           </div>
           <div className="rc-body">

@@ -7,7 +7,7 @@ import PackageCard from '@/components/tour/PackageCard';
 import Reveal from '@/components/motion/Reveal';
 import Marquee from '@/components/motion/Marquee';
 import Icon from '@/components/ui/Icon';
-import { getPhoto } from '@/lib/photos';
+import Pic from '@/components/ui/Pic';
 import { getRegions, getTours, lengthBucket, tourRegionIds } from '@/lib/packages';
 
 const lengths = [
@@ -39,12 +39,11 @@ export default function ToursPage() {
     [selectedLength, selectedRegion, tours],
   );
 
-  const hero = getPhoto('hero-tours');
 
   return (
     <BaseLayout title="Iceland Tour Packages" description="Six ready-to-sell Iceland group tours - from a 4-night South Coast escape to the full Ring Road - for travel-trade partners.">
       <section className="phero">
-        <img src={hero} alt="Aerial view of an Icelandic Ring Road winding through mountains" className="phero-bg" loading="eager" fetchPriority="high" />
+        <Pic photoKey="hero-tours" alt="Aerial view of an Icelandic Ring Road winding through mountains" className="phero-bg" loading="eager" fetchPriority="high" />
         <div className="phero-scrim" />
         <Container className="phero-inner">
           <p className="u-eyebrow text-white/80">Tour Packages</p>

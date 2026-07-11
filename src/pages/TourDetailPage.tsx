@@ -12,7 +12,7 @@ import RouteExperience from '@/components/tour/RouteExperience';
 import Reveal from '@/components/motion/Reveal';
 import TimelineRail from '@/components/motion/TimelineRail';
 import { getTour } from '@/lib/content';
-import { getPhoto } from '@/lib/photos';
+import Pic from '@/components/ui/Pic';
 import { formatLength, getRegions, getTours, seasonalityText, tourRegionIds } from '@/lib/packages';
 import { site } from '@/config/site';
 
@@ -45,7 +45,6 @@ export default function TourDetailPage() {
   const related = allTours.filter((t) => t.id !== tour.id && t.data.category === d.category).slice(0, 3);
   const relatedFinal = related.length ? related : allTours.filter((t) => t.id !== tour.id).slice(0, 3);
   const sibling = d.pairSlug ? allTours.find((t) => t.id === d.pairSlug) : undefined;
-  const hero = getPhoto(d.heroImage);
   const inquiryHref = `/contact?package=${d.code}#inquiry`;
   const jsonLd = [
     {
@@ -79,7 +78,7 @@ export default function TourDetailPage() {
   return (
     <BaseLayout title={`${d.name} - ${d.days}D/${d.nights}N Iceland Tour`} description={d.summary} image="/og-default.jpg" jsonLd={jsonLd}>
       <section className="thero">
-        <img src={hero} alt={d.heroAlt} className="thero-bg" loading="eager" fetchPriority="high" />
+        <Pic photoKey={d.heroImage} alt={d.heroAlt} className="thero-bg" loading="eager" fetchPriority="high" />
         <div className="thero-scrim" />
         <Container className="thero-inner">
           <nav className="crumbs" aria-label="Breadcrumb">

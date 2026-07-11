@@ -114,7 +114,7 @@ export default function HomePage() {
             </h1>
             <p className="home-hero-lead">{site.description}</p>
             <div className="home-hero-actions">
-              <Button href="/contact#inquiry">Request a quote</Button>
+              <Button href="/contact#inquiry" magnetic>Request a quote</Button>
               <Button href="/tours" variant="secondary">
                 Browse tour packages
               </Button>
@@ -287,7 +287,7 @@ export default function HomePage() {
             confidence.
           </Reveal>
           <Reveal delay={200} className="home-cta-actions">
-            <Button href="/contact#inquiry" pulse>
+            <Button href="/contact#inquiry" pulse magnetic>
               Request a quote
             </Button>
             <Button href="/tours" variant="onDark">

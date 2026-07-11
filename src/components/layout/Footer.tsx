@@ -26,7 +26,7 @@ export default function Footer() {
         <nav aria-label="Footer" className="flex flex-col gap-3">
           <p className="footer-heading">Explore</p>
           {site.nav.map((item) => (
-            <Link key={item.href} to={item.href} className="footer-link">
+            <Link key={item.href} to={item.href} viewTransition className="footer-link">
               {item.label}
             </Link>
           ))}

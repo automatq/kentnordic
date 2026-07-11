@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
+import { useTilt } from '@/lib/useTilt';
 import Icon from '@/components/ui/Icon';
-import { getPhoto } from '@/lib/photos';
+import Pic from '@/components/ui/Pic';
 import { formatLength, lengthBucket, seasonalityText, tourRegionIds, type Tour } from '@/lib/packages';
 
 interface PackageCardProps {
@@ -10,14 +11,14 @@ interface PackageCardProps {
 }
 
 export default function PackageCard({ tour, regionColors, regionNames }: PackageCardProps) {
+  const tiltRef = useTilt<HTMLElement>();
   const d = tour.data;
-  const img = getPhoto(d.heroImage);
   const regionIds = tourRegionIds(tour);
 
   return (
-    <article className="card" data-nights={d.nights} data-length={lengthBucket(tour)} data-regions={regionIds.join(',')}>
-      <Link className="card-media" to={`/tours/${tour.id}`} tabIndex={-1} aria-hidden="true">
-        <img src={img} alt={d.heroAlt} className="card-img" loading="lazy" />
+    <article ref={tiltRef} className="card" data-nights={d.nights} data-length={lengthBucket(tour)} data-regions={regionIds.join(',')}>
+      <Link className="card-media" viewTransition to={`/tours/${tour.id}`} tabIndex={-1} aria-hidden="true">
+        <Pic photoKey={d.heroImage} alt={d.heroAlt} className="card-img" sizes="(min-width: 1024px) 30vw, 92vw" />
         <span className="card-code">{d.code}</span>
         <span className="card-nights">{d.nights} nights</span>
       </Link>
@@ -33,7 +34,7 @@ export default function PackageCard({ tour, regionColors, regionNames }: Package
         </div>
 
         <h3 className="card-title">
-          <Link to={`/tours/${tour.id}`}>{d.name}</Link>
+          <Link viewTransition to={`/tours/${tour.id}`}>{d.name}</Link>
         </h3>
         <p className="card-summary">{d.summary}</p>
 

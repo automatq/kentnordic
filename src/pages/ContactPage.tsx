@@ -5,12 +5,11 @@ import Icon from "@/components/ui/Icon";
 import Reveal from "@/components/motion/Reveal";
 import InquiryForm from "@/components/react/InquiryForm";
 import { getOffices } from "@/lib/content";
-import { getPhoto } from "@/lib/photos";
+import Pic from "@/components/ui/Pic";
 import { getTours } from "@/lib/packages";
 import { site } from "@/config/site";
 
 export default function ContactPage() {
-  const hero = getPhoto("hero-contact");
   const offices = getOffices();
   const packages = getTours().map((t) => ({
     code: t.data.code,
@@ -37,8 +36,8 @@ export default function ContactPage() {
       jsonLd={jsonLd}
     >
       <section className="chero">
-        <img
-          src={hero}
+        <Pic
+          photoKey="hero-contact"
           alt="Quiet Icelandic coastline at first light"
           className="chero-bg"
           loading="eager"

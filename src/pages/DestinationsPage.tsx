@@ -6,18 +6,17 @@ import IcelandMap from '@/components/map/IcelandMap';
 import RegionCards from '@/components/map/RegionCards';
 import TourWalkthrough from '@/components/map/TourWalkthrough';
 import Marquee from '@/components/motion/Marquee';
-import { getPhoto } from '@/lib/photos';
+import Pic from '@/components/ui/Pic';
 import { getRegions, getTours } from '@/lib/packages';
 
 export default function DestinationsPage() {
-  const hero = getPhoto('hero-destinations');
   const regions = getRegions();
   const tours = getTours();
 
   return (
     <BaseLayout title="Destinations - Explore Iceland by Region" description="An interactive map of Iceland's eight regions - from the Golden Circle and South Coast to the Ring Road north - each linked to the tours that visit it.">
       <section className="dhero">
-        <img src={hero} alt="Map-like aerial view of Iceland's coastline and highlands" className="dhero-bg" loading="eager" fetchPriority="high" />
+        <Pic photoKey="hero-destinations" alt="Map-like aerial view of Iceland's coastline and highlands" className="dhero-bg" loading="eager" fetchPriority="high" />
         <div className="dhero-scrim" />
         <Container className="dhero-inner">
           <p className="u-eyebrow text-white/80">Destinations</p>

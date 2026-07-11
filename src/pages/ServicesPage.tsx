@@ -8,16 +8,15 @@ import Icon from '@/components/ui/Icon';
 import Reveal from '@/components/motion/Reveal';
 import CardDeckReveal from '@/components/motion/CardDeckReveal';
 import { getServices } from '@/lib/content';
-import { getPhoto } from '@/lib/photos';
+import Pic from '@/components/ui/Pic';
 
 export default function ServicesPage() {
-  const hero = getPhoto('hero-services');
   const services = getServices();
 
   return (
     <BaseLayout title="Services - FIT, Group Tours & MICE" description="Idcibidci's ground services for travel agencies: independent (FIT) driver-guide and self-drive, fully operated group tours, and MICE / incentive programmes.">
       <section className="shero">
-        <img src={hero} alt="Coach touring a mountain road in the Icelandic highlands" className="shero-bg" loading="eager" fetchPriority="high" />
+        <Pic photoKey="hero-services" alt="Coach touring a mountain road in the Icelandic highlands" className="shero-bg" loading="eager" fetchPriority="high" />
         <div className="shero-scrim" />
         <Container className="shero-inner">
           <p className="u-eyebrow text-white/80">Services</p>

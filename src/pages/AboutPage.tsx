@@ -6,7 +6,7 @@ import Button from '@/components/ui/Button';
 import Icon from '@/components/ui/Icon';
 import Reveal from '@/components/motion/Reveal';
 import { getOffices } from '@/lib/content';
-import { getPhoto } from '@/lib/photos';
+import Pic from '@/components/ui/Pic';
 
 const values = [
   { icon: 'map-pin', title: 'Local, on the ground', body: 'A licensed Icelandic DMC operating from Reykjavik - real roads, real weather, real relationships with hotels and guides.' },
@@ -23,13 +23,12 @@ const stats = [
 ];
 
 export default function AboutPage() {
-  const hero = getPhoto('hero-about');
   const offices = getOffices();
 
   return (
     <BaseLayout title="About Idcibidci" description="Idcibidci ehf is a licensed Iceland destination management company serving travel agencies and MICE planners, with offices in Reykjavik and Kuala Lumpur.">
       <section className="ahero">
-        <img src={hero} alt="Turf-roofed Icelandic buildings beneath a mountain" className="ahero-bg" loading="eager" fetchPriority="high" />
+        <Pic photoKey="hero-about" alt="Turf-roofed Icelandic buildings beneath a mountain" className="ahero-bg" loading="eager" fetchPriority="high" />
         <div className="ahero-scrim" />
         <Container className="ahero-inner">
           <p className="u-eyebrow text-white/80">About us</p>

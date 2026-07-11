@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { getPhoto } from '@/lib/photos';
+import Pic from '@/components/ui/Pic';
 import { onScrollFrame, clamp } from '@/lib/scrollMath';
 import { cn } from '@/lib/classNames';
 import AuroraVeil from '@/components/three/AuroraVeil';
@@ -64,7 +64,7 @@ export default function ParallaxGallery({ items, className, children, aurora }: 
             className={cn('pgallery-item', item.visibilityClassName)}
             style={item.style}
           >
-            <img src={getPhoto(item.photoKey)} alt={item.alt} className={cn('pgallery-img', item.aspectClassName)} loading="lazy" />
+            <Pic photoKey={item.photoKey} alt={item.alt} className={cn('pgallery-img', item.aspectClassName)} sizes="(min-width: 1024px) 26rem, 60vw" />
           </div>
         ))}
       </div>

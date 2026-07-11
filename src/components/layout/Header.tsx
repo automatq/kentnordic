@@ -47,6 +47,23 @@ interface MegaMenuPanel {
   };
 }
 
+/* Warm a route's lazy chunk the moment the pointer shows intent — makes
+   code-split navigation feel instant. Specifiers must match App.tsx lazy(). */
+const routePrefetch: Record<string, () => Promise<unknown>> = {
+  '/': () => import('@/pages/HomePage'),
+  '/about': () => import('@/pages/AboutPage'),
+  '/services': () => import('@/pages/ServicesPage'),
+  '/destinations': () => import('@/pages/DestinationsPage'),
+  '/tours': () => import('@/pages/ToursPage'),
+  '/contact': () => import('@/pages/ContactPage'),
+};
+
+function prefetchRoute(href: string) {
+  routePrefetch[href]?.().catch(() => {
+    /* prefetch is best-effort */
+  });
+}
+
 function excerpt(text: string, maxLength = 116) {
   if (text.length <= maxLength) return text;
   const cut = text.slice(0, maxLength).replace(/\s+\S*$/, "");
@@ -291,8 +308,10 @@ export default function Header({ overlay = false }: HeaderProps) {
                   <li key={item.href} className="desktop-nav-item">
                     <Link
                       to={item.href}
+                      viewTransition
                       className="nav-link"
                       aria-current={isActive(item.href) ? "page" : undefined}
+                      onPointerEnter={() => prefetchRoute(item.href)}
                     >
                       {item.label}
                     </Link>
@@ -304,7 +323,10 @@ export default function Header({ overlay = false }: HeaderProps) {
                 <li
                   key={item.href}
                   className="desktop-nav-item desktop-nav-item--mega"
-                  onMouseEnter={() => openMegaMenu(item.href)}
+                  onMouseEnter={() => {
+                    openMegaMenu(item.href);
+                    prefetchRoute(item.href);
+                  }}
                   onMouseLeave={() => scheduleMegaClose(item.href)}
                   onFocus={() => openMegaMenu(item.href)}
                   onBlur={(event) => {
@@ -319,6 +341,7 @@ export default function Header({ overlay = false }: HeaderProps) {
                 >
                   <Link
                     to={item.href}
+                    viewTransition
                     className="nav-link nav-trigger"
                     aria-current={isActive(item.href) ? "page" : undefined}
                   >

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/classNames';
+import { useMagnetic } from '@/lib/useMagnetic';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
@@ -7,6 +8,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg';
   /** Soft attention-drawing pulse, e.g. the primary CTA in a closing section. */
   pulse?: boolean;
+  /** Magnetic hover — the button leans toward the cursor (hero/CTA moments). */
+  magnetic?: boolean;
   children: React.ReactNode;
 }
 
@@ -35,28 +38,31 @@ export default function Button({
   variant = 'primary',
   size = 'md',
   pulse = false,
+  magnetic = false,
   className,
   type = 'button',
   children,
   ...rest
 }: ButtonProps) {
+  const magnetRef = useMagnetic<HTMLElement>(magnetic ? 6 : 0);
+  const ref = magnetic ? magnetRef : undefined;
   const cls = cn(base, variants[variant], sizes[size], pulse && 'btn-pulse', className);
   if (href) {
     if (isInternal(href)) {
       return (
-        <Link to={href} className={cls}>
+        <Link ref={ref as React.Ref<HTMLAnchorElement>} to={href} viewTransition className={cls}>
           {children}
         </Link>
       );
     }
     return (
-      <a href={href} className={cls}>
+      <a ref={ref as React.Ref<HTMLAnchorElement>} href={href} className={cls}>
         {children}
       </a>
     );
   }
   return (
-    <button className={cls} type={type} {...rest}>
+    <button ref={ref as React.Ref<HTMLButtonElement>} className={cls} type={type} {...rest}>
       {children}
     </button>
   );
