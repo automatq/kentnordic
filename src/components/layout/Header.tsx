@@ -197,6 +197,7 @@ export default function Header({ overlay = false }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const [activeMega, setActiveMega] = useState<string | null>(null);
   const desktopNavRef = useRef<HTMLDivElement | null>(null);
+  const closeTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > 24);
@@ -231,9 +232,34 @@ export default function Header({ overlay = false }: HeaderProps) {
     return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [activeMega]);
 
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current);
+    };
+  }, []);
+
   function isActive(href: string) {
     if (href === "/") return path === "/";
     return path === href || path.startsWith(`${href}/`);
+  }
+
+  function cancelMegaClose() {
+    if (!closeTimerRef.current) return;
+    window.clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = null;
+  }
+
+  function openMegaMenu(href: string) {
+    cancelMegaClose();
+    setActiveMega(href);
+  }
+
+  function scheduleMegaClose(href: string) {
+    cancelMegaClose();
+    closeTimerRef.current = window.setTimeout(() => {
+      setActiveMega((current) => (current === href ? null : current));
+      closeTimerRef.current = null;
+    }, 180);
   }
 
   return (
@@ -278,22 +304,16 @@ export default function Header({ overlay = false }: HeaderProps) {
                 <li
                   key={item.href}
                   className="desktop-nav-item desktop-nav-item--mega"
-                  onMouseEnter={() => setActiveMega(item.href)}
-                  onMouseLeave={() =>
-                    setActiveMega((current) =>
-                      current === item.href ? null : current,
-                    )
-                  }
-                  onFocus={() => setActiveMega(item.href)}
+                  onMouseEnter={() => openMegaMenu(item.href)}
+                  onMouseLeave={() => scheduleMegaClose(item.href)}
+                  onFocus={() => openMegaMenu(item.href)}
                   onBlur={(event) => {
                     if (
                       !event.currentTarget.contains(
                         event.relatedTarget as Node | null,
                       )
                     ) {
-                      setActiveMega((current) =>
-                        current === item.href ? null : current,
-                      );
+                      scheduleMegaClose(item.href);
                     }
                   }}
                 >
@@ -313,7 +333,12 @@ export default function Header({ overlay = false }: HeaderProps) {
                     />
                   </Link>
 
-                  <div className="mega-menu" hidden={!isMegaOpen}>
+                  <div
+                    className="mega-menu"
+                    hidden={!isMegaOpen}
+                    onMouseEnter={cancelMegaClose}
+                    onMouseLeave={() => scheduleMegaClose(item.href)}
+                  >
                     <div className="mega-menu-grid">
                       <div className="mega-intro">
                         <p className="mega-eyebrow">{megaMenu.intro.eyebrow}</p>
