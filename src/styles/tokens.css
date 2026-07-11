@@ -4,47 +4,51 @@
  * class (bg-cream, text-ink, py-section…) AND as a CSS custom property
  * (var(--color-cream)) for scoped styles and the interactive SVG map.
  *
- * Nordic palette: cool paper white, slate ink, and a glacier-blue accent —
- * restoring the direction of the original PRD proposal (white/beige/grey with
- * a muted glacier-blue accent) after an interim warm "preet/cambridge"
- * cream-and-terracotta palette was tried and superseded. Region colours
- * mirror the Iceland map artwork and stay independent — the `regions`
- * content collection remains authoritative and injects its exact hex inline
- * on the map.
+ * Nordic palette, harmonised with the map artwork ("the original obj"). The
+ * brand is anchored on a cool FJORD TEAL accent deepened from the map's
+ * mint/periwinkle family, over a neutral BIRCH-WHITE paper (warmed off the
+ * old clinical cool-blue) so the warm-leaning map pastels sit naturally. The
+ * eight map region colours are promoted to a first-class AURORA tint scale
+ * (--color-aurora-*) usable site-wide for category dots, badge tints, and
+ * section washes — the `regions` content collection stays authoritative and
+ * still injects its exact hex inline on the map; the aliases point at the
+ * same values so brand and map visually rhyme.
  */
 
 @theme {
-  /* ---- Core palette ---- */
+  /* ---- Core palette (neutral birch white → warm charcoal) ---- */
   --color-white: #ffffff;
-  --color-cream: #f5f7f8; /* cool paper/mist background */
-  --color-beige: #eceef0; /* secondary background / card wash */
-  --color-beige-deep: #dde2e5; /* deeper layering */
-  --color-line: #dde2e5; /* dividers, card borders */
-  --color-grey: #dde2e5; /* alias of line, kept for existing call sites */
-  --color-grey-soft: #eceef0;
-  --color-charcoal: #262a2d; /* body text, headings ("ink") */
-  --color-charcoal-soft: #636c72; /* secondary text ("ink-muted") */
-  --color-ink: #262a2d; /* near-black for display headings */
-  --color-ink-2: #14171a; /* deepest panels (footer, CTA bands) */
+  --color-cream: #f5f3ef; /* neutral birch-white paper background */
+  --color-beige: #ece8e2; /* warm mist — secondary background / card wash */
+  --color-beige-deep: #ddd8d0; /* deeper layering */
+  --color-line: #ddd8d0; /* warm hairline — dividers, card borders */
+  --color-grey: #ddd8d0; /* alias of line, kept for existing call sites */
+  --color-grey-soft: #ece8e2;
+  --color-charcoal: #2b2a28; /* warm charcoal — body text, headings ("ink") */
+  --color-charcoal-soft: #6b6660; /* secondary text ("ink-muted") */
+  --color-ink: #2b2a28; /* warm near-black for display headings */
+  --color-ink-2: #1a1815; /* deepest panels (footer, CTA bands) */
 
-  /* ---- Accent: glacier blue ---- */
-  --color-accent: #57717c;
-  --color-accent-600: #455960; /* hover/active */
-  --color-accent-700: #374850; /* AA-contrast text on light surfaces */
-  --color-accent-300: #b7c9ce; /* accent-soft */
-  --color-accent-100: #e2ebed; /* tint backgrounds, badges */
-  --color-accent-50: #f2f6f7; /* faintest tint */
+  /* ---- Accent: fjord teal (deepened from the map's mint/periwinkle) ---- */
+  --color-accent: #4a7e77; /* AA: white button text 4.6, UI on paper 4.2 */
+  --color-accent-600: #3f6b65; /* hover/active */
+  --color-accent-700: #345650; /* AA-contrast text on light surfaces */
+  --color-accent-300: #9fc6bf; /* accent-soft */
+  --color-accent-100: #dcebe8; /* tint backgrounds, badges */
+  --color-accent-50: #eff6f4; /* faintest tint */
 
   /* ---- Natural support accents ---- */
-  --color-moss: #7c8a6b;
+  --color-moss: #7c8a6b; /* aligns with the map's sage */
   --color-moss-deep: #4f5a3e; /* AA-contrast text on light surfaces */
   --color-lava: #5c6469; /* basalt-grey */
+  --color-sand: #ecd4a2; /* warm section wash (from golden-circle) */
+  --color-sand-deep: #8a6a30; /* AA-contrast text on light surfaces */
 
   /* ---- Feedback ---- */
   --color-success: #4f7a5b;
   --color-error: #a4493f;
 
-  /* ---- Region colours (sampled from the map artwork — unrelated to brand palette) ---- */
+  /* ---- Region colours (sampled from the map artwork; kept for the map) ---- */
   --color-region-reykjavik: #e8908a;
   --color-region-golden-circle: #ecd4a2;
   --color-region-south-coast: #aecb9f;
@@ -54,13 +58,23 @@
   --color-region-eastfjords: #aab5cd;
   --color-region-snaefellsnes: #c7b9dd;
 
-  /* ---- Typography ---- */
+  /* ---- Aurora tint scale (the map palette, promoted for site-wide brand use) ---- */
+  --color-aurora-coral: #e8908a;
+  --color-aurora-sand: #ecd4a2;
+  --color-aurora-sage: #aecb9f;
+  --color-aurora-orchid: #e6a9d1;
+  --color-aurora-peach: #f0c39c;
+  --color-aurora-mint: #a7dacf;
+  --color-aurora-periwinkle: #aab5cd;
+  --color-aurora-lavender: #c7b9dd;
+
+  /* ---- Typography — Scandinavian pairing: humanist serif + geometric grotesque ---- */
   --font-sans:
-    'Geist Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
-  --font-copy: 'Montserrat Variable', 'Geist Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Playfair Display Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-  --font-accent-serif: 'Instrument Serif', 'Playfair Display Variable', Georgia, serif;
+    'Hanken Grotesk Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-copy: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Newsreader Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-accent-serif: 'Newsreader Variable', Georgia, serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* Fluid type scale */

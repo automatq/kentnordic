@@ -1,7 +1,7 @@
 import { cn } from '@/lib/classNames';
 
 interface SectionProps {
-  tone?: 'white' | 'beige' | 'cream' | 'charcoal' | 'grey';
+  tone?: 'white' | 'beige' | 'cream' | 'charcoal' | 'grey' | 'sand';
   size?: 'default' | 'sm';
   id?: string;
   className?: string;
@@ -13,6 +13,8 @@ const tones = {
   cream: 'bg-cream text-charcoal',
   beige: 'bg-beige text-charcoal',
   grey: 'bg-grey-soft text-charcoal',
+  // Faint warm-sand wash (from the map's golden-circle) for vertical rhythm.
+  sand: 'bg-sand/12 text-charcoal',
   charcoal: 'bg-ink text-white',
 };
 

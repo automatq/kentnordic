@@ -16,12 +16,13 @@ interface TourWalkthroughProps {
 }
 
 const mealLabels: Record<string, string> = { B: 'Breakfast', L: 'Lunch', D: 'Dinner' };
-const AUTOPLAY_MS = 4200;
+const AUTOPLAY_MS = 5000;
 
 export default function TourWalkthrough({ tours, initialTourId, className }: TourWalkthroughProps) {
   const [tourId, setTourId] = useState(initialTourId && tours.some((t) => t.id === initialTourId) ? initialTourId : tours[0]?.id);
   const [dayIdx, setDayIdx] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [countdownMs, setCountdownMs] = useState(AUTOPLAY_MS);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const tour = tours.find((t) => t.id === tourId) ?? tours[0];
@@ -54,14 +55,34 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
   );
 
   useEffect(() => {
-    if (!playing) return;
-    if (dayIdx >= lastIdx) {
-      setPlaying(false);
+    if (!playing) {
+      setCountdownMs(AUTOPLAY_MS);
       return;
     }
-    const t = window.setTimeout(() => goTo(dayIdx + 1, true), AUTOPLAY_MS);
-    return () => window.clearTimeout(t);
+    if (dayIdx >= lastIdx) {
+      setPlaying(false);
+      setCountdownMs(AUTOPLAY_MS);
+      return;
+    }
+    const startedAt = Date.now();
+    setCountdownMs(AUTOPLAY_MS);
+
+    const tick = window.setInterval(() => {
+      setCountdownMs(Math.max(0, AUTOPLAY_MS - (Date.now() - startedAt)));
+    }, 100);
+
+    const t = window.setTimeout(() => {
+      setCountdownMs(AUTOPLAY_MS);
+      goTo(dayIdx + 1, true);
+    }, AUTOPLAY_MS);
+
+    return () => {
+      window.clearInterval(tick);
+      window.clearTimeout(t);
+    };
   }, [playing, dayIdx, lastIdx, goTo]);
+
+  const countdownSeconds = Math.max(0, Math.ceil(countdownMs / 1000));
 
   const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'ArrowRight') {
@@ -305,6 +326,16 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
             >
               <Icon name={playing ? 'pause' : 'play'} size={16} />
             </button>
+          </div>
+
+          <div className="walk-status" aria-live="polite">
+            {playing ? (
+              <p className="walk-countdown">
+                Auto-playing day by day. Next stop in <span className="tnum">{countdownSeconds}</span>s.
+              </p>
+            ) : (
+              <p className="walk-countdown is-idle">Press play to start a 5-second guided walkthrough.</p>
+            )}
           </div>
 
           {tours.length > 1 && (

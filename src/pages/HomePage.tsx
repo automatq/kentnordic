@@ -19,11 +19,13 @@ const CUBE_FACES = [
 ];
 
 const heroClusters: Array<{ x: number; y: number; fills: Array<string | null>; startDelay: number }> = [
-  { x: 0, y: 0, fills: ['beige', 'white', 'line'], startDelay: 0.2 },
-  { x: -50, y: 86.6, fills: ['cream', 'beige', 'white'], startDelay: 0.35 },
+  // Top faces pick up soft aurora/fjord tints (the map palette) so the cluster
+  // reads as a pale glacier crystal; side faces stay neutral for structure.
+  { x: 0, y: 0, fills: ['accent-100', 'white', 'line'], startDelay: 0.2 },
+  { x: -50, y: 86.6, fills: ['aurora-mint', 'beige', 'white'], startDelay: 0.35 },
   { x: 100, y: 28.87, fills: ['white', 'line', 'beige'], startDelay: 0.5 },
   { x: 50, y: -86.6, fills: [null, 'beige', 'white'], startDelay: 0.65 },
-  { x: -100, y: -28.87, fills: ['white', 'cream', 'line'], startDelay: 0.75 },
+  { x: -100, y: -28.87, fills: ['aurora-periwinkle', 'cream', 'line'], startDelay: 0.75 },
 ];
 
 const heroLines = [
@@ -342,11 +344,11 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      <Section tone="cream">
+      <Section tone="sand">
         <Container>
           <SectionHeading eyebrow="Partner Questions" title="Frequently Asked Questions" lead="What agencies and planners ask before sending us an Iceland brief." align="center" className="mx-auto" />
           <FlipCardCarousel
-            className="mt-12"
+            className="mt-20"
             cards={faq.map((f) => ({ question: f.question, heading: f.heading, answer: f.answer, icon: f.icon, photoKey: f.photoKey }))}
           />
         </Container>

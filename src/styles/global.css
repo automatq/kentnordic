@@ -37,8 +37,10 @@
     font-family: var(--font-display);
     font-optical-sizing: auto;
     color: var(--color-ink);
+    /* Newsreader is a warm, lower-contrast humanist serif — it wants a touch
+       more weight and looser tracking than the old Playfair didone. */
     font-weight: 500;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.018em;
     text-wrap: balance;
   }
 
@@ -121,32 +123,9 @@
     max-width: var(--container-prose);
   }
 
-  /* Eyebrow pill badge */
-  .u-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-sans);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-accent-700);
-    background-color: var(--color-accent-100);
-    padding: 0.35rem 1rem;
-    border-radius: var(--radius-pill);
-  }
-
-  /* Eyebrows placed on dark/photo surfaces (hero overlays) read as a plain
-     tracked label instead of a light pill, so they don't fight the image
-     beneath them or trap white text on a pale badge. */
-  .u-eyebrow.text-white\/80,
-  .u-eyebrow.is-on-dark {
-    background-color: transparent;
-    color: rgb(255 255 255 / 0.8);
-    padding: 0;
-    letter-spacing: 0.14em;
-  }
+  /* Eyebrow pill badge — the single authoritative definition lives in
+     components.css (loaded after this file) as a Scandinavian tracked
+     small-caps label with a fjord dot; see `.u-eyebrow` there. */
 
   /* Reveal-on-scroll initial state (activated by lib/motion.ts). Gated on the
      `.js` class so content is fully visible when JavaScript is unavailable. */

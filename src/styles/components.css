@@ -2375,7 +2375,19 @@ main {
 }
 
 .site-footer {
-  background: var(--color-cream);
+  /* Faint aurora glow rising from the top edge, tying the footer to the map. */
+  background:
+    radial-gradient(
+      60rem 22rem at 12% 0%,
+      color-mix(in srgb, var(--color-accent-100) 55%, transparent),
+      transparent 64%
+    ),
+    radial-gradient(
+      48rem 20rem at 92% 0%,
+      color-mix(in srgb, var(--color-aurora-periwinkle) 20%, transparent),
+      transparent 66%
+    ),
+    var(--color-cream);
   border-block-start: 1px solid
     color-mix(in srgb, var(--color-line) 90%, transparent);
   color: var(--color-charcoal-soft);
@@ -2539,31 +2551,65 @@ main {
   color: var(--color-ink);
 }
 
-.u-eyebrow,
-.u-eyebrow.text-white\/80,
-.u-eyebrow.is-on-dark {
+/* Eyebrow — Scandinavian tracked small-caps label on a hairline pill, with a
+   fjord-teal dot. Single source of truth (global.css defers to this). */
+.u-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
   background: color-mix(in srgb, var(--color-white) 55%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-line) 95%, transparent);
+  border: 1px solid var(--color-line);
   border-radius: 999px;
   color: var(--color-accent-700);
-  padding: 0.35rem 0.85rem;
-  font-size: 0.78rem;
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
+  padding: 0.4rem 0.9rem;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   box-shadow: 0 1px 0 color-mix(in srgb, var(--color-white) 55%, transparent)
     inset;
 }
 
 .u-eyebrow::before {
   content: "";
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.4rem;
+  height: 0.4rem;
   border-radius: 999px;
+  background: var(--color-accent);
+}
+
+/* On dark/photo surfaces (hero overlays) the eyebrow drops the pill and reads
+   as a plain tracked white label so it doesn't fight the image beneath. */
+.u-eyebrow.text-white\/80,
+.u-eyebrow.is-on-dark {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  color: rgb(255 255 255 / 0.8);
+  padding-inline: 0;
+}
+
+.u-eyebrow.text-white\/80::before,
+.u-eyebrow.is-on-dark::before {
   background: var(--color-accent-300);
+}
+
+/* The page heroes (.dhero/.thero/…) are light cream panels, but their eyebrow
+   markup tags on-dark (white) — which would vanish on the pale background.
+   Inside a light hero, restore the pill/tinted label. */
+:is(.ahero, .shero, .dhero, .chero, .phero, .thero) .u-eyebrow.text-white\/80,
+:is(.ahero, .shero, .dhero, .chero, .phero, .thero) .u-eyebrow.is-on-dark,
+:is(.ahero, .shero, .dhero, .chero, .phero, .thero) .u-eyebrow {
+  background: color-mix(in srgb, var(--color-white) 55%, transparent);
+  border-color: var(--color-line);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-white) 55%, transparent)
+    inset;
+  color: var(--color-accent-700);
+  padding-inline: 0.9rem;
+}
+:is(.ahero, .shero, .dhero, .chero, .phero, .thero) .u-eyebrow::before {
+  background: var(--color-accent);
 }
 
 .btn-pulse,
@@ -2937,8 +2983,10 @@ section.bg-ink {
   inline-size: 100%;
   max-inline-size: 72rem;
   margin-inline: auto;
-  block-size: clamp(31rem, 60vh, 38rem);
-  perspective: 1500px;
+  block-size: clamp(28rem, 54vh, 34rem);
+  /* Larger perspective = less enlargement of the front card (it sits at
+     translateZ(radius)), so it no longer balloons up into the heading. */
+  perspective: 2200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3093,7 +3141,7 @@ section.bg-ink {
 @media (max-width: 639px) {
   .faq-scene {
     max-inline-size: 21rem;
-    block-size: 29rem;
+    block-size: 27rem;
   }
   .faq-carousel {
     inline-size: min(90vw, 18.5rem);
@@ -3147,6 +3195,35 @@ section.bg-ink {
   padding-block: calc(var(--header-h) + 4rem) 5rem;
   background: var(--color-cream);
   overflow: clip;
+}
+/* Soft aurora wash — a faint fjord/mint/periwinkle glow drifting off the art
+   side, echoing the map palette without competing with the copy. */
+.home-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(
+      40rem 32rem at 85% 12%,
+      color-mix(in srgb, var(--color-aurora-mint) 32%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      36rem 30rem at 100% 90%,
+      color-mix(in srgb, var(--color-aurora-periwinkle) 26%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      34rem 28rem at 60% 40%,
+      color-mix(in srgb, var(--color-accent-100) 55%, transparent),
+      transparent 70%
+    );
+}
+.home-hero > * {
+  position: relative;
+  z-index: 1;
 }
 .home-hero-inner {
   display: flex;
@@ -3219,7 +3296,8 @@ section.bg-ink {
 .home-hero-svg {
   width: 130%;
   height: 130%;
-  color: var(--color-line);
+  /* Wireframe drawn in a faint glacier tint rather than flat grey. */
+  color: color-mix(in srgb, var(--color-accent) 30%, var(--color-line));
 }
 
 .home-marquee {

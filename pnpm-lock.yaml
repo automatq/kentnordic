@@ -8,18 +8,12 @@ importers:
 
   .:
     dependencies:
-      '@fontsource-variable/montserrat':
+      '@fontsource-variable/hanken-grotesk':
         specifier: ^5.2.8
         version: 5.2.8
-      '@fontsource-variable/playfair-display':
+      '@fontsource-variable/newsreader':
         specifier: ^5.2.8
-        version: 5.2.8
-      '@fontsource/geist-sans':
-        specifier: ^5.2.5
-        version: 5.2.5
-      '@fontsource/instrument-serif':
-        specifier: ^5.2.8
-        version: 5.2.8
+        version: 5.2.10
       '@fontsource/jetbrains-mono':
         specifier: ^5.2.8
         version: 5.2.8
@@ -331,17 +325,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@fontsource-variable/montserrat@5.2.8':
-    resolution: {integrity: sha512-d8wykq7GCKhEOlLwEuQIOK3w3qsXNxwDlH0meru4AZZzQ4/+rZyvHWKL6BBtHdmbovSHEEQDkwkD8qYUKlcFtQ==}
+  '@fontsource-variable/hanken-grotesk@5.2.8':
+    resolution: {integrity: sha512-K7hu09ZKReBc7EifRLeM4K94NZBrxFEg0nGcISmVwlFQOJo4EmYkLXTWEwr5JcNW4z2hr5zy8vLS2sxC8JDmrQ==}
 
-  '@fontsource-variable/playfair-display@5.2.8':
-    resolution: {integrity: sha512-ZzVIXPOrL85yyOvZYoBzUszIJM+xKkHqni4IYn2CVLaGQQdJR8sBeC8yFNgjxSJ7ludTwta8qpULeOFuk5X75A==}
-
-  '@fontsource/geist-sans@5.2.5':
-    resolution: {integrity: sha512-anllOHyJbElRs9fV15TeDRqAeb1IKm4bSknPl6ZMoyPTx1BBy7logudcUwpNjmQLkzn4Q0JGQLRCUKJYoyST6A==}
-
-  '@fontsource/instrument-serif@5.2.8':
-    resolution: {integrity: sha512-s+bkz+syj2rO00Rmq9g0P+PwuLig33DR1xDR8pTWmovH1pUjwnncrFk++q9mmOex8fUQ7oW80gPpPDaw7V1MMw==}
+  '@fontsource-variable/newsreader@5.2.10':
+    resolution: {integrity: sha512-MdI2iRwrqWpMOU/2aV2BgfZ4dJNlj/XlYaY8Zb7t87mWqHskYW0XiUANkt1cyOCiEfW2VQ0bQ5vZgGPp6B2B4w==}
 
   '@fontsource/jetbrains-mono@5.2.8':
     resolution: {integrity: sha512-6w8/SG4kqvIMu7xd7wt6x3idn1Qux3p9N62s6G3rfldOUYHpWcc2FKrqf+Vo44jRvqWj2oAtTHrZXEP23oSKwQ==}
@@ -1661,13 +1649,9 @@ snapshots:
   '@esbuild/win32-x64@0.25.12':
     optional: true
 
-  '@fontsource-variable/montserrat@5.2.8': {}
+  '@fontsource-variable/hanken-grotesk@5.2.8': {}
 
-  '@fontsource-variable/playfair-display@5.2.8': {}
-
-  '@fontsource/geist-sans@5.2.5': {}
-
-  '@fontsource/instrument-serif@5.2.8': {}
+  '@fontsource-variable/newsreader@5.2.10': {}
 
   '@fontsource/jetbrains-mono@5.2.8': {}
 
