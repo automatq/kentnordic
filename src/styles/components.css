@@ -454,6 +454,40 @@ main {
   overflow: visible;
 }
 
+/* Individual destination points — a third layer above the region hotspots.
+   pointer-events is off on the layer itself so clicks between points still
+   reach the region beneath; each point re-enables it on its own hit target. */
+.map-points {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.map-point {
+  pointer-events: auto;
+  cursor: pointer;
+  outline: none;
+}
+.map-point-dot {
+  fill: var(--rc);
+  stroke: var(--color-white);
+  stroke-width: 10;
+  transition:
+    r 0.2s var(--ease-out-quint),
+    filter 0.2s var(--ease-out-quint);
+  filter: drop-shadow(0 2px 6px rgb(42 42 40 / 0.35));
+}
+.map-point:hover .map-point-dot,
+.map-point:focus-visible .map-point-dot,
+.map-point.is-active .map-point-dot {
+  filter: drop-shadow(0 4px 10px rgb(42 42 40 / 0.4));
+}
+.map-point:focus-visible .map-point-dot {
+  stroke: var(--color-accent);
+}
+
 /* Interactive hotspots */
 .hotspot {
   cursor: pointer;
@@ -519,6 +553,11 @@ main {
 .rpanel-blurb {
   font-size: 0.92rem;
   color: var(--color-charcoal-soft);
+}
+.rpanel-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 .rpanel-legend {
   list-style: none;
@@ -3289,6 +3328,46 @@ section.bg-ink {
   max-inline-size: 34rem;
   margin-block-start: 0.35rem;
 }
+.fly-stops {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin-block-start: 0.75rem;
+  max-inline-size: 34rem;
+}
+.fly-stop {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+.fly-stop-n {
+  display: grid;
+  place-items: center;
+  inline-size: 1.4rem;
+  block-size: 1.4rem;
+  flex: none;
+  margin-block-start: 0.1rem;
+  border-radius: 50%;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+}
+.fly-stop-body {
+  display: flex;
+  flex-direction: column;
+}
+.fly-stop-name {
+  font-weight: 500;
+  color: var(--color-ink);
+  font-size: 0.88rem;
+}
+.fly-stop-blurb {
+  font-size: 0.78rem;
+  color: var(--color-charcoal-soft);
+}
 .fly-controls {
   display: flex;
   align-items: center;
@@ -3866,7 +3945,11 @@ section.bg-ink {
   }
 }
 
+/* Pointer-only interaction (the container is aria-hidden — keyboard users
+   already reach every day via the accessible day-dots below, and see this
+   day's stops in the panel's text list). */
 .walk-pin {
+  cursor: pointer;
   transition: opacity 0.3s var(--ease-out-quint);
 }
 .walk-pin-dot {
@@ -3874,7 +3957,12 @@ section.bg-ink {
   stroke: var(--color-white);
   stroke-width: 6;
   filter: drop-shadow(0 2px 4px rgb(20 23 26 / 0.35));
-  transition: r 0.3s var(--ease-out-quint);
+  transition:
+    r 0.3s var(--ease-out-quint),
+    filter 0.2s var(--ease-out-quint);
+}
+.walk-pin:hover .walk-pin-dot {
+  filter: drop-shadow(0 4px 8px rgb(20 23 26 / 0.45));
 }
 .walk-pin.is-visited .walk-pin-dot {
   fill: color-mix(

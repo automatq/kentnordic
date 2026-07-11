@@ -1,8 +1,11 @@
 import { ContactShadows } from '@react-three/drei';
 import { useMemo } from 'react';
 import PaperMap from '@/three/iceland/PaperMap';
+import PointMesh, { type PointInfo } from '@/three/iceland/PointMesh';
 import RegionMesh from '@/three/iceland/RegionMesh';
 import { getIcelandGeometry } from '@/three/iceland/regionGeometry';
+
+export type { PointInfo };
 
 export interface RegionInfo {
   id: string;
@@ -15,6 +18,11 @@ interface IcelandSceneProps {
   interactive?: boolean;
   onSelect?: (slug: string) => void;
   onHover?: (slug: string | null) => void;
+  /** Individual destination markers (main map only — omit elsewhere). */
+  points?: PointInfo[];
+  activePoint?: string | null;
+  onSelectPoint?: (id: string) => void;
+  onHoverPoint?: (id: string | null) => void;
   children?: React.ReactNode;
 }
 
@@ -23,7 +31,18 @@ interface IcelandSceneProps {
  * Destinations map and the tour flythrough. Trails/pins/camera rigs come in
  * as children so both experiences stay in one visual world.
  */
-export default function IcelandScene({ regions, activeRegion, interactive = true, onSelect, onHover, children }: IcelandSceneProps) {
+export default function IcelandScene({
+  regions,
+  activeRegion,
+  interactive = true,
+  onSelect,
+  onHover,
+  points,
+  activePoint,
+  onSelectPoint,
+  onHoverPoint,
+  children,
+}: IcelandSceneProps) {
   const geo = useMemo(() => getIcelandGeometry(), []);
   const colorBySlug = useMemo(() => new Map(regions.map((r) => [r.id, r.color])), [regions]);
 
@@ -44,6 +63,9 @@ export default function IcelandScene({ regions, activeRegion, interactive = true
           onSelect={onSelect}
           onHover={onHover}
         />
+      ))}
+      {points?.map((p) => (
+        <PointMesh key={p.id} point={p} active={activePoint === p.id} onSelect={onSelectPoint} onHover={onHoverPoint} />
       ))}
       {children}
       {/* Soft drop beneath the whole paper so the map hovers off the page. */}

@@ -1,6 +1,7 @@
-import { getRegions as loadRegions, getTours as loadTours, type Region, type Tour } from '@/lib/content';
+import { getDestinations, getRegions as loadRegions, getTours as loadTours, type Destination, type Region, type Tour } from '@/lib/content';
+import { getWalkthrough } from '@/lib/tourRoute';
 
-export type { Region, Tour };
+export type { Destination, Region, Tour };
 
 const MONTHS = [
   '',
@@ -47,6 +48,27 @@ export function tourRegionIds(tour: Tour): string[] {
 export function toursForRegion(regionId: string): Tour[] {
   const tours = getTours();
   return tours.filter((t) => tourRegionIds(t).includes(regionId));
+}
+
+export function getDestinationPoints(): Destination[] {
+  return getDestinations();
+}
+
+/** Destination id -> the tours whose itinerary stops there, built in one pass. */
+export function destinationTourMap(): Map<string, Tour[]> {
+  const map = new Map<string, Tour[]>();
+  for (const t of getTours()) {
+    for (const pin of getWalkthrough(t).pins) {
+      map.set(pin.id, [...(map.get(pin.id) ?? []), t]);
+    }
+  }
+  return map;
+}
+
+/** Tours that visit a given destination point. Prefer destinationTourMap()
+    when looking up more than one point, to avoid recomputing the map. */
+export function toursForDestination(destinationId: string): Tour[] {
+  return destinationTourMap().get(destinationId) ?? [];
 }
 
 export function formatLength(tour: Tour): string {

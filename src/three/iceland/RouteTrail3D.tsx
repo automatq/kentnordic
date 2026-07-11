@@ -1,5 +1,6 @@
-import { useFrame } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
+import { useFrame, invalidate } from '@react-three/fiber';
+import { useCursor } from '@react-three/drei';
+import { useMemo, useRef, useState } from 'react';
 import { CatmullRomCurve3, TubeGeometry, Vector3, type Mesh } from 'three';
 import type { Trail } from '@/lib/tourRoute';
 import { toWorld } from '@/three/iceland/regionGeometry';
@@ -45,11 +46,15 @@ interface RouteTrail3DProps {
   uRef: React.RefObject<number>;
   pinColor: (pinId: string) => string;
   accent: string;
+  /** Clicking a revealed pin — the host jumps to that stop's day. */
+  onSelectPin?: (pinId: string) => void;
 }
 
-export default function RouteTrail3D({ trail, runtime, uRef, pinColor, accent }: RouteTrail3DProps) {
+export default function RouteTrail3D({ trail, runtime, uRef, pinColor, accent, onSelectPin }: RouteTrail3DProps) {
   const legMeshes = useRef<Array<Mesh | null>>([]);
   const pinMeshes = useRef<Array<Mesh | null>>([]);
+  const [hoveredPin, setHoveredPin] = useState(false);
+  useCursor(hoveredPin);
 
   const legs = useMemo(() => {
     const out: Array<{ geometry: TubeGeometry; uStart: number; uEnd: number; indexCount: number }> = [];
@@ -108,6 +113,20 @@ export default function RouteTrail3D({ trail, runtime, uRef, pinColor, accent }:
           visible={false}
           ref={(el) => {
             pinMeshes.current[i] = el;
+          }}
+          onPointerOver={(e) => {
+            if (!pinMeshes.current[i]?.visible) return;
+            e.stopPropagation();
+            setHoveredPin(true);
+          }}
+          onPointerOut={() => setHoveredPin(false)}
+          onClick={(e) => {
+            // Guard against selecting a stop the ribbon hasn't reached yet —
+            // `visible` is mutated imperatively per-frame above, not via props.
+            if (!pinMeshes.current[i]?.visible) return;
+            e.stopPropagation();
+            onSelectPin?.(p.pinId);
+            invalidate();
           }}
         >
           <sphereGeometry args={[0.011, 12, 12]} />

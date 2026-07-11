@@ -22,6 +22,7 @@ interface FlythroughSceneProps {
   accent: string;
   frameloop: 'always' | 'never';
   pinColor: (pinId: string) => string;
+  onSelectPin?: (pinId: string) => void;
   onArrive: () => void;
   onReady: () => void;
 }
@@ -103,7 +104,7 @@ function ReadySignal({ onReady }: { onReady: () => void }) {
   return null;
 }
 
-export default function FlythroughScene({ regions, trail, dayIdx, playing, accent, frameloop, pinColor, onArrive, onReady }: FlythroughSceneProps) {
+export default function FlythroughScene({ regions, trail, dayIdx, playing, accent, frameloop, pinColor, onSelectPin, onArrive, onReady }: FlythroughSceneProps) {
   const runtime = useMemo(() => buildTrailRuntime(trail), [trail]);
   const uRef = useRef(0);
   if (!runtime) return null;
@@ -113,7 +114,7 @@ export default function FlythroughScene({ regions, trail, dayIdx, playing, accen
     <Canvas frameloop={frameloop} dpr={[1, 1.75]} camera={{ fov: 40, position: [0.02, 1.26, 1.4], rotation: [-0.733, 0, 0] }} gl={{ alpha: true, antialias: true }}>
       <ReadySignal onReady={onReady} />
       <IcelandScene regions={regions} interactive={false}>
-        <RouteTrail3D trail={trail} runtime={runtime} uRef={uRef} pinColor={pinColor} accent={accent} />
+        <RouteTrail3D trail={trail} runtime={runtime} uRef={uRef} pinColor={pinColor} accent={accent} onSelectPin={onSelectPin} />
       </IcelandScene>
       <Rig runtime={runtime} targetU={targetU} playing={playing} uRef={uRef} onArrive={onArrive} />
     </Canvas>

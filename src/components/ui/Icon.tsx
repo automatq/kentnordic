@@ -49,6 +49,8 @@ const paths: Record<string, string> = {
   star: '<path d="m12 3 2.6 5.6 6.2.6-4.6 4.2 1.3 6.1L12 16.8 6.5 19.5l1.3-6.1L3.2 9.2l6.2-.6z"/>',
   play: '<path d="M7 4.5 19 12 7 19.5z"/>',
   pause: '<path d="M8 5v14M16 5v14"/>',
+  waterfall: '<path d="M6 3v6c0 1 .5 2 1.5 2.5"/><path d="M12 3v5c0 1.3.7 2.4 1.8 3"/><path d="M18 3v4c0 1.6.9 3 2 3.5"/><path d="M4 21c1-4 2.5-9 4-9s2 5 4 5 2-6 4-6 2.5 6 4 6"/>',
+  droplet: '<path d="M12 2.5c3 4 6 8 6 12a6 6 0 0 1-12 0c0-4 3-8 6-12z"/><path d="M9.5 15.5a2.5 2.5 0 0 0 2.5 2.5"/>',
 };
 
 export default function Icon({ name, size = 24, className = '', title }: IconProps) {

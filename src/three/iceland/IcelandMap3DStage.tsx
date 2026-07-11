@@ -1,12 +1,16 @@
 import { Canvas } from '@react-three/fiber';
 import { useEffect } from 'react';
-import IcelandScene, { type RegionInfo } from '@/three/iceland/IcelandScene';
+import IcelandScene, { type PointInfo, type RegionInfo } from '@/three/iceland/IcelandScene';
 
 interface IcelandMap3DStageProps {
   regions: RegionInfo[];
   activeRegion: string | null;
   onSelect: (slug: string) => void;
   onHover?: (slug: string | null) => void;
+  points?: PointInfo[];
+  activePoint?: string | null;
+  onSelectPoint?: (id: string) => void;
+  onHoverPoint?: (id: string | null) => void;
   onReady: () => void;
 }
 
@@ -21,7 +25,17 @@ function ReadySignal({ onReady }: { onReady: () => void }) {
 }
 
 /** Lazy entry point: the R3F canvas hosting the extruded Iceland relief. */
-export default function IcelandMap3DStage({ regions, activeRegion, onSelect, onHover, onReady }: IcelandMap3DStageProps) {
+export default function IcelandMap3DStage({
+  regions,
+  activeRegion,
+  onSelect,
+  onHover,
+  points,
+  activePoint,
+  onSelectPoint,
+  onHoverPoint,
+  onReady,
+}: IcelandMap3DStageProps) {
   return (
     <Canvas
       frameloop="demand"
@@ -30,7 +44,16 @@ export default function IcelandMap3DStage({ regions, activeRegion, onSelect, onH
       gl={{ alpha: true, antialias: true }}
     >
       <ReadySignal onReady={onReady} />
-      <IcelandScene regions={regions} activeRegion={activeRegion} onSelect={onSelect} onHover={onHover} />
+      <IcelandScene
+        regions={regions}
+        activeRegion={activeRegion}
+        onSelect={onSelect}
+        onHover={onHover}
+        points={points}
+        activePoint={activePoint}
+        onSelectPoint={onSelectPoint}
+        onHoverPoint={onHoverPoint}
+      />
     </Canvas>
   );
 }

@@ -39,6 +39,18 @@ export default function TourFlythrough3D({ tour }: TourFlythrough3DProps) {
   const regionColor = useMemo(() => new Map(regions.map((r) => [r.id, r.color])), [regions]);
   const accent = useMemo(() => readAccent(), []);
 
+  // First day each pin is visited — clicking a 3D pin jumps here, mirroring
+  // TourWalkthrough's day-dot behaviour.
+  const firstVisitDay = useMemo(() => {
+    const m = new Map<string, number>();
+    walk.days.forEach((d, i) => {
+      d.stops.forEach((s) => {
+        if (!m.has(s.pin.id)) m.set(s.pin.id, i);
+      });
+    });
+    return m;
+  }, [walk]);
+
   const days = walk.days;
   const day = days[dayIdx];
   const lastIdx = days.length - 1;
@@ -105,6 +117,7 @@ export default function TourFlythrough3D({ tour }: TourFlythrough3DProps) {
                 accent={accent}
                 frameloop={inView ? 'always' : 'never'}
                 pinColor={pinColor}
+                onSelectPin={(pinId) => goTo(firstVisitDay.get(pinId) ?? dayIdx)}
                 onArrive={onArrive}
                 onReady={() => setReady(true)}
               />
@@ -121,6 +134,19 @@ export default function TourFlythrough3D({ tour }: TourFlythrough3DProps) {
           </p>
           <h3 className="fly-title">{day?.title}</h3>
           {day?.summary && <p className="fly-summary">{day.summary}</p>}
+          {day && day.stops.length > 0 && (
+            <ol className="fly-stops">
+              {day.stops.map((s, i) => (
+                <li key={s.pin.id} className="fly-stop">
+                  <span className="fly-stop-n tnum">{i + 1}</span>
+                  <span className="fly-stop-body">
+                    <span className="fly-stop-name">{s.pin.name}</span>
+                    {s.pin.blurb && <span className="fly-stop-blurb">{s.pin.blurb}</span>}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          )}
         </div>
         <div className="fly-controls">
           <button type="button" className="fly-btn" aria-label="Previous day" disabled={dayIdx === 0} onClick={() => goTo(dayIdx - 1)}>

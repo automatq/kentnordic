@@ -209,6 +209,7 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
                   className={cn('walk-pin', isCurrent && 'is-current', isVisited && 'is-visited', isFuture && 'is-future')}
                   transform={`translate(${pin.coords.x}, ${pin.coords.y})`}
                   style={{ '--rc': regionColor.get(pin.region) } as React.CSSProperties}
+                  onClick={() => goTo(first)}
                 >
                   {isCurrent && <circle className="walk-pin-pulse" r="46" />}
                   <circle className="walk-pin-dot" r={isCurrent ? 26 : 17} />
