@@ -3325,6 +3325,34 @@ section.bg-ink {
   color: color-mix(in srgb, var(--color-accent) 30%, var(--color-line));
 }
 
+/* Hero crystal stack — SVG cubes beneath, WebGL canvas above, crossfading
+   once the scene renders its first frame. */
+.hero-crystal {
+  position: absolute;
+  inset: 0;
+}
+.hero-crystal-svg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s var(--ease-out-quint);
+}
+.hero-crystal-svg.is-yield {
+  opacity: 0;
+}
+.hero-crystal-canvas {
+  position: absolute;
+  inset: -12%;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out-quint);
+  pointer-events: none;
+}
+.hero-crystal-canvas.is-ready {
+  opacity: 1;
+}
+
 .home-marquee {
   margin-block-start: 0;
 }

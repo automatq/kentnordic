@@ -64,8 +64,13 @@ export type SceneTier = 'light' | 'heavy';
  * Reduced motion is handled separately (and live) by When3D/useReducedMotion.
  */
 export function canRender3D(tier: SceneTier): boolean {
-  if (saveData()) return false;
+  // QA escape hatch: ?force3d skips the device gates (WebGL still required)
+  // so software-rendered test browsers can exercise the heavy scenes.
+  const forced =
+    typeof location !== 'undefined' && new URLSearchParams(location.search).has('force3d');
+  if (saveData() && !forced) return false;
   if (!supportsWebGL()) return false;
+  if (forced) return true;
   if (tier === 'heavy' && (!gpuAccelerated() || !deviceTierOk())) return false;
   return true;
 }
