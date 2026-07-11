@@ -4,25 +4,38 @@
  * costs a nicety while a false positive costs jank on weak hardware.
  */
 
-let webglSupport: boolean | null = null;
+const probeCache = new Map<string, boolean>();
 
-/** Probe WebGL once (2 then 1), rejecting software rasterizers. */
-export function supportsWebGL(): boolean {
-  if (webglSupport !== null) return webglSupport;
-  if (typeof document === 'undefined') return (webglSupport = false);
+function probeWebGL(requireHardware: boolean): boolean {
+  const key = requireHardware ? 'hw' : 'any';
+  const cached = probeCache.get(key);
+  if (cached !== undefined) return cached;
+  if (typeof document === 'undefined') return false;
+  let ok = false;
   try {
     const canvas = document.createElement('canvas');
     canvas.width = 1;
     canvas.height = 1;
-    const attrs = { failIfMajorPerformanceCaveat: true } as WebGLContextAttributes;
+    const attrs = { failIfMajorPerformanceCaveat: requireHardware } as WebGLContextAttributes;
     const gl =
       canvas.getContext('webgl2', attrs) ?? canvas.getContext('webgl', attrs);
-    webglSupport = !!gl;
+    ok = !!gl;
     gl?.getExtension('WEBGL_lose_context')?.loseContext();
   } catch {
-    webglSupport = false;
+    ok = false;
   }
-  return webglSupport;
+  probeCache.set(key, ok);
+  return ok;
+}
+
+/** Any WebGL at all — software rasterizers qualify (fine for tiny shaders). */
+export function supportsWebGL(): boolean {
+  return probeWebGL(false);
+}
+
+/** Hardware-accelerated WebGL — three.js scenes stay off software renderers. */
+export function gpuAccelerated(): boolean {
+  return probeWebGL(true);
 }
 
 /** Data-saver users never pay for a 3D chunk download. */
@@ -53,6 +66,6 @@ export type SceneTier = 'light' | 'heavy';
 export function canRender3D(tier: SceneTier): boolean {
   if (saveData()) return false;
   if (!supportsWebGL()) return false;
-  if (tier === 'heavy' && !deviceTierOk()) return false;
+  if (tier === 'heavy' && (!gpuAccelerated() || !deviceTierOk())) return false;
   return true;
 }

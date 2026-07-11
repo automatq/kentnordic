@@ -3225,6 +3225,31 @@ section.bg-ink {
   position: relative;
   z-index: 1;
 }
+
+/* Aurora veil — WebGL northern-lights canvas layered over a section. The
+   veil sits above the section background (and the .home-hero::before wash)
+   but below content. Blend mode does the compositing: multiply tints light
+   paper, screen glows on dark ink. */
+.aurora-veil,
+.aurora-veil-host,
+.aurora-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.aurora-canvas {
+  width: 100%;
+  height: 100%;
+}
+.aurora-veil--light {
+  mix-blend-mode: multiply;
+}
+.aurora-veil--dark {
+  mix-blend-mode: screen;
+}
+.home-hero > .aurora-veil {
+  z-index: 0;
+}
 .home-hero-inner {
   display: flex;
   flex-direction: column;
@@ -3474,6 +3499,8 @@ section.bg-ink {
   text-align: center;
 }
 .home-cta-inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;

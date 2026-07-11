@@ -9,6 +9,7 @@ import Marquee from '@/components/motion/Marquee';
 import CardDeckReveal from '@/components/motion/CardDeckReveal';
 import ParallaxGallery, { type ParallaxGalleryItem } from '@/components/motion/ParallaxGallery';
 import FlipCardCarousel from '@/components/motion/FlipCardCarousel';
+import AuroraVeil from '@/components/three/AuroraVeil';
 import { getServices, getTestimonials, getFaq } from '@/lib/content';
 import { site } from '@/config/site';
 
@@ -129,6 +130,7 @@ export default function HomePage() {
   return (
     <BaseLayout title="Iceland Ground Operator & DMC" jsonLd={jsonLd}>
       <section className="home-hero">
+        <AuroraVeil variant="light" />
         <Container className="home-hero-inner">
           <div className="home-hero-copy">
             <span className="u-eyebrow">Iceland Destination Management</span>
@@ -243,7 +245,7 @@ export default function HomePage() {
         />
       </Section>
 
-      <ParallaxGallery items={galleryItems}>
+      <ParallaxGallery items={galleryItems} aurora>
         <div className="pgallery-copy">
           <span className="u-eyebrow is-on-dark">Destinations</span>
           <h2 className="pgallery-title">
@@ -355,6 +357,7 @@ export default function HomePage() {
       </Section>
 
       <section className="home-cta">
+        <AuroraVeil variant="dark" />
         <Container className="home-cta-inner">
           <Reveal as="h2" className="home-cta-title">
             <span>From first brief.</span>

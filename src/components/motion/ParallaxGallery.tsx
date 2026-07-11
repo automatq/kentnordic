@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { getPhoto } from '@/lib/photos';
 import { onScrollFrame, clamp } from '@/lib/scrollMath';
 import { cn } from '@/lib/classNames';
+import AuroraVeil from '@/components/three/AuroraVeil';
 
 export interface ParallaxGalleryItem {
   photoKey: string;
@@ -19,10 +20,12 @@ interface ParallaxGalleryProps {
   items: ParallaxGalleryItem[];
   className?: string;
   children?: React.ReactNode;
+  /** Layer a living aurora veil behind the floating photos (dark sections). */
+  aurora?: boolean;
 }
 
 /** Tall sticky section with photo cards drifting at different speeds as the user scrolls past. */
-export default function ParallaxGallery({ items, className, children }: ParallaxGalleryProps) {
+export default function ParallaxGallery({ items, className, children, aurora }: ParallaxGalleryProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
   const progressRef = useRef(-1);
@@ -49,6 +52,7 @@ export default function ParallaxGallery({ items, className, children }: Parallax
   return (
     <div ref={sectionRef} className={cn('pgallery', className)}>
       <div className="pgallery-sticky">
+        {aurora && <AuroraVeil variant="dark" />}
         <div className="pgallery-glow" aria-hidden="true" />
         {children}
         {items.map((item, i) => (
