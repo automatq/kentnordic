@@ -755,6 +755,8 @@ main {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 1.25rem;
+  /* Header + sticky day-jump strip clearance for #day-N anchors. */
+  scroll-margin-block-start: calc(var(--header-h) + 4.5rem);
 }
 .day-rail {
   display: flex;
@@ -825,8 +827,79 @@ main {
   border-radius: var(--radius-pill);
 }
 .day-summary {
+  display: block;
+  flex-basis: 100%;
   margin-block-start: 0.75rem;
   color: var(--color-charcoal-soft);
+}
+
+/* Collapsible day card: the head doubles as the <details> summary so the
+   default view is a scannable list of day titles + summaries. */
+.day-details > summary.day-head-toggle {
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  padding-inline-end: 2.25rem;
+}
+.day-details > summary.day-head-toggle::-webkit-details-marker {
+  display: none;
+}
+.day-chevron {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: 0.35rem;
+  color: var(--color-charcoal-soft);
+  transition: transform 0.25s var(--ease-out-quint);
+}
+.day-details[open] > .day-head-toggle .day-chevron {
+  transform: rotate(180deg);
+}
+.day-details > summary.day-head-toggle:hover .day-title,
+.day-details > summary.day-head-toggle:focus-visible .day-title {
+  color: var(--color-accent-700);
+}
+.day-detail-body {
+  padding-block-start: 0.25rem;
+}
+
+/* Sticky day-jump pill strip above the itinerary. */
+.day-jump {
+  position: sticky;
+  inset-block-start: calc(var(--header-h) + 0.75rem);
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  margin-block-end: 1.5rem;
+  background: color-mix(in srgb, var(--color-cream) 88%, transparent);
+  backdrop-filter: blur(10px);
+}
+.day-jump a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-line);
+  background: var(--color-white);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--color-charcoal-soft);
+  text-decoration: none;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background-color 0.2s;
+}
+.day-jump a:hover,
+.day-jump a:focus-visible {
+  color: var(--color-accent-700);
+  border-color: var(--color-accent-300);
+  background: var(--color-accent-50);
 }
 .places {
   display: flex;
@@ -2397,6 +2470,65 @@ main {
   color: var(--color-charcoal-soft);
   text-decoration: none;
 }
+.side-print {
+  inline-size: 100%;
+  margin-block-start: 0.6rem;
+}
+
+/* Social proof at the decision point. */
+.side-quote {
+  margin-block-start: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-inline-start: 3px solid var(--color-accent-300);
+  background: color-mix(in srgb, var(--color-white) 60%, transparent);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+.side-quote blockquote {
+  margin: 0;
+  font-family: var(--font-accent-serif);
+  font-style: italic;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: var(--color-charcoal);
+}
+.side-quote figcaption {
+  margin-block-start: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--color-charcoal-soft);
+}
+
+/* Mobile-only sticky bottom quote bar (desktop keeps the sticky side-card). */
+.quote-bar {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem var(--spacing-gutter) calc(0.75rem + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--color-white) 92%, transparent);
+  backdrop-filter: blur(14px);
+  border-block-start: 1px solid var(--color-line);
+  transform: translateY(105%);
+  transition: transform 0.3s var(--ease-out-quint);
+}
+.quote-bar[data-visible='true'] {
+  transform: none;
+}
+.quote-bar-code {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--color-charcoal-soft);
+}
+@media (min-width: 1024px) {
+  .quote-bar {
+    display: none;
+  }
+}
+
 .side-alt:hover {
   color: var(--color-accent);
 }
@@ -4219,5 +4351,89 @@ section.bg-ink {
   .walk-leg.is-drawing {
     animation: none;
     stroke-dashoffset: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Print: the tour itinerary as a clean handout — the artifact agencies
+ * forward to their clients. Chrome, WebGL, and navigation disappear;
+ * day cards compact to bordered black-on-white blocks.
+ * (Unlayered, so these win over Tailwind utility layers without hacks.)
+ * ------------------------------------------------------------------------- */
+@media print {
+  @page {
+    margin: 1.5cm;
+  }
+  .site-header,
+  .site-footer,
+  .skip-link,
+  .quote-bar,
+  .day-jump,
+  .crumbs,
+  .thero-bg,
+  .thero-scrim,
+  .route-map,
+  .route-note,
+  .toggle,
+  .side-cta,
+  .side-print,
+  .side-alt,
+  .side-quote,
+  .rel-section,
+  .tour-cta-band,
+  .aurora-veil {
+    display: none !important;
+  }
+  body.grain::before,
+  .grain::before {
+    display: none !important;
+  }
+  .u-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .thero {
+    min-block-size: 0 !important;
+    padding-block: 0.5cm !important;
+    background: none !important;
+    color: #000 !important;
+  }
+  .thero-title,
+  .thero-meta,
+  .thero-meta span {
+    color: #000 !important;
+  }
+  /* Side-card facts print above the itinerary as a summary block. */
+  .layout {
+    display: block !important;
+  }
+  .side {
+    margin-block-end: 1cm;
+  }
+  .day,
+  .side-card,
+  .incl-grid {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    border-radius: 6px !important;
+    break-inside: avoid;
+    background: #fff !important;
+    padding: 0.4cm !important;
+  }
+  .day {
+    margin-block-end: 0.3cm;
+    scroll-margin-block-start: 0;
+  }
+  .day-num {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #999 !important;
+    box-shadow: none !important;
+  }
+  .day-chevron {
+    display: none !important;
+  }
+  .day-details > summary.day-head-toggle {
+    padding-inline-end: 0;
   }
 }

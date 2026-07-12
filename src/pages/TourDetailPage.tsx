@@ -9,11 +9,15 @@ import Badge from '@/components/ui/Badge';
 import ItineraryDay from '@/components/tour/ItineraryDay';
 import PackageCard from '@/components/tour/PackageCard';
 import RouteExperience from '@/components/tour/RouteExperience';
+import QuoteBar from '@/components/tour/QuoteBar';
+import DayJumpNav from '@/components/tour/DayJumpNav';
+import PrintItineraryButton from '@/components/tour/PrintItineraryButton';
+import SectionHeading from '@/components/ui/SectionHeading';
 import Reveal from '@/components/motion/Reveal';
 import TimelineRail from '@/components/motion/TimelineRail';
-import { getTour } from '@/lib/content';
+import { getTestimonials, getTour } from '@/lib/content';
 import Pic from '@/components/ui/Pic';
-import { formatLength, getRegions, getTours, seasonalityText, tourRegionIds } from '@/lib/packages';
+import { formatLength, getRegions, getTours, pickTestimonial, seasonalityText, tourRegionIds } from '@/lib/packages';
 import { site } from '@/config/site';
 
 export default function TourDetailPage() {
@@ -46,6 +50,7 @@ export default function TourDetailPage() {
   const relatedFinal = related.length ? related : allTours.filter((t) => t.id !== tour.id).slice(0, 3);
   const sibling = d.pairSlug ? allTours.find((t) => t.id === d.pairSlug) : undefined;
   const inquiryHref = `/contact?package=${d.code}#inquiry`;
+  const testimonial = pickTestimonial(tour, getTestimonials());
   const jsonLd = [
     {
       '@context': 'https://schema.org',
@@ -152,9 +157,10 @@ export default function TourDetailPage() {
 
               <div className="block">
                 <h2 className="block-title">Day by day</h2>
+                <DayJumpNav days={d.itinerary.map((day) => ({ day: day.day, title: day.title }))} />
                 <TimelineRail className="timeline">
                   {d.itinerary.map((day, i) => (
-                    <ItineraryDay key={`${day.day}-${day.title}`} day={day} last={i === d.itinerary.length - 1} />
+                    <ItineraryDay key={`${day.day}-${day.title}`} day={day} id={`day-${day.day}`} defaultOpen={i === 0} last={i === d.itinerary.length - 1} />
                   ))}
                 </TimelineRail>
               </div>
@@ -229,17 +235,28 @@ export default function TourDetailPage() {
                 <Button href={inquiryHref} className="side-cta">
                   Request a quote
                 </Button>
+                <PrintItineraryButton />
                 <Link className="side-alt" to="/tours">
                   ← All tour packages
                 </Link>
               </div>
+
+              {testimonial && (
+                <figure className="side-quote">
+                  <blockquote>“{testimonial.quote}”</blockquote>
+                  <figcaption>
+                    {testimonial.author} · {testimonial.agency}
+                    {testimonial.country ? `, ${testimonial.country}` : ''}
+                  </figcaption>
+                </figure>
+              )}
             </aside>
           </div>
         </Container>
       </Section>
 
       {relatedFinal.length > 0 && (
-        <Section tone="beige">
+        <Section tone="beige" className="rel-section">
           <Container>
             <h2 className="rel-title">More Iceland itineraries</h2>
             <div className="rel-grid">
@@ -250,6 +267,30 @@ export default function TourDetailPage() {
           </Container>
         </Section>
       )}
+
+      <Section tone="charcoal" className="tour-cta-band">
+        <Container>
+          <SectionHeading
+            align="center"
+            tone="light"
+            eyebrow="Ready to quote"
+            title={`Sell ${d.name}`}
+            flourish="with confidence."
+            lead="Share your dates and group size — we come back with a costed, day-by-day proposal within one business day."
+            className="mx-auto"
+          />
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <Button href={inquiryHref} magnetic>
+              Request a quote for {d.code}
+            </Button>
+            <Button href="/tours" variant="onDark">
+              Browse all tours
+            </Button>
+          </div>
+        </Container>
+      </Section>
+
+      <QuoteBar code={d.code} inquiryHref={inquiryHref} />
     </BaseLayout>
   );
 }

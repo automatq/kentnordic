@@ -101,3 +101,16 @@ export function seasonalityText(tour: Tour): string {
 export function optionalCount(tour: Tour): number {
   return tour.data.itinerary.reduce((n, d) => n + d.optional.length, 0);
 }
+
+/**
+ * The testimonial most relevant to a tour, for display at its decision
+ * point: MICE buyers get the incentive-operator quote, Ring Road tours the
+ * full-circle logistics quote, coastal tours the South Coast quote.
+ */
+export function pickTestimonial<T extends { id: string }>(tour: Tour, testimonials: T[]): T | undefined {
+  const byId = new Map(testimonials.map((t) => [t.id, t]));
+  if (tour.data.serviceType === 'mice') return byId.get('sakura-jp') ?? testimonials[0];
+  if (tour.data.category === 'round-iceland') return byId.get('wanderlust-sg') ?? testimonials[0];
+  if (tour.data.category === 'south-coast') return byId.get('apex-my') ?? testimonials[0];
+  return testimonials[0];
+}
