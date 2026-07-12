@@ -3,7 +3,7 @@ import Container from "@/components/layout/Container";
 import Section from "@/components/layout/Section";
 import Icon from "@/components/ui/Icon";
 import Reveal from "@/components/motion/Reveal";
-import InquiryForm from "@/components/react/InquiryForm";
+import RequestQuoteForm from "@/components/react/RequestQuoteForm";
 import { getOffices, getTestimonials } from "@/lib/content";
 import Pic from "@/components/ui/Pic";
 import { getTours } from "@/lib/packages";
@@ -63,7 +63,7 @@ export default function ContactPage() {
               <p className="c-form-note">
                 Fields marked <span className="req">*</span> are required.
               </p>
-              <InquiryForm packages={packages} endpoint={site.form.endpoint} />
+              <RequestQuoteForm packages={packages} endpoint={site.form.endpoint} />
             </div>
 
             <aside className="c-side">
