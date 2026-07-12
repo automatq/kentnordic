@@ -1,8 +1,17 @@
+export type SubmissionStatus = "new" | "contacted" | "archived";
+
+// Keep in sync with api/_lib/submissions.js SUBMISSION_STATUSES.
+export const SUBMISSION_STATUSES: SubmissionStatus[] = [
+  "new",
+  "contacted",
+  "archived",
+];
+
 export interface AdminSubmission {
   id: string;
   formType: string;
   createdAt: string;
-  status: string;
+  status: SubmissionStatus;
   summary: string;
   sourcePage: string;
   contact: {
@@ -78,4 +87,30 @@ export async function fetchAdminSubmissions(limit = 100) {
     submissions: data.submissions || [],
     storageDriver: data.storageDriver || "unknown",
   };
+}
+
+export async function updateSubmissionStatus(
+  id: string,
+  status: SubmissionStatus,
+): Promise<void> {
+  const res = await fetch(`/api/admin/submissions/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ status }),
+  });
+  const data = await readJson<{ ok?: boolean; error?: string }>(res);
+  if (!res.ok || data.ok === false)
+    throw new Error(data.error || "Unable to update submission.");
+}
+
+export async function deleteSubmission(id: string): Promise<void> {
+  const res = await fetch(`/api/admin/submissions/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    credentials: "same-origin",
+    headers: { Accept: "application/json" },
+  });
+  const data = await readJson<{ ok?: boolean; error?: string }>(res);
+  if (!res.ok || data.ok === false)
+    throw new Error(data.error || "Unable to delete submission.");
 }

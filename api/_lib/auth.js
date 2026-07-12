@@ -5,6 +5,36 @@ import { json } from "./http.js";
 const COOKIE_NAME = "idc_admin_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 12;
 
+// Per-instance login throttle: 5 failures locks an IP out for 15 minutes.
+// Lives in module memory, so it resets on cold start and isn't shared across
+// concurrent serverless instances — a speed bump against casual brute
+// forcing, not a substitute for a durable rate limiter.
+const MAX_LOGIN_ATTEMPTS = 5;
+const LOGIN_LOCKOUT_MS = 15 * 60 * 1000;
+const loginAttempts = new Map();
+
+export function checkLoginRateLimit(ip) {
+  const entry = loginAttempts.get(ip);
+  if (entry?.lockedUntil && entry.lockedUntil > Date.now()) {
+    return { limited: true, retryAfterMs: entry.lockedUntil - Date.now() };
+  }
+  return { limited: false };
+}
+
+export function recordLoginFailure(ip) {
+  const entry = loginAttempts.get(ip) || { count: 0, lockedUntil: 0 };
+  entry.count += 1;
+  if (entry.count >= MAX_LOGIN_ATTEMPTS) {
+    entry.lockedUntil = Date.now() + LOGIN_LOCKOUT_MS;
+    entry.count = 0;
+  }
+  loginAttempts.set(ip, entry);
+}
+
+export function recordLoginSuccess(ip) {
+  loginAttempts.delete(ip);
+}
+
 export function isAdminConfigured() {
   return Boolean(process.env.ADMIN_PASSWORD);
 }
