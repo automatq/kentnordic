@@ -1,8 +1,17 @@
+export type SubmissionStatus = "new" | "contacted" | "archived";
+
+// Keep in sync with api/_lib/submissions.js SUBMISSION_STATUSES.
+export const SUBMISSION_STATUSES: SubmissionStatus[] = [
+  "new",
+  "contacted",
+  "archived",
+];
+
 export interface AdminSubmission {
   id: string;
   formType: string;
   createdAt: string;
-  status: string;
+  status: SubmissionStatus;
   summary: string;
   sourcePage: string;
   contact: {
@@ -25,8 +34,28 @@ export interface AdminSession {
   expiresAt?: string;
 }
 
+function isLocalApiResponse(res: Response): boolean {
+  const hostname = new URL(res.url).hostname;
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
+
 async function readJson<T>(res: Response): Promise<T> {
-  return (await res.json()) as T;
+  const contentType = res.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    if (isLocalApiResponse(res)) {
+      throw new Error(
+        "The admin backend is unavailable in Vite. Start local admin development with pnpm dev:admin.",
+      );
+    }
+
+    throw new Error("The admin API returned an unexpected non-JSON response.");
+  }
+
+  try {
+    return (await res.json()) as T;
+  } catch {
+    throw new Error("The admin API returned malformed JSON.");
+  }
 }
 
 export async function fetchAdminSession(): Promise<AdminSession> {
@@ -78,4 +107,30 @@ export async function fetchAdminSubmissions(limit = 100) {
     submissions: data.submissions || [],
     storageDriver: data.storageDriver || "unknown",
   };
+}
+
+export async function updateSubmissionStatus(
+  id: string,
+  status: SubmissionStatus,
+): Promise<void> {
+  const res = await fetch(`/api/admin/submissions/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ status }),
+  });
+  const data = await readJson<{ ok?: boolean; error?: string }>(res);
+  if (!res.ok || data.ok === false)
+    throw new Error(data.error || "Unable to update submission.");
+}
+
+export async function deleteSubmission(id: string): Promise<void> {
+  const res = await fetch(`/api/admin/submissions/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    credentials: "same-origin",
+    headers: { Accept: "application/json" },
+  });
+  const data = await readJson<{ ok?: boolean; error?: string }>(res);
+  if (!res.ok || data.ok === false)
+    throw new Error(data.error || "Unable to delete submission.");
 }

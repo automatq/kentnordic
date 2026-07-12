@@ -16,6 +16,11 @@ const serviceModules = import.meta.glob<string>('../content/services/*.{md,mdx}'
   import: 'default',
   eager: true,
 });
+const legalModules = import.meta.glob<string>('../content/legal/*.{md,mdx}', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
 const regionModules = import.meta.glob<Record<string, unknown>>('../content/regions/*.json', {
   import: 'default',
   eager: true,
@@ -167,6 +172,13 @@ const officeSchema = z.object({
   order: z.number().default(0),
 });
 
+const legalPageSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  order: z.number().default(0),
+  updated: z.string().optional(),
+});
+
 export type Tour = {
   id: string;
   body: string;
@@ -180,6 +192,11 @@ export type Service = {
   id: string;
   body: string;
   data: z.output<typeof serviceSchema>;
+};
+export type LegalPage = {
+  id: string;
+  body: string;
+  data: z.output<typeof legalPageSchema>;
 };
 export type Destination = z.output<typeof destinationSchema>;
 export type Testimonial = z.output<typeof testimonialSchema>;
@@ -227,6 +244,10 @@ const services: Service[] = Object.entries(serviceModules)
   .map(([path, raw]) => parseMarkdown(path, raw, serviceSchema))
   .sort((a, b) => a.data.order - b.data.order);
 
+const legalPages: LegalPage[] = Object.entries(legalModules)
+  .map(([path, raw]) => parseMarkdown(path, raw, legalPageSchema))
+  .sort((a, b) => a.data.order - b.data.order);
+
 const destinations = z.array(destinationSchema).parse(destinationsJson);
 const testimonials = z.array(testimonialSchema).parse(testimonialsJson).sort((a, b) => a.order - b.order);
 const faqs = z.array(faqSchema).parse(faqJson).sort((a, b) => a.order - b.order);
@@ -246,6 +267,14 @@ export function getRegions(): Region[] {
 
 export function getServices(): Service[] {
   return services;
+}
+
+export function getLegalPages(): LegalPage[] {
+  return legalPages;
+}
+
+export function getLegalPage(slug: string | undefined): LegalPage | undefined {
+  return slug ? legalPages.find((page) => page.id === slug) : undefined;
 }
 
 export function getDestinations(): Destination[] {

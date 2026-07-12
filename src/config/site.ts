@@ -12,13 +12,23 @@ export interface NavItem {
   href: string;
 }
 
+export interface SocialItem {
+  label: string;
+  href: string;
+  icon: string;
+}
+
+function definedSocials(items: SocialItem[]): SocialItem[] {
+  return items.filter((item) => item.href.trim().length > 0);
+}
+
 export const site = {
   brandName: "Idcibidci",
   legalName: "Idcibidci ehf",
   tagline: "Your ground partner in Iceland",
   /** One-line B2B value proposition used in hero + meta. */
   description:
-    "Idcibidci is a licensed Iceland destination management company (DMC) crafting reliable, beautifully run group and tailor-made tours for travel agencies and MICE planners.",
+    "Idcibidci is an Iceland destination management company and ground operator crafting reliable, beautifully run tours for travel agencies, tour operators, and MICE planners.",
   url: "https://idcibidci.is",
   locale: "en",
 
@@ -36,6 +46,13 @@ export const site = {
   phone: "+354 555 0100",
   phoneKL: "+60 3-2856 0100",
 
+  company: {
+    registrationNumber:
+      import.meta.env.PUBLIC_COMPANY_REGISTRATION_NUMBER || "",
+    licenseNumber: import.meta.env.PUBLIC_COMPANY_LICENSE_NUMBER || "",
+    vatNumber: import.meta.env.PUBLIC_COMPANY_VAT_NUMBER || "",
+  },
+
   /**
    * Inquiry form delivery. The frontend posts to our own Vercel API so submissions
    * can be reviewed in the protected /admin area.
@@ -45,15 +62,32 @@ export const site = {
     endpoint: "/api/form-submissions",
   },
 
-  socials: [
-    { label: "Instagram", href: "https://instagram.com/", icon: "instagram" },
-    { label: "LinkedIn", href: "https://linkedin.com/", icon: "linkedin" },
-    { label: "Facebook", href: "https://facebook.com/", icon: "facebook" },
-  ],
+  legal: {
+    privacyHref: "/privacy",
+    tradeTermsHref: "/trade-terms",
+  },
+
+  socials: definedSocials([
+    {
+      label: "Instagram",
+      href: import.meta.env.PUBLIC_INSTAGRAM_URL || "",
+      icon: "instagram",
+    },
+    {
+      label: "LinkedIn",
+      href: import.meta.env.PUBLIC_LINKEDIN_URL || "",
+      icon: "linkedin",
+    },
+    {
+      label: "Facebook",
+      href: import.meta.env.PUBLIC_FACEBOOK_URL || "",
+      icon: "facebook",
+    },
+  ]),
 
   /** Trust-marquee chrome on the homepage - presentation copy, not editorial content. */
   trustBullets: [
-    { icon: "shield", label: "Licensed Icelandic DMC" },
+    { icon: "shield", label: "Iceland Destination Management" },
     { icon: "map-pin", label: "Reykjavik-Based Operations" },
     { icon: "compass", label: "Asia Pacific Sales Desk" },
     { icon: "tag", label: "Net Rates For The Trade" },
@@ -65,6 +99,12 @@ export const site = {
     titleTemplate: "%s · Idcibidci",
     defaultTitle: "Idcibidci · Iceland Destination Management Company",
     defaultOgImage: "/og-default.jpg",
+  },
+
+  measurement: {
+    googleAnalyticsId: import.meta.env.PUBLIC_GOOGLE_ANALYTICS_ID || "",
+    googleSiteVerification:
+      import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || "",
   },
 } as const;
 

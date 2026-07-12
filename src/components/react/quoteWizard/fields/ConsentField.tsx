@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { site } from "@/config/site";
+
 interface ConsentFieldProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
@@ -11,7 +14,17 @@ export default function ConsentField({ checked, onChange }: ConsentFieldProps) {
     <label className="qw-consent" data-checked={checked || undefined}>
       <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} aria-invalid={!checked} />
       <span className="qw-consent-box" aria-hidden="true" />
-      <span className="qw-consent-text">I agree to Idcibidci contacting me about this inquiry.</span>
+      <span className="qw-consent-text">
+        I agree to Idcibidci contacting me about this inquiry and accept the{" "}
+        <Link to={site.legal.privacyHref} viewTransition>
+          Privacy Policy
+        </Link>{" "}
+        and{" "}
+        <Link to={site.legal.tradeTermsHref} viewTransition>
+          Trade Terms
+        </Link>
+        .
+      </span>
     </label>
   );
 }

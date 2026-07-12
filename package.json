@@ -5,8 +5,9 @@
   "description": "Idcibidci ehf — Iceland DMC B2B website (React Router SPA)",
   "scripts": {
     "dev": "vite",
+    "dev:admin": "vercel dev",
     "start": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/build-sitemap.mjs",
     "build:fast": "vite build",
     "preview": "vite preview",
     "format": "prettier --write .",

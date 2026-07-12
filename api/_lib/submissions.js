@@ -1,6 +1,9 @@
+import { getClientIp } from "./http.js";
 import { createSubmissionId } from "./storage.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const SUBMISSION_STATUSES = ["new", "contacted", "archived"];
 
 export function normalizeInquirySubmission(body, req) {
   const data = {
@@ -34,12 +37,18 @@ export function normalizeInquirySubmission(body, req) {
 
   const createdAt = new Date().toISOString();
   const packageLabel = data.packageCode || "General inquiry";
+  // RateSheetForm posts through this same endpoint with synthetic fields —
+  // it tags its sourcePage with a #rate-sheet suffix so the admin inbox can
+  // tell the two kinds of submission apart.
+  const formType = data.sourcePage.endsWith("#rate-sheet")
+    ? "rate-sheet"
+    : "inquiry";
 
   return {
     ok: true,
     submission: {
       id: createSubmissionId(),
-      formType: "inquiry",
+      formType,
       createdAt,
       status: "new",
       summary: `${data.agency} — ${packageLabel}`,
@@ -63,7 +72,7 @@ export function normalizeInquirySubmission(body, req) {
         Message: data.message,
       },
       meta: {
-        ipAddress: clean(ipAddress(req)) || "—",
+        ipAddress: clean(getClientIp(req)) || "—",
         referer: clean(req.headers.referer) || "—",
         userAgent: clean(req.headers["user-agent"]) || "—",
       },
@@ -74,10 +83,4 @@ export function normalizeInquirySubmission(body, req) {
 
 function clean(value) {
   return String(value || "").trim();
-}
-
-function ipAddress(req) {
-  const forwarded = req.headers["x-forwarded-for"];
-  if (typeof forwarded === "string") return forwarded.split(",")[0].trim();
-  return req.socket?.remoteAddress || "";
 }

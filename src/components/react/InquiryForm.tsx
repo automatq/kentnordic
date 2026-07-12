@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { submitInquiry, type InquiryPayload } from "@/lib/formProvider";
+import { site } from "@/config/site";
 
 interface PackageOption {
   code: string;
@@ -295,7 +296,23 @@ export default function InquiryForm({ packages, endpoint }: Props) {
           className="mt-1 size-4 accent-[var(--color-accent)]"
         />
         <span>
-          I agree to Idcibidci contacting me about this inquiry.
+          I agree to Idcibidci contacting me about this inquiry and to the{" "}
+          <Link
+            to={site.legal.privacyHref}
+            viewTransition
+            className="font-medium text-accent-700 underline underline-offset-2"
+          >
+            Privacy Policy
+          </Link>{" "}
+          and{" "}
+          <Link
+            to={site.legal.tradeTermsHref}
+            viewTransition
+            className="font-medium text-accent-700 underline underline-offset-2"
+          >
+            Trade Terms
+          </Link>
+          .
           {errors.consent && (
             <span id="err-consent" className="mt-1 block text-error">
               {errors.consent}

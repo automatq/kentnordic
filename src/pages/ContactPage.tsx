@@ -8,6 +8,9 @@ import { getOffices, getTestimonials } from "@/lib/content";
 import Pic from "@/components/ui/Pic";
 import { getTours } from "@/lib/packages";
 import { site } from "@/config/site";
+import CompanyCredentials from "@/components/company/CompanyCredentials";
+import EditableText from "@/copy/EditableText";
+import { buildBreadcrumbJsonLd } from "@/lib/seo";
 
 export default function ContactPage() {
   const offices = getOffices();
@@ -16,24 +19,32 @@ export default function ContactPage() {
     code: t.data.code,
     name: t.data.name,
   }));
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "TravelAgency",
-    name: site.legalName,
-    url: site.url,
-    email: site.inquiryEmail,
-    address: offices.map((o) => ({
-      "@type": "PostalAddress",
-      streetAddress: o.addressLines.join(", "),
-      addressLocality: o.city,
-      addressCountry: o.country,
-    })),
-  };
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "TravelAgency",
+      name: site.legalName,
+      url: site.url,
+      email: site.inquiryEmail,
+      address: offices.map((o) => ({
+        "@type": "PostalAddress",
+        ...(o.addressLines.length > 0
+          ? { streetAddress: o.addressLines.join(", ") }
+          : {}),
+        addressLocality: o.city,
+        addressCountry: o.country,
+      })),
+    },
+    buildBreadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "Contact", path: "/contact" },
+    ]),
+  ];
 
   return (
     <BaseLayout
       title="Contact & Inquiry"
-      description="Request a quote or reach the Idcibidci team in Reykjavik and Kuala Lumpur. B2B ground operator for Iceland."
+      description="Contact Idcibidci, an Iceland destination management company and ground operator for travel agencies, tour operators, and MICE planners."
       jsonLd={jsonLd}
     >
       <section className="chero">
@@ -46,12 +57,9 @@ export default function ContactPage() {
         />
         <div className="chero-scrim" />
         <Container className="chero-inner">
-          <p className="u-eyebrow text-white/80">Contact</p>
-          <h1 className="chero-title">Let's build an itinerary</h1>
-          <p className="chero-lead">
-            Tell us about your group and we'll come back with a tailored,
-            net-rate quote - usually within one business day.
-          </p>
+          <EditableText copyKey="contact.hero.eyebrow" defaultValue="Contact" as="p" className="u-eyebrow text-white/80" />
+          <EditableText copyKey="contact.hero.title" defaultValue="Let's build an itinerary" as="h1" className="chero-title" />
+          <EditableText copyKey="contact.hero.lead" defaultValue="Tell us about your group and we'll come back with a tailored, net-rate quote - usually within one business day." as="p" multiline className="chero-lead" />
         </Container>
       </section>
 
@@ -59,16 +67,16 @@ export default function ContactPage() {
         <Container>
           <div className="c-layout">
             <div className="c-form" id="inquiry">
-              <h2 className="c-form-title">Request a quote</h2>
+              <EditableText copyKey="contact.form.title" defaultValue="Request a quote" as="h2" className="c-form-title" />
               <p className="c-form-note">
-                Fields marked <span className="req">*</span> are required.
+                <EditableText copyKey="contact.form.note" defaultValue="Fields marked" as="span" /> <span className="req">*</span> <EditableText copyKey="contact.form.noteSuffix" defaultValue="are required." as="span" />
               </p>
               <RequestQuoteForm packages={packages} endpoint={site.form.endpoint} />
             </div>
 
             <aside className="c-side">
               <div className="c-quick">
-                <h2 className="c-side-title">Talk to us</h2>
+                <EditableText copyKey="contact.quick.title" defaultValue="Talk to us" as="h2" className="c-side-title" />
                 <a className="c-quick-row" href={`mailto:${site.inquiryEmail}`}>
                   <Icon name="mail" size={18} />
                   <span>{site.inquiryEmail}</span>
@@ -100,11 +108,12 @@ export default function ContactPage() {
                   </p>
                   <ul className="c-trust-promises">
                     <li>
-                      <Icon name="clock" size={15} /> We reply within one
-                      business day
+                      <Icon name="clock" size={15} />{" "}
+                      <EditableText copyKey="contact.trust.promise1" defaultValue="We reply within one business day" as="span" />
                     </li>
                     <li>
-                      <Icon name="tag" size={15} /> Net trade rates
+                      <Icon name="tag" size={15} />{" "}
+                      <EditableText copyKey="contact.trust.promise2" defaultValue="Net trade rates" as="span" />
                     </li>
                   </ul>
                 </div>
@@ -130,6 +139,10 @@ export default function ContactPage() {
                   </Reveal>
                 ))}
               </div>
+              <CompanyCredentials
+                title="Licensing & company details"
+                className="mt-6"
+              />
             </aside>
           </div>
         </Container>

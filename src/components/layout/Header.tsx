@@ -4,6 +4,8 @@ import { Link, useLocation } from "react-router-dom";
 import { site } from "@/config/site";
 import Button from "@/components/ui/Button";
 import Icon from "@/components/ui/Icon";
+import EditableText from "@/copy/EditableText";
+import { useCopyValue } from "@/copy/useCopy";
 import { cn } from "@/lib/classNames";
 import { getServices } from "@/lib/content";
 import {
@@ -56,6 +58,8 @@ const routePrefetch: Record<string, () => Promise<unknown>> = {
   '/destinations': () => import('@/pages/DestinationsPage'),
   '/tours': () => import('@/pages/ToursPage'),
   '/contact': () => import('@/pages/ContactPage'),
+  '/privacy': () => import('@/pages/LegalPage'),
+  '/trade-terms': () => import('@/pages/LegalPage'),
 };
 
 function prefetchRoute(href: string) {
@@ -279,6 +283,31 @@ export default function Header({ overlay = false }: HeaderProps) {
     }, 180);
   }
 
+  const navLabels = {
+    about: useCopyValue("nav.about", "About"),
+    services: useCopyValue("nav.services", "Services"),
+    destinations: useCopyValue("nav.destinations", "Destinations"),
+    tours: useCopyValue("nav.tours", "Tour Packages"),
+    contact: useCopyValue("nav.contact", "Contact"),
+    quote: useCopyValue("nav.quote", "Request a quote"),
+  };
+
+  const displayNav = site.nav.map((item) => ({
+    ...item,
+    label:
+      item.href === "/about"
+        ? navLabels.about
+        : item.href === "/services"
+          ? navLabels.services
+          : item.href === "/destinations"
+            ? navLabels.destinations
+            : item.href === "/tours"
+              ? navLabels.tours
+              : item.href === "/contact"
+                ? navLabels.contact
+                : item.label,
+  }));
+
   return (
     <header
       className={cn(
@@ -299,7 +328,7 @@ export default function Header({ overlay = false }: HeaderProps) {
           aria-label="Primary"
         >
           <ul className="desktop-nav">
-            {site.nav.map((item) => {
+            {displayNav.map((item) => {
               const megaMenu = megaMenus[item.href];
               const isMegaOpen = activeMega === item.href;
 
@@ -454,7 +483,11 @@ export default function Header({ overlay = false }: HeaderProps) {
 
         <div className="flex items-center gap-2">
           <Button href="/contact#inquiry" size="sm" className="desktop-quote">
-            Request a quote
+            <EditableText
+              copyKey="nav.quote"
+              defaultValue="Request a quote"
+              as="span"
+            />
           </Button>
           <button
             type="button"
@@ -471,14 +504,14 @@ export default function Header({ overlay = false }: HeaderProps) {
 
       <div id="mobile-menu" className="mobile-menu" hidden={!open}>
         <nav className="mobile-nav" aria-label="Mobile">
-          {site.nav.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
+              {displayNav.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
               className="mobile-link"
               aria-current={isActive(item.href) ? "page" : undefined}
             >
-              <span>{item.label}</span>
+                  <span>{item.label}</span>
               {megaMenus[item.href] && (
                 <span className="mobile-link-copy">
                   {megaMenus[item.href].intro.title}
@@ -486,11 +519,15 @@ export default function Header({ overlay = false }: HeaderProps) {
               )}
             </Link>
           ))}
-          <Button href="/contact#inquiry" className="mt-4">
-            Request a quote
-          </Button>
-        </nav>
-      </div>
+              <Button href="/contact#inquiry" className="mt-4">
+                <EditableText
+                  copyKey="nav.quote"
+                  defaultValue="Request a quote"
+                  as="span"
+                />
+              </Button>
+            </nav>
+          </div>
     </header>
   );
 }
