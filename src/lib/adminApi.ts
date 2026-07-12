@@ -34,8 +34,28 @@ export interface AdminSession {
   expiresAt?: string;
 }
 
+function isLocalApiResponse(res: Response): boolean {
+  const hostname = new URL(res.url).hostname;
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
+
 async function readJson<T>(res: Response): Promise<T> {
-  return (await res.json()) as T;
+  const contentType = res.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    if (isLocalApiResponse(res)) {
+      throw new Error(
+        "The admin backend is unavailable in Vite. Start local admin development with pnpm dev:admin.",
+      );
+    }
+
+    throw new Error("The admin API returned an unexpected non-JSON response.");
+  }
+
+  try {
+    return (await res.json()) as T;
+  } catch {
+    throw new Error("The admin API returned malformed JSON.");
+  }
 }
 
 export async function fetchAdminSession(): Promise<AdminSession> {

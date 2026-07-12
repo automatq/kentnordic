@@ -23,10 +23,10 @@ pnpm dev                  # http://localhost:5173
 pnpm build && pnpm preview
 ```
 
-For the admin backend and protected inbox, use `vercel dev` locally so the `api/`
-routes run alongside the frontend. Plain `pnpm dev` keeps the site fast for design
-work, but falls back to demo submission behavior because Vite does not serve the
-serverless functions.
+For the admin backend and protected inbox, use `pnpm dev:admin` locally so the
+`api/` routes run alongside the frontend. Plain `pnpm dev` keeps the site fast for
+design work, but Vite does not serve the serverless functions or persist form
+submissions.
 
 ## Editing content
 
@@ -91,6 +91,7 @@ Storage behavior:
 | Command                                    | Description                                        |
 | ------------------------------------------ | -------------------------------------------------- |
 | `pnpm dev` / `pnpm build` / `pnpm preview` | Vite dev / TypeScript + production build / preview |
+| `pnpm dev:admin`                           | Vercel Dev with the local admin API                   |
 | `pnpm gen:map`                             | Rebuild the interactive map from the raw SVG       |
 | `pnpm format`                              | Prettier                                           |
 

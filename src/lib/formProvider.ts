@@ -23,9 +23,11 @@ export interface InquiryPayload {
 
 export interface SubmitResult {
   ok: boolean;
-  demo?: boolean;
   error?: string;
 }
+
+const LOCAL_BACKEND_ERROR =
+  "The form backend is unavailable in Vite. Start local submission testing with pnpm dev:admin.";
 
 export async function submitInquiry(
   payload: InquiryPayload,
@@ -45,10 +47,8 @@ export async function submitInquiry(
     const data = await res.json().catch(() => ({}) as Record<string, unknown>);
     if (res.ok && data.ok !== false) return { ok: true };
 
-    if (import.meta.env.DEV && res.status === 404) {
-      await new Promise((r) => setTimeout(r, 300));
-      return { ok: true, demo: true };
-    }
+    if (import.meta.env.DEV && res.status === 404)
+      return { ok: false, error: LOCAL_BACKEND_ERROR };
 
     const error =
       typeof data.error === "string"
@@ -57,8 +57,7 @@ export async function submitInquiry(
     return { ok: false, error };
   } catch {
     if (import.meta.env.DEV) {
-      await new Promise((r) => setTimeout(r, 300));
-      return { ok: true, demo: true };
+      return { ok: false, error: LOCAL_BACKEND_ERROR };
     }
     return {
       ok: false,
