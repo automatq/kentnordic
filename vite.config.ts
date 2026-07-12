@@ -25,6 +25,10 @@ export default defineConfig({
           // import — left unassigned, Rollup co-locates it into whichever
           // chunk it likes (it picked r3f), re-welding 3D into every page.
           if (id.includes('vite/preload-helper')) return 'react-vendor';
+          // Region outlines are shared by the maps AND the home intro —
+          // isolate them so the intro doesn't drag in the 290KB map artwork
+          // that lives in the walkthrough chunk.
+          if (id.includes('data/map-regions.json')) return 'map-geometry';
           if (!id.includes('node_modules')) return;
           if (/node_modules\/(?:react-dom|react-router-dom|react-router|react-helmet-async|react|scheduler)\//.test(id)) {
             return 'react-vendor';

@@ -11,6 +11,7 @@ import ParallaxGallery, { type ParallaxGalleryItem } from '@/components/motion/P
 import FlipCardCarousel from '@/components/motion/FlipCardCarousel';
 import AuroraVeil from '@/components/three/AuroraVeil';
 import HeroCrystal from '@/components/three/HeroCrystal';
+import SiteIntro from '@/components/home/SiteIntro';
 import { getServices, getTestimonials, getFaq } from '@/lib/content';
 import { site } from '@/config/site';
 
@@ -102,6 +103,7 @@ export default function HomePage() {
 
   return (
     <BaseLayout title="Iceland Ground Operator & DMC" jsonLd={jsonLd}>
+      <SiteIntro />
       <section className="home-hero">
         <AuroraVeil variant="light" />
         <Container className="home-hero-inner">
