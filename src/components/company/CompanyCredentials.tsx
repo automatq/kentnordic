@@ -68,7 +68,7 @@ export default function CompanyCredentials({
               {office.email && (
                 <a
                   href={`mailto:${office.email}`}
-                  className="text-accent hover:text-accent-700"
+                  className="text-accent-700 hover:text-accent-600"
                 >
                   {office.email}
                 </a>
@@ -76,7 +76,7 @@ export default function CompanyCredentials({
               {office.phone && (
                 <a
                   href={`tel:${office.phone.replace(/\s/g, "")}`}
-                  className="text-accent hover:text-accent-700"
+                  className="text-accent-700 hover:text-accent-600"
                 >
                   {office.phone}
                 </a>

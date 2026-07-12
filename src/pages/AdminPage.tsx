@@ -232,7 +232,7 @@ export default function AdminPage() {
                             {submission.contact.name} ·{" "}
                             <a
                               href={`mailto:${submission.contact.email}`}
-                              className="text-accent hover:text-accent-700"
+                              className="text-accent-700 hover:text-accent-600"
                             >
                               {submission.contact.email}
                             </a>
