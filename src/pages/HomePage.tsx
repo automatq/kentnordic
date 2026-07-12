@@ -12,6 +12,7 @@ import FlipCardCarousel from '@/components/motion/FlipCardCarousel';
 import AuroraVeil from '@/components/three/AuroraVeil';
 import HeroCrystal from '@/components/three/HeroCrystal';
 import SiteIntro from '@/components/home/SiteIntro';
+import EditableText from '@/copy/EditableText';
 import { getServices, getTestimonials, getFaq } from '@/lib/content';
 import { site } from '@/config/site';
 
@@ -91,34 +92,65 @@ export default function HomePage() {
   const services = getServices();
   const testimonials = getTestimonials();
   const faq = getFaq();
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'TravelAgency',
-    name: site.legalName,
-    description: site.description,
-    url: site.url,
-    areaServed: 'Iceland',
-    email: site.inquiryEmail,
-  };
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'TravelAgency',
+      name: site.legalName,
+      description: site.description,
+      url: site.url,
+      areaServed: 'Iceland',
+      email: site.inquiryEmail,
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faq.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ];
 
   return (
-    <BaseLayout title="Iceland Ground Operator & DMC" jsonLd={jsonLd}>
+    <BaseLayout
+      title="Iceland DMC & Ground Operator"
+      description="Idcibidci is an Iceland destination management company for travel agencies, tour operators, and MICE planners seeking a reliable local ground partner."
+      jsonLd={jsonLd}
+    >
       <SiteIntro />
       <section className="home-hero">
         <AuroraVeil variant="light" />
         <Container className="home-hero-inner">
           <div className="home-hero-copy">
-            <span className="u-eyebrow">Iceland Destination Management</span>
+            <EditableText
+              copyKey="home.hero.eyebrow"
+              defaultValue="Iceland Destination Management"
+              as="span"
+              className="u-eyebrow"
+            />
             <h1 className="home-hero-title">
-              <span>Your ground partner.</span>
-              <span>Trade-ready Iceland.</span>
-              <span className="u-flourish">Beautifully run.</span>
+              <EditableText copyKey="home.hero.titleLine1" defaultValue="Your ground partner." as="span" />
+              <EditableText copyKey="home.hero.titleLine2" defaultValue="Trade-ready Iceland." as="span" />
+              <EditableText copyKey="home.hero.titleLine3" defaultValue="Beautifully run." as="span" className="u-flourish" />
             </h1>
-            <p className="home-hero-lead">{site.description}</p>
+            <EditableText
+              copyKey="home.hero.lead"
+              defaultValue={site.description}
+              as="p"
+              multiline
+              className="home-hero-lead"
+            />
             <div className="home-hero-actions">
-              <Button href="/contact#inquiry" magnetic>Request a quote</Button>
+              <Button href="/contact#inquiry" magnetic>
+                <EditableText copyKey="home.hero.primaryCta" defaultValue="Request a quote" as="span" />
+              </Button>
               <Button href="/tours" variant="secondary">
-                Browse tour packages
+                <EditableText copyKey="home.hero.secondaryCta" defaultValue="Browse tour packages" as="span" />
               </Button>
             </div>
           </div>
@@ -135,7 +167,11 @@ export default function HomePage() {
         renderItem={(b) => (
           <>
             <Icon name={b.icon} size={18} />
-            <span>{b.label}</span>
+            <EditableText
+              copyKey={`home.trustBullet.${b.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+              defaultValue={b.label}
+              as="span"
+            />
           </>
         )}
       />
@@ -145,15 +181,15 @@ export default function HomePage() {
           eyebrow={
             <div className="deck-badges">
               <span className="deck-dot" />
-              <span>Not a Reseller</span>
+              <EditableText copyKey="home.deck.badge1" defaultValue="Not a Reseller" as="span" />
               <span className="deck-dot" />
-              <span>Trade Only</span>
+              <EditableText copyKey="home.deck.badge2" defaultValue="Trade Only" as="span" />
             </div>
           }
           heading={
             <h2 className="deck-title">
-              <span>One Iceland Partner</span>
-              <span className="u-flourish">from brief to departure</span>
+              <EditableText copyKey="home.deck.heading1" defaultValue="One Iceland Partner" as="span" />
+              <EditableText copyKey="home.deck.heading2" defaultValue="from brief to departure" as="span" className="u-flourish" />
             </h2>
           }
           items={services.map((s) => ({
@@ -167,16 +203,24 @@ export default function HomePage() {
 
       <ParallaxGallery items={galleryItems} aurora>
         <div className="pgallery-copy">
-          <span className="u-eyebrow is-on-dark">Destinations</span>
+          <EditableText
+            copyKey="home.destinations.eyebrow"
+            defaultValue="Destinations"
+            as="span"
+            className="u-eyebrow is-on-dark"
+          />
           <h2 className="pgallery-title">
-            <span>Trace the Ring Road.</span>
-            <span>Cross the South Coast.</span>
-            <span className="u-flourish">Stand beside ice.</span>
+            <EditableText copyKey="home.destinations.title1" defaultValue="Trace the Ring Road." as="span" />
+            <EditableText copyKey="home.destinations.title2" defaultValue="Cross the South Coast." as="span" />
+            <EditableText copyKey="home.destinations.title3" defaultValue="Stand beside ice." as="span" className="u-flourish" />
           </h2>
-          <p className="pgallery-lead">
-            Eight regions, six ready-to-sell itineraries and the local judgement to adapt each route around weather, season and
-            group pace.
-          </p>
+          <EditableText
+            copyKey="home.destinations.lead"
+            defaultValue="Eight regions, six ready-to-sell itineraries and the local judgement to adapt each route around weather, season and group pace."
+            as="p"
+            multiline
+            className="pgallery-lead"
+          />
         </div>
       </ParallaxGallery>
 
@@ -184,28 +228,31 @@ export default function HomePage() {
         <Container>
           <div className="quote-section">
             <div>
-              <span className="u-eyebrow">Quote Workflow</span>
+              <EditableText copyKey="home.quote.eyebrow" defaultValue="Quote Workflow" as="span" className="u-eyebrow" />
               <h2 className="quote-title">
-                <span>Share the brief.</span>
-                <span>Get a costed</span>
-                <span className="u-flourish">day-by-day plan.</span>
+                <EditableText copyKey="home.quote.title1" defaultValue="Share the brief." as="span" />
+                <EditableText copyKey="home.quote.title2" defaultValue="Get a costed" as="span" />
+                <EditableText copyKey="home.quote.title3" defaultValue="day-by-day plan." as="span" className="u-flourish" />
               </h2>
-              <p className="quote-lead">
-                Tell us dates, pax, budget and travel style. We return a practical itinerary with hotels, coach, driver-guide,
-                sightseeing and optional add-ons clearly separated.
-              </p>
+              <EditableText
+                copyKey="home.quote.lead"
+                defaultValue="Tell us dates, pax, budget and travel style. We return a practical itinerary with hotels, coach, driver-guide, sightseeing and optional add-ons clearly separated."
+                as="p"
+                multiline
+                className="quote-lead"
+              />
               <ul className="quote-ticks">
                 <li>
                   <Icon name="check" size={20} />
-                  <span>Net rates for travel-trade partners</span>
+                  <EditableText copyKey="home.quote.tick1" defaultValue="Net rates for travel-trade partners" as="span" />
                 </li>
                 <li>
                   <Icon name="check" size={20} />
-                  <span>Clear inclusions and optional add-ons</span>
+                  <EditableText copyKey="home.quote.tick2" defaultValue="Clear inclusions and optional add-ons" as="span" />
                 </li>
                 <li>
                   <Icon name="check" size={20} />
-                  <span>Weather-aware local operations</span>
+                  <EditableText copyKey="home.quote.tick3" defaultValue="Weather-aware local operations" as="span" />
                 </li>
               </ul>
             </div>
@@ -238,37 +285,45 @@ export default function HomePage() {
                 </li>
               </ul>
               <Button href="/contact#inquiry" className="quote-card-cta">
-                Request a quote
+                <EditableText copyKey="home.quote.cardCta" defaultValue="Request a quote" as="span" />
               </Button>
             </Reveal>
           </div>
         </Container>
       </Section>
 
-      <Section tone="charcoal">
-        <Container>
-          <SectionHeading eyebrow="Partners" title="Trusted by agencies across the region" tone="light" align="center" className="mx-auto" />
-          <div className="quotes">
-            {testimonials.map((t) => (
-              <figure key={t.id} className="quote u-reveal">
-                <Icon name="quote" size={26} className="quote-mark" />
-                <blockquote>{t.quote}</blockquote>
-                <figcaption>
-                  <span className="quote-author">{t.author}</span>
-                  <span className="quote-agency">
-                    {t.agency}
-                    {t.country ? ` · ${t.country}` : ''}
-                  </span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </Container>
-      </Section>
+      {testimonials.length > 0 && (
+        <Section tone="charcoal">
+          <Container>
+            <SectionHeading eyebrow="Partners" title="Trusted by agencies across the region" tone="light" align="center" className="mx-auto" />
+            <div className="quotes">
+              {testimonials.map((t) => (
+                <figure key={t.id} className="quote u-reveal">
+                  <Icon name="quote" size={26} className="quote-mark" />
+                  <blockquote>{t.quote}</blockquote>
+                  <figcaption>
+                    <span className="quote-author">{t.author}</span>
+                    <span className="quote-agency">
+                      {t.agency}
+                      {t.country ? ` · ${t.country}` : ''}
+                    </span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </Container>
+        </Section>
+      )}
 
       <Section tone="sand">
         <Container>
-          <SectionHeading eyebrow="Partner Questions" title="Frequently Asked Questions" lead="What agencies and planners ask before sending us an Iceland brief." align="center" className="mx-auto" />
+          <SectionHeading
+            eyebrow={<EditableText copyKey="home.faq.eyebrow" defaultValue="Partner Questions" as="span" />}
+            title={<EditableText copyKey="home.faq.title" defaultValue="Frequently Asked Questions" as="span" />}
+            lead={<EditableText copyKey="home.faq.lead" defaultValue="What agencies and planners ask before sending us an Iceland brief." as="span" />}
+            align="center"
+            className="mx-auto"
+          />
           <FlipCardCarousel
             className="mt-20"
             cards={faq.map((f) => ({ question: f.question, heading: f.heading, answer: f.answer, icon: f.icon, photoKey: f.photoKey }))}
@@ -280,20 +335,25 @@ export default function HomePage() {
         <AuroraVeil variant="dark" />
         <Container className="home-cta-inner">
           <Reveal as="h2" className="home-cta-title">
-            <span>From first brief.</span>
-            <span>To final transfer.</span>
-            <span className="u-flourish">We run Iceland.</span>
+            <EditableText copyKey="home.cta.title1" defaultValue="From first brief." as="span" />
+            <EditableText copyKey="home.cta.title2" defaultValue="To final transfer." as="span" />
+            <EditableText copyKey="home.cta.title3" defaultValue="We run Iceland." as="span" className="u-flourish" />
           </Reveal>
-          <Reveal as="p" delay={100} className="home-cta-lead">
-            Send your dates, pax and preferred route. We will come back with a clear, costed proposal your agency can sell with
-            confidence.
+          <Reveal delay={100}>
+            <EditableText
+              copyKey="home.cta.lead"
+              defaultValue="Send your dates, pax and preferred route. We will come back with a clear, costed proposal your agency can sell with confidence."
+              as="p"
+              multiline
+              className="home-cta-lead"
+            />
           </Reveal>
           <Reveal delay={200} className="home-cta-actions">
             <Button href="/contact#inquiry" pulse magnetic>
-              Request a quote
+              <EditableText copyKey="home.cta.primaryCta" defaultValue="Request a quote" as="span" />
             </Button>
             <Button href="/tours" variant="onDark">
-              Browse tours
+              <EditableText copyKey="home.cta.secondaryCta" defaultValue="Browse tours" as="span" />
             </Button>
           </Reveal>
         </Container>

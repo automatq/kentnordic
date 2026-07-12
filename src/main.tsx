@@ -7,22 +7,34 @@ import '@/styles/global.css';
 import '@/styles/components.css';
 
 import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 import App from '@/App';
 import { site } from '@/config/site';
+import { CopyProvider } from '@/copy/CopyProvider';
+import EditModeToolbar from '@/copy/EditModeToolbar';
 
 // Set once, outside Helmet's management — react-helmet-async drops managed
 // html attributes on StrictMode remounts, which failed axe's html-has-lang.
 document.documentElement.lang = site.locale;
 
-createRoot(document.getElementById('root')!).render(
+const app = (
   <StrictMode>
     <HelmetProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <CopyProvider>
+        <BrowserRouter>
+          <App />
+          <EditModeToolbar />
+        </BrowserRouter>
+      </CopyProvider>
     </HelmetProvider>
-  </StrictMode>,
+  </StrictMode>
 );
+
+const root = document.getElementById('root')!;
+if (root.hasChildNodes()) {
+  hydrateRoot(root, app);
+} else {
+  createRoot(root).render(app);
+}

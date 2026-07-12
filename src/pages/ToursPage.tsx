@@ -8,7 +8,9 @@ import Reveal from '@/components/motion/Reveal';
 import Marquee from '@/components/motion/Marquee';
 import Icon from '@/components/ui/Icon';
 import Pic from '@/components/ui/Pic';
+import EditableText from '@/copy/EditableText';
 import { SEASONS, getRegions, getTours, lengthBucket, matchesSeason, tourRegionIds } from '@/lib/packages';
+import { buildBreadcrumbJsonLd } from '@/lib/seo';
 
 const lengths = [
   { key: 'all', label: 'All lengths' },
@@ -30,6 +32,10 @@ export default function ToursPage() {
   const [selectedLength, setSelectedLength] = useState(['short', 'medium', 'long'].includes(qLength ?? '') ? qLength! : 'all');
   const [selectedRegion, setSelectedRegion] = useState(qRegion && validRegions.has(qRegion) ? qRegion : 'all');
   const [selectedSeason, setSelectedSeason] = useState(SEASONS.some((s) => s.key === qSeason && s.key !== 'all') ? qSeason! : 'all');
+  const jsonLd = buildBreadcrumbJsonLd([
+    { name: 'Home', path: '/' },
+    { name: 'Tour Packages', path: '/tours' },
+  ]);
 
   const visibleTours = useMemo(
     () =>
@@ -44,14 +50,18 @@ export default function ToursPage() {
 
 
   return (
-    <BaseLayout title="Iceland Tour Packages" description="Six ready-to-sell Iceland group tours - from a 4-night South Coast escape to the full Ring Road - for travel-trade partners.">
+    <BaseLayout
+      title="Iceland Tour Packages"
+      description="Browse trade-ready Iceland tour packages from a local DMC, including South Coast and Ring Road itineraries for travel agencies and tour operators."
+      jsonLd={jsonLd}
+    >
       <section className="phero">
         <Pic photoKey="hero-tours" alt="Aerial view of an Icelandic Ring Road winding through mountains" className="phero-bg" loading="eager" fetchPriority="high" />
         <div className="phero-scrim" />
         <Container className="phero-inner">
-          <p className="u-eyebrow text-white/80">Tour Packages</p>
-          <h1 className="phero-title">Ready-to-sell Iceland itineraries</h1>
-          <p className="phero-lead">Six fully operated group tours - coach, driver-guide, hotels and sightseeing arranged. Sell them as published or tailor them to your group.</p>
+          <EditableText copyKey="tours.hero.eyebrow" defaultValue="Tour Packages" as="p" className="u-eyebrow text-white/80" />
+          <EditableText copyKey="tours.hero.title" defaultValue="Ready-to-sell Iceland itineraries" as="h1" className="phero-title" />
+          <EditableText copyKey="tours.hero.lead" defaultValue="Six fully operated group tours - coach, driver-guide, hotels and sightseeing arranged. Sell them as published or tailor them to your group." as="p" multiline className="phero-lead" />
         </Container>
       </section>
 
@@ -70,32 +80,32 @@ export default function ToursPage() {
         <Container>
           <div className="filters" role="group" aria-label="Filter tours">
             <div className="filter-group">
-              <span className="filter-label">Length</span>
+              <EditableText copyKey="tours.filters.length" defaultValue="Length" as="span" className="filter-label" />
               <div className="chips" data-filter="length">
                 {lengths.map((l) => (
                   <button key={l.key} type="button" className="fchip" data-value={l.key} aria-pressed={selectedLength === l.key} onClick={() => setSelectedLength(l.key)}>
-                    {l.label}
+                    <EditableText copyKey={`tours.filters.lengthOption.${l.key}`} defaultValue={l.label} as="span" />
                   </button>
                 ))}
               </div>
             </div>
 
             <div className="filter-group">
-              <span className="filter-label">Season</span>
+              <EditableText copyKey="tours.filters.season" defaultValue="Season" as="span" className="filter-label" />
               <div className="chips" data-filter="season">
                 {SEASONS.map((s) => (
                   <button key={s.key} type="button" className="fchip" data-value={s.key} aria-pressed={selectedSeason === s.key} onClick={() => setSelectedSeason(s.key)}>
-                    {s.label}
+                    <EditableText copyKey={`tours.filters.seasonOption.${s.key}`} defaultValue={s.label} as="span" />
                   </button>
                 ))}
               </div>
             </div>
 
             <div className="filter-group">
-              <span className="filter-label">Region</span>
+              <EditableText copyKey="tours.filters.region" defaultValue="Region" as="span" className="filter-label" />
               <div className="chips" data-filter="region">
                 <button type="button" className="fchip" data-value="all" aria-pressed={selectedRegion === 'all'} onClick={() => setSelectedRegion('all')}>
-                  All regions
+                  <EditableText copyKey="tours.filters.regionOption.all" defaultValue="All regions" as="span" />
                 </button>
                 {regions.map((r) => (
                   <button key={r.id} type="button" className="fchip" data-value={r.id} aria-pressed={selectedRegion === r.id} onClick={() => setSelectedRegion(r.id)}>
@@ -121,7 +131,7 @@ export default function ToursPage() {
             </div>
           ) : (
             <p className="empty" data-empty>
-              No tours match those filters.{' '}
+              <EditableText copyKey="tours.empty.message" defaultValue="No tours match those filters." as="span" />{' '}
               <button
                 type="button"
                 className="reset-link"
@@ -132,7 +142,7 @@ export default function ToursPage() {
                   setSelectedSeason('all');
                 }}
               >
-                Reset filters
+                <EditableText copyKey="tours.empty.reset" defaultValue="Reset filters" as="span" />
               </button>
             </p>
           )}

@@ -1,5 +1,126 @@
 /* Migrated component/page styles. */
 
+/* Inline editor */
+.idc-edit-toolbar {
+  position: fixed;
+  inset-inline-end: 1rem;
+  inset-block-end: 1rem;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--color-line) 82%, white);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.94);
+  color: var(--color-ink);
+  box-shadow: 0 18px 45px rgb(20 23 26 / 0.16);
+  backdrop-filter: blur(14px);
+}
+.idc-edit-dot {
+  inline-size: 0.6rem;
+  block-size: 0.6rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-charcoal-soft) 65%, white);
+  box-shadow: 0 0 0 0.22rem rgb(87 113 124 / 0.12);
+}
+.idc-edit-dot.is-active {
+  background: #2f7d53;
+  box-shadow: 0 0 0 0.24rem rgb(47 125 83 / 0.16);
+}
+.idc-edit-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+.idc-edit-divider,
+.idc-edit-path {
+  color: var(--color-charcoal-soft);
+}
+.idc-edit-toolbar button {
+  appearance: none;
+  border: 1px solid color-mix(in srgb, var(--color-line) 84%, white);
+  border-radius: 999px;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  padding: 0.45rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+.idc-edit-toolbar button:hover {
+  background: white;
+  border-color: color-mix(in srgb, var(--color-accent-200) 55%, white);
+}
+.idc-edit-toolbar button.is-secondary {
+  background: transparent;
+  color: var(--color-charcoal-soft);
+}
+.idc-edit-toolbar button.is-secondary:hover {
+  color: var(--color-ink);
+}
+.idc-edit-toast {
+  position: fixed;
+  inset-inline-end: 1rem;
+  inset-block-end: 4.8rem;
+  z-index: 91;
+  max-inline-size: min(22rem, calc(100vw - 2rem));
+  padding: 0.8rem 1rem;
+  border-radius: 1rem;
+  background: rgb(33 55 46 / 0.96);
+  color: white;
+  box-shadow: 0 18px 40px rgb(20 23 26 / 0.18);
+}
+.idc-edit-toast.is-error {
+  background: rgb(129 39 39 / 0.96);
+}
+.idc-editable {
+  outline: 2px dashed transparent;
+  outline-offset: 4px;
+  border-radius: 0.35rem;
+  transition: outline-color 120ms ease, background-color 120ms ease;
+  cursor: text;
+}
+.idc-editable:hover {
+  outline-color: rgb(87 113 124 / 0.42);
+  background-color: rgb(87 113 124 / 0.06);
+}
+.idc-editable:focus {
+  outline-color: rgb(87 113 124 / 0.95);
+  outline-style: solid;
+  background-color: rgb(87 113 124 / 0.08);
+}
+@media (max-width: 640px) {
+  .idc-edit-toolbar {
+    inset-inline: 0.75rem;
+    inset-block-end: 0.75rem;
+    justify-content: space-between;
+    gap: 0.55rem;
+    padding: 0.7rem 0.8rem;
+  }
+  .idc-edit-label {
+    min-inline-size: 0;
+    flex: 1;
+    overflow: hidden;
+  }
+  .idc-edit-path {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .idc-edit-toast {
+    inset-inline: 0.75rem;
+    inset-block-end: 5rem;
+    max-inline-size: none;
+  }
+}
+
 /* src/layouts/BaseLayout.tsx */
 main {
   --header-h: 5rem;
@@ -1805,6 +1926,32 @@ main {
   color: var(--color-accent-600);
   text-decoration: underline;
   text-underline-offset: 0.15em;
+  font-weight: 500;
+}
+.legal-copy {
+  max-width: var(--container-prose);
+  color: var(--color-charcoal);
+}
+.legal-copy h2,
+.legal-copy h3 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  line-height: 1.15;
+  margin-block: 2rem 0.9rem;
+}
+.legal-copy p,
+.legal-copy ul {
+  color: var(--color-charcoal-soft);
+}
+.legal-copy ul {
+  padding-inline-start: 1.2rem;
+}
+.legal-copy a,
+.rate-sheet-note a,
+.qw-consent-text a {
+  color: var(--color-accent-600);
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
   font-weight: 500;
 }
 .svc-subs {

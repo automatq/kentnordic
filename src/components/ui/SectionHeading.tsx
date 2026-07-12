@@ -1,11 +1,11 @@
 import { cn } from '@/lib/classNames';
 
 interface SectionHeadingProps {
-  eyebrow?: string;
-  title: string;
+  eyebrow?: React.ReactNode;
+  title: React.ReactNode;
   /** Trailing word rendered in the italic accent serif, e.g. CasaFlow's "Beautifully run." pattern. */
-  flourish?: string;
-  lead?: string;
+  flourish?: React.ReactNode;
+  lead?: React.ReactNode;
   align?: 'left' | 'center';
   as?: 'h1' | 'h2' | 'h3';
   tone?: 'dark' | 'light';

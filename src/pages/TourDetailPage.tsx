@@ -18,11 +18,14 @@ import TimelineRail from '@/components/motion/TimelineRail';
 import { getTestimonials, getTour } from '@/lib/content';
 import Pic from '@/components/ui/Pic';
 import SeasonBand from '@/components/tour/SeasonBand';
+import EditableText from '@/copy/EditableText';
+import { useCopyContext } from '@/copy/CopyProvider';
 import { formatLength, getRegions, getTours, pickTestimonial, priceText, seasonalityText, totalDistanceKm, tourRegionIds } from '@/lib/packages';
 import { site } from '@/config/site';
 
 export default function TourDetailPage() {
   const { slug } = useParams();
+  const { get } = useCopyContext();
   const tour = getTour(slug);
 
   if (!tour) {
@@ -42,6 +45,8 @@ export default function TourDetailPage() {
   }
 
   const d = tour.data;
+  const tourName = get(`tour.${tour.id}.name`, d.name);
+  const tourSummary = get(`tour.${tour.id}.summary`, d.summary);
   const regions = getRegions();
   const regionColors = new Map(regions.map((r) => [r.id, r.data.color]));
   const regionNames = new Map(regions.map((r) => [r.id, r.data.name]));
@@ -57,8 +62,8 @@ export default function TourDetailPage() {
     {
       '@context': 'https://schema.org',
       '@type': 'TouristTrip',
-      name: `${d.name} (${d.code})`,
-      description: d.summary,
+      name: `${tourName} (${d.code})`,
+      description: tourSummary,
       touristType: 'Travel agencies & MICE planners',
       provider: { '@type': 'TravelAgency', name: site.legalName, url: site.url },
       itinerary: {
@@ -77,13 +82,13 @@ export default function TourDetailPage() {
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
         { '@type': 'ListItem', position: 2, name: 'Tour Packages', item: `${site.url}/tours` },
-        { '@type': 'ListItem', position: 3, name: d.name, item: `${site.url}/tours/${tour.id}` },
+        { '@type': 'ListItem', position: 3, name: tourName, item: `${site.url}/tours/${tour.id}` },
       ],
     },
   ];
 
   return (
-    <BaseLayout title={`${d.name} - ${d.days}D/${d.nights}N Iceland Tour`} description={d.summary} image="/og-default.jpg" jsonLd={jsonLd}>
+    <BaseLayout title={`${tourName} - ${d.days}D/${d.nights}N Iceland Tour`} description={tourSummary} image="/og-default.jpg" jsonLd={jsonLd}>
       <section className="thero">
         <Pic photoKey={d.heroImage} alt={d.heroAlt} className="thero-bg" loading="eager" fetchPriority="high" />
         <div className="thero-scrim" />
@@ -91,10 +96,10 @@ export default function TourDetailPage() {
           <nav className="crumbs" aria-label="Breadcrumb">
             <Link to="/tours">Tour Packages</Link>
             <Icon name="arrow" size={13} />
-            <span>{d.name}</span>
+            <EditableText copyKey={`tour.${tour.id}.name`} defaultValue={tourName} as="span" />
           </nav>
           <p className="u-eyebrow">{d.code}</p>
-          <h1 className="thero-title">{d.name}</h1>
+          <EditableText copyKey={`tour.${tour.id}.name`} defaultValue={tourName} as="h1" className="thero-title" />
           <div className="thero-meta">
             <span>
               <Icon name="calendar" size={17} /> {formatLength(tour)}
@@ -113,11 +118,11 @@ export default function TourDetailPage() {
         <Container>
           <div className="layout">
             <div className="main">
-              <p className="lead">{d.summary}</p>
+              <EditableText copyKey={`tour.${tour.id}.summary`} defaultValue={tourSummary} as="p" multiline className="lead" />
 
               {sibling && (
                 <div className="toggle" role="group" aria-label="Choose travel direction">
-                  <span className="toggle-label">Direction</span>
+                  <EditableText copyKey={`tour.${tour.id}.directionLabel`} defaultValue="Direction" as="span" className="toggle-label" />
                   <div className="toggle-btns">
                     <span className="toggle-btn is-active" aria-current="true">
                       {d.direction === 'anti-clockwise' ? 'Anti-clockwise' : 'Clockwise'}
@@ -130,12 +135,12 @@ export default function TourDetailPage() {
               )}
 
               <div className="block">
-                <SectionHeading as="h2" eyebrow="Highlights" title="Trip highlights" className="block-heading" />
+                <SectionHeading as="h2" eyebrow={<EditableText copyKey={`tour.${tour.id}.highlights.eyebrow`} defaultValue="Highlights" as="span" />} title={<EditableText copyKey={`tour.${tour.id}.highlights.title`} defaultValue="Trip highlights" as="span" />} className="block-heading" />
                 <ul className="highlights">
                   {d.highlights.map((h, i) => (
                     <Reveal as="li" key={h} delay={(i % 4) * 60}>
                       <Icon name="check" size={17} className="hl-icon" />
-                      {h}
+                      <EditableText copyKey={`tour.${tour.id}.highlights.item.${i + 1}`} defaultValue={h} as="span" />
                     </Reveal>
                   ))}
                 </ul>
@@ -150,9 +155,9 @@ export default function TourDetailPage() {
               <div className="block">
                 <SectionHeading
                   as="h2"
-                  eyebrow="The route"
-                  title="Walk the route"
-                  lead={`This itinerary travels through ${coveredRegions.length} of Iceland's regions - step through it day by day on the map.`}
+                  eyebrow={<EditableText copyKey={`tour.${tour.id}.route.eyebrow`} defaultValue="The route" as="span" />}
+                  title={<EditableText copyKey={`tour.${tour.id}.route.title`} defaultValue="Walk the route" as="span" />}
+                  lead={<EditableText copyKey={`tour.${tour.id}.route.lead`} defaultValue={`This itinerary travels through ${coveredRegions.length} of Iceland's regions - step through it day by day on the map.`} as="span" />}
                   className="block-heading"
                 />
                 <div className="route-map">
@@ -161,7 +166,7 @@ export default function TourDetailPage() {
               </div>
 
               <div className="block">
-                <SectionHeading as="h2" eyebrow="Itinerary" title="Day by day" className="block-heading" />
+                <SectionHeading as="h2" eyebrow={<EditableText copyKey={`tour.${tour.id}.itinerary.eyebrow`} defaultValue="Itinerary" as="span" />} title={<EditableText copyKey={`tour.${tour.id}.itinerary.title`} defaultValue="Day by day" as="span" />} className="block-heading" />
                 <DayJumpNav days={d.itinerary.map((day) => ({ day: day.day, title: day.title }))} />
                 <TimelineRail className="timeline">
                   {d.itinerary.map((day, i) => (
@@ -173,21 +178,25 @@ export default function TourDetailPage() {
               <div className="block incl-grid">
                 <Reveal className="incl-col">
                   <h3 className="incl-h">
-                    <Icon name="check" size={18} /> What's included
+                    <Icon name="check" size={18} /> <EditableText copyKey={`tour.${tour.id}.included.title`} defaultValue="What's included" as="span" />
                   </h3>
                   <ul>
-                    {d.inclusions.map((i) => (
-                      <li key={i}>{i}</li>
+                    {d.inclusions.map((item, i) => (
+                      <li key={item}>
+                        <EditableText copyKey={`tour.${tour.id}.included.item.${i + 1}`} defaultValue={item} as="span" />
+                      </li>
                     ))}
                   </ul>
                 </Reveal>
                 <Reveal delay={100} className="incl-col excl">
                   <h3 className="incl-h">
-                    <Icon name="close" size={18} /> Not included
+                    <Icon name="close" size={18} /> <EditableText copyKey={`tour.${tour.id}.excluded.title`} defaultValue="Not included" as="span" />
                   </h3>
                   <ul>
-                    {d.exclusions.map((i) => (
-                      <li key={i}>{i}</li>
+                    {d.exclusions.map((item, i) => (
+                      <li key={item}>
+                        <EditableText copyKey={`tour.${tour.id}.excluded.item.${i + 1}`} defaultValue={item} as="span" />
+                      </li>
                     ))}
                   </ul>
                 </Reveal>
@@ -198,17 +207,17 @@ export default function TourDetailPage() {
               <div className="side-card">
                 <p className="side-eyebrow">Group tour · {d.code}</p>
                 <p className="side-price">{priceText(tour)}</p>
-                <p className="side-note">Net rates for travel-trade partners. Share your dates and group size for a tailored quote.</p>
+                <EditableText copyKey={`tour.${tour.id}.side.note`} defaultValue="Net rates for travel-trade partners. Share your dates and group size for a tailored quote." as="p" multiline className="side-note" />
                 <dl className="side-facts">
                   <div>
                     <dt>
-                      <Icon name="calendar" size={16} /> Length
+                      <Icon name="calendar" size={16} /> <EditableText copyKey={`tour.${tour.id}.side.length`} defaultValue="Length" as="span" />
                     </dt>
                     <dd>{formatLength(tour)}</dd>
                   </div>
                   <div>
                     <dt>
-                      <Icon name="route" size={16} /> Route
+                      <Icon name="route" size={16} /> <EditableText copyKey={`tour.${tour.id}.side.route`} defaultValue="Route" as="span" />
                     </dt>
                     <dd>
                       {d.startCity} → {d.endCity}
@@ -216,7 +225,7 @@ export default function TourDetailPage() {
                   </div>
                   <div>
                     <dt>
-                      <Icon name="snowflake" size={16} /> Season
+                      <Icon name="snowflake" size={16} /> <EditableText copyKey={`tour.${tour.id}.side.season`} defaultValue="Season" as="span" />
                     </dt>
                     <dd>
                       <SeasonBand tour={tour} />
@@ -226,20 +235,20 @@ export default function TourDetailPage() {
                   {totalKm > 0 && (
                     <div>
                       <dt>
-                        <Icon name="car" size={16} /> Total driving
+                        <Icon name="car" size={16} /> <EditableText copyKey={`tour.${tour.id}.side.driving`} defaultValue="Total driving" as="span" />
                       </dt>
                       <dd className="tnum">~{Math.round(totalKm / 10) * 10} km</dd>
                     </div>
                   )}
                   <div>
                     <dt>
-                      <Icon name="group" size={16} /> Type
+                      <Icon name="group" size={16} /> <EditableText copyKey={`tour.${tour.id}.side.typeLabel`} defaultValue="Type" as="span" />
                     </dt>
-                    <dd>Guided group coach tour</dd>
+                    <dd><EditableText copyKey={`tour.${tour.id}.side.typeValue`} defaultValue="Guided group coach tour" as="span" /></dd>
                   </div>
                 </dl>
                 <div className="side-regions">
-                  <p className="side-regions-label">Regions covered</p>
+                  <EditableText copyKey={`tour.${tour.id}.side.regions`} defaultValue="Regions covered" as="p" className="side-regions-label" />
                   <div className="side-region-chips">
                     {coveredRegions.map((id) => (
                       <Badge key={id} dotColor={regionColors.get(id)} tone="neutral">
@@ -249,11 +258,11 @@ export default function TourDetailPage() {
                   </div>
                 </div>
                 <Button href={inquiryHref} className="side-cta">
-                  Request a quote
+                  <EditableText copyKey={`tour.${tour.id}.side.cta`} defaultValue="Request a quote" as="span" />
                 </Button>
                 <PrintItineraryButton />
                 <Link className="side-alt" to="/tours">
-                  ← All tour packages
+                  ← <EditableText copyKey={`tour.${tour.id}.side.back`} defaultValue="All tour packages" as="span" />
                 </Link>
               </div>
 
@@ -274,7 +283,7 @@ export default function TourDetailPage() {
       {relatedFinal.length > 0 && (
         <Section tone="beige" className="rel-section">
           <Container>
-            <SectionHeading as="h2" eyebrow="Keep browsing" title="More Iceland itineraries" className="block-heading" />
+            <SectionHeading as="h2" eyebrow={<EditableText copyKey={`tour.${tour.id}.related.eyebrow`} defaultValue="Keep browsing" as="span" />} title={<EditableText copyKey={`tour.${tour.id}.related.title`} defaultValue="More Iceland itineraries" as="span" />} className="block-heading" />
             <div className="rel-grid">
               {relatedFinal.map((t) => (
                 <PackageCard key={t.id} tour={t} regionColors={regionColors} regionNames={regionNames} />
@@ -289,18 +298,18 @@ export default function TourDetailPage() {
           <SectionHeading
             align="center"
             tone="light"
-            eyebrow="Ready to quote"
-            title={`Sell ${d.name}`}
-            flourish="with confidence."
-            lead="Share your dates and group size — we come back with a costed, day-by-day proposal within one business day."
+            eyebrow={<EditableText copyKey={`tour.${tour.id}.cta.eyebrow`} defaultValue="Ready to quote" as="span" />}
+            title={<EditableText copyKey={`tour.${tour.id}.cta.title`} defaultValue={`Sell ${tourName}`} as="span" />}
+            flourish={<EditableText copyKey={`tour.${tour.id}.cta.flourish`} defaultValue="with confidence." as="span" />}
+            lead={<EditableText copyKey={`tour.${tour.id}.cta.lead`} defaultValue="Share your dates and group size — we come back with a costed, day-by-day proposal within one business day." as="span" />}
             className="mx-auto"
           />
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button href={inquiryHref} magnetic>
-              Request a quote for {d.code}
+              <EditableText copyKey={`tour.${tour.id}.cta.primary`} defaultValue={`Request a quote for ${d.code}`} as="span" />
             </Button>
             <Button href="/tours" variant="onDark">
-              Browse all tours
+              <EditableText copyKey={`tour.${tour.id}.cta.secondary`} defaultValue="Browse all tours" as="span" />
             </Button>
           </div>
         </Container>

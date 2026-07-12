@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { submitInquiry } from "@/lib/formProvider";
+import { site } from "@/config/site";
 
 type Status = "idle" | "submitting" | "done" | "error";
 
@@ -70,7 +72,18 @@ export default function RateSheetForm() {
           Enter a valid work email.
         </p>
       )}
-      <p className="rate-sheet-note">By requesting the rate sheet you agree to be contacted by our sales team.</p>
+      <p className="rate-sheet-note">
+        By requesting the rate sheet you agree to be contacted by our sales
+        team and accept our{" "}
+        <Link to={site.legal.privacyHref} viewTransition>
+          Privacy Policy
+        </Link>{" "}
+        and{" "}
+        <Link to={site.legal.tradeTermsHref} viewTransition>
+          Trade Terms
+        </Link>
+        .
+      </p>
     </form>
   );
 }

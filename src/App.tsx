@@ -1,5 +1,6 @@
-import { Suspense, lazy, useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Suspense, lazy } from "react";
+import { Route, Routes } from "react-router-dom";
+import RouteEffects from "@/router/RouteEffects";
 
 /*
  * Route-level code splitting: each page loads on demand. React Router v7
@@ -12,47 +13,11 @@ const AdminPage = lazy(() => import("@/pages/AdminPage"));
 const AboutPage = lazy(() => import("@/pages/AboutPage"));
 const ContactPage = lazy(() => import("@/pages/ContactPage"));
 const DestinationsPage = lazy(() => import("@/pages/DestinationsPage"));
+const LegalPage = lazy(() => import("@/pages/LegalPage"));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
 const ServicesPage = lazy(() => import("@/pages/ServicesPage"));
 const TourDetailPage = lazy(() => import("@/pages/TourDetailPage"));
 const ToursPage = lazy(() => import("@/pages/ToursPage"));
-
-/** How long to keep polling for a hash target while the lazy page mounts. */
-const HASH_SCROLL_DEADLINE_MS = 3000;
-
-function RouteEffects() {
-  const location = useLocation();
-
-  useEffect(() => {
-    let rafId: number | null = null;
-
-    if (location.hash) {
-      // Pages are React.lazy — on a cross-route navigation the hash target
-      // doesn't exist yet when this effect fires. Poll per frame until the
-      // element mounts (or give up after the deadline).
-      const id = location.hash.slice(1);
-      const deadline = performance.now() + HASH_SCROLL_DEADLINE_MS;
-      const seek = () => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.scrollIntoView();
-          return;
-        }
-        if (performance.now() < deadline) rafId = requestAnimationFrame(seek);
-      };
-      rafId = requestAnimationFrame(seek);
-    } else {
-      window.scrollTo({ top: 0 });
-    }
-    window.dispatchEvent(new Event("routechange"));
-
-    return () => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
-    };
-  }, [location.pathname, location.hash, location.key]);
-
-  return null;
-}
 
 export default function App() {
   return (
@@ -68,6 +33,11 @@ export default function App() {
           <Route path="/tours" element={<ToursPage />} />
           <Route path="/tours/:slug" element={<TourDetailPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy" element={<LegalPage slug="privacy" />} />
+          <Route
+            path="/trade-terms"
+            element={<LegalPage slug="trade-terms" />}
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>

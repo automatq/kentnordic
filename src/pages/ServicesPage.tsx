@@ -9,23 +9,33 @@ import Reveal from '@/components/motion/Reveal';
 import CardDeckReveal from '@/components/motion/CardDeckReveal';
 import { getServices } from '@/lib/content';
 import Pic from '@/components/ui/Pic';
+import EditableText from '@/copy/EditableText';
+import { buildBreadcrumbJsonLd } from '@/lib/seo';
 
 export default function ServicesPage() {
   const services = getServices();
+  const jsonLd = buildBreadcrumbJsonLd([
+    { name: 'Home', path: '/' },
+    { name: 'Services', path: '/services' },
+  ]);
 
   return (
-    <BaseLayout title="Services - FIT, Group Tours & MICE" description="Idcibidci's ground services for travel agencies: independent (FIT) driver-guide and self-drive, fully operated group tours, and MICE / incentive programmes.">
+    <BaseLayout
+      title="Iceland DMC Services"
+      description="Explore Idcibidci's Iceland ground services for travel agencies: FIT programs, group tours, and MICE / incentive operations."
+      jsonLd={jsonLd}
+    >
       <section className="shero">
         <Pic photoKey="hero-services" alt="Coach touring a mountain road in the Icelandic highlands" className="shero-bg" loading="eager" fetchPriority="high" />
         <div className="shero-scrim" />
         <Container className="shero-inner">
-          <p className="u-eyebrow text-white/80">Services</p>
-          <h1 className="shero-title">Ground services, end to end</h1>
-          <p className="shero-lead">One dependable partner for every kind of Iceland travel - independent, group and corporate.</p>
+          <EditableText copyKey="services.hero.eyebrow" defaultValue="Services" as="p" className="u-eyebrow text-white/80" />
+          <EditableText copyKey="services.hero.title" defaultValue="Ground services, end to end" as="h1" className="shero-title" />
+          <EditableText copyKey="services.hero.lead" defaultValue="One dependable partner for every kind of Iceland travel - independent, group and corporate." as="p" multiline className="shero-lead" />
           <nav className="shero-jump" aria-label="Jump to service">
             {services.map((s) => (
               <a key={s.id} href={`#${s.data.slug}`}>
-                {s.data.name}
+                <EditableText copyKey={`services.${s.id}.name`} defaultValue={s.data.name} as="span" />
               </a>
             ))}
           </nav>
@@ -34,7 +44,7 @@ export default function ServicesPage() {
 
       <Section tone="white">
         <CardDeckReveal
-          heading={<h2 className="deck-title mx-auto text-center">One partner, three ways to travel</h2>}
+          heading={<h2 className="deck-title mx-auto text-center"><EditableText copyKey="services.deck.title" defaultValue="One partner, three ways to travel" as="span" /></h2>}
           items={services.map((s) => ({
             icon: s.data.icon,
             title: s.data.name,
@@ -54,10 +64,10 @@ export default function ServicesPage() {
                 </span>
                 <div>
                   <p className="u-eyebrow">Service {String(i + 1).padStart(2, '0')}</p>
-                  <h2 className="svc-title">{service.data.name}</h2>
+                  <EditableText copyKey={`services.${service.id}.name`} defaultValue={service.data.name} as="h2" className="svc-title" />
                 </div>
               </div>
-              <p className="svc-summary">{service.data.summary}</p>
+              <EditableText copyKey={`services.${service.id}.summary`} defaultValue={service.data.summary} as="p" multiline className="svc-summary" />
               <div className="svc-body">
                 <ReactMarkdown>{service.body}</ReactMarkdown>
               </div>
@@ -66,15 +76,15 @@ export default function ServicesPage() {
                   {service.data.subServices.map((sub, si) => (
                     <Reveal key={sub.name} delay={si * 80} className="svc-sub">
                       <h3 className="svc-sub-title">
-                        <Icon name="check" size={17} /> {sub.name}
+                        <Icon name="check" size={17} /> <EditableText copyKey={`services.${service.id}.sub.${si + 1}.title`} defaultValue={sub.name} as="span" />
                       </h3>
-                      <p>{sub.body}</p>
+                      <EditableText copyKey={`services.${service.id}.sub.${si + 1}.body`} defaultValue={sub.body} as="p" multiline />
                     </Reveal>
                   ))}
                 </div>
               )}
               <Button href="/contact#inquiry" variant="secondary" className="svc-cta">
-                Enquire about {service.data.name}
+                <EditableText copyKey={`services.${service.id}.cta`} defaultValue={`Enquire about ${service.data.name}`} as="span" />
               </Button>
             </div>
           </Container>
@@ -83,11 +93,11 @@ export default function ServicesPage() {
 
       <Section tone="charcoal">
         <Container className="text-center">
-          <SectionHeading align="center" tone="light" eyebrow="Ready when you are" title="Let's plan your clients' Iceland" lead="Share your brief and we'll build a costed, day-by-day proposal." className="mx-auto" />
+          <SectionHeading align="center" tone="light" eyebrow={<EditableText copyKey="services.cta.eyebrow" defaultValue="Ready when you are" as="span" />} title={<EditableText copyKey="services.cta.title" defaultValue="Let's plan your clients' Iceland" as="span" />} lead={<EditableText copyKey="services.cta.lead" defaultValue="Share your brief and we'll build a costed, day-by-day proposal." as="span" />} className="mx-auto" />
           <div className="mt-8 flex justify-center gap-3">
-            <Button href="/contact#inquiry">Request a quote</Button>
+            <Button href="/contact#inquiry"><EditableText copyKey="services.cta.primary" defaultValue="Request a quote" as="span" /></Button>
             <Button href="/tours" variant="onDark">
-              Browse tour packages
+              <EditableText copyKey="services.cta.secondary" defaultValue="Browse tour packages" as="span" />
             </Button>
           </div>
         </Container>

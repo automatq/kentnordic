@@ -26,15 +26,21 @@ const AUTO_DISMISS_MS = 4600;
  * on demand, so visits that skip the intro never download it.
  */
 export default function SiteIntro() {
-  const [state, setState] = useState<IntroState>(() => {
-    if (typeof window === 'undefined') return 'done';
-    if (new URLSearchParams(window.location.search).has('intro')) return 'playing';
-    if (sessionStorage.getItem(SEEN_KEY)) return 'done';
-    if (prefersReducedMotion()) return 'done';
-    return 'playing';
-  });
+  const [state, setState] = useState<IntroState>('done');
   const [paths, setPaths] = useState<RegionPath[] | null>(null);
   const dismissTimer = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const forced = new URLSearchParams(window.location.search).has('intro');
+    if (forced) {
+      setState('playing');
+      return;
+    }
+    if (sessionStorage.getItem(SEEN_KEY)) return;
+    if (prefersReducedMotion()) return;
+    setState('playing');
+  }, []);
 
   useEffect(() => {
     if (state !== 'playing') return;

@@ -10,6 +10,9 @@ export default defineConfig({
       '@': '/src',
     },
   },
+  ssr: {
+    noExternal: ['react-helmet-async'],
+  },
   build: {
     rollupOptions: {
       output: {
