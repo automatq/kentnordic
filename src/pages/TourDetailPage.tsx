@@ -17,7 +17,8 @@ import Reveal from '@/components/motion/Reveal';
 import TimelineRail from '@/components/motion/TimelineRail';
 import { getTestimonials, getTour } from '@/lib/content';
 import Pic from '@/components/ui/Pic';
-import { formatLength, getRegions, getTours, pickTestimonial, seasonalityText, tourRegionIds } from '@/lib/packages';
+import SeasonBand from '@/components/tour/SeasonBand';
+import { formatLength, getRegions, getTours, pickTestimonial, priceText, seasonalityText, totalDistanceKm, tourRegionIds } from '@/lib/packages';
 import { site } from '@/config/site';
 
 export default function TourDetailPage() {
@@ -51,6 +52,7 @@ export default function TourDetailPage() {
   const sibling = d.pairSlug ? allTours.find((t) => t.id === d.pairSlug) : undefined;
   const inquiryHref = `/contact?package=${d.code}#inquiry`;
   const testimonial = pickTestimonial(tour, getTestimonials());
+  const totalKm = totalDistanceKm(tour);
   const jsonLd = [
     {
       '@context': 'https://schema.org',
@@ -91,7 +93,7 @@ export default function TourDetailPage() {
             <Icon name="arrow" size={13} />
             <span>{d.name}</span>
           </nav>
-          <p className="thero-code">{d.code}</p>
+          <p className="u-eyebrow">{d.code}</p>
           <h1 className="thero-title">{d.name}</h1>
           <div className="thero-meta">
             <span>
@@ -128,7 +130,7 @@ export default function TourDetailPage() {
               )}
 
               <div className="block">
-                <h2 className="block-title">Trip highlights</h2>
+                <SectionHeading as="h2" eyebrow="Highlights" title="Trip highlights" className="block-heading" />
                 <ul className="highlights">
                   {d.highlights.map((h, i) => (
                     <Reveal as="li" key={h} delay={(i % 4) * 60}>
@@ -146,17 +148,20 @@ export default function TourDetailPage() {
               )}
 
               <div className="block">
-                <h2 className="block-title">Walk the route</h2>
-                <p className="route-note">
-                  This itinerary travels through {coveredRegions.length} of Iceland's regions - step through it day by day on the map.
-                </p>
+                <SectionHeading
+                  as="h2"
+                  eyebrow="The route"
+                  title="Walk the route"
+                  lead={`This itinerary travels through ${coveredRegions.length} of Iceland's regions - step through it day by day on the map.`}
+                  className="block-heading"
+                />
                 <div className="route-map">
                   <RouteExperience tour={tour} />
                 </div>
               </div>
 
               <div className="block">
-                <h2 className="block-title">Day by day</h2>
+                <SectionHeading as="h2" eyebrow="Itinerary" title="Day by day" className="block-heading" />
                 <DayJumpNav days={d.itinerary.map((day) => ({ day: day.day, title: day.title }))} />
                 <TimelineRail className="timeline">
                   {d.itinerary.map((day, i) => (
@@ -192,7 +197,7 @@ export default function TourDetailPage() {
             <aside className="side">
               <div className="side-card">
                 <p className="side-eyebrow">Group tour · {d.code}</p>
-                <p className="side-price">Price on request</p>
+                <p className="side-price">{priceText(tour)}</p>
                 <p className="side-note">Net rates for travel-trade partners. Share your dates and group size for a tailored quote.</p>
                 <dl className="side-facts">
                   <div>
@@ -213,8 +218,19 @@ export default function TourDetailPage() {
                     <dt>
                       <Icon name="snowflake" size={16} /> Season
                     </dt>
-                    <dd>{seasonalityText(tour)}</dd>
+                    <dd>
+                      <SeasonBand tour={tour} />
+                      <span className="season-caption">{seasonalityText(tour)}</span>
+                    </dd>
                   </div>
+                  {totalKm > 0 && (
+                    <div>
+                      <dt>
+                        <Icon name="car" size={16} /> Total driving
+                      </dt>
+                      <dd className="tnum">~{Math.round(totalKm / 10) * 10} km</dd>
+                    </div>
+                  )}
                   <div>
                     <dt>
                       <Icon name="group" size={16} /> Type
@@ -258,7 +274,7 @@ export default function TourDetailPage() {
       {relatedFinal.length > 0 && (
         <Section tone="beige" className="rel-section">
           <Container>
-            <h2 className="rel-title">More Iceland itineraries</h2>
+            <SectionHeading as="h2" eyebrow="Keep browsing" title="More Iceland itineraries" className="block-heading" />
             <div className="rel-grid">
               {relatedFinal.map((t) => (
                 <PackageCard key={t.id} tour={t} regionColors={regionColors} regionNames={regionNames} />

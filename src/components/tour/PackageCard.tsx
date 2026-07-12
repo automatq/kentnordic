@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTilt } from '@/lib/useTilt';
 import Icon from '@/components/ui/Icon';
 import Pic from '@/components/ui/Pic';
-import { formatLength, lengthBucket, seasonalityText, tourRegionIds, type Tour } from '@/lib/packages';
+import { formatLength, lengthBucket, priceText, seasonalityText, tourRegionIds, type Tour } from '@/lib/packages';
 
 interface PackageCardProps {
   tour: Tour;
@@ -50,7 +50,7 @@ export default function PackageCard({ tour, regionColors, regionNames }: Package
         </dl>
 
         <div className="card-foot">
-          <span className="card-price">Price on request</span>
+          <span className="card-price">{priceText(tour)}</span>
           <span className="card-cta">
             View itinerary <Icon name="arrow" size={16} />
           </span>

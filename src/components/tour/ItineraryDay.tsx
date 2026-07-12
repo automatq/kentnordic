@@ -1,6 +1,7 @@
 import Badge from '@/components/ui/Badge';
 import Icon from '@/components/ui/Icon';
 import { cn } from '@/lib/classNames';
+import { dayDistanceKm, dayDriveDuration } from '@/lib/packages';
 import type { ItineraryDay as Day } from '@/lib/content';
 
 interface ItineraryDayProps {
@@ -15,6 +16,8 @@ interface ItineraryDayProps {
 const mealLabels: Record<string, string> = { B: 'Breakfast', L: 'Lunch', D: 'Dinner' };
 
 export default function ItineraryDay({ day, last = false, id, defaultOpen = false }: ItineraryDayProps) {
+  const km = dayDistanceKm(day);
+  const driveDuration = dayDriveDuration(day);
   return (
     <article id={id} className={cn('day', last && 'is-last')}>
       <div className="day-rail" aria-hidden="true">
@@ -26,6 +29,11 @@ export default function ItineraryDay({ day, last = false, id, defaultOpen = fals
           <summary className="day-head-toggle">
             <span className="day-kicker">Day {day.day}</span>
             <h3 className="day-title">{day.title}</h3>
+            {km > 0 && (
+              <span className="day-km tnum">
+                ~{km} km{driveDuration ? ` · ~${driveDuration} driving` : ''}
+              </span>
+            )}
             {day.summary && <span className="day-summary">{day.summary}</span>}
             <Icon name="arrow-down" size={18} className="day-chevron" />
           </summary>

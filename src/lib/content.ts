@@ -85,6 +85,10 @@ const tourSchema = z.object({
   exclusions: z.array(z.string()).default([]),
   itinerary: z.array(itineraryDaySchema),
   priceOnRequest: z.boolean().default(true),
+  /** Optional net per-person "from" price anchor. Rendering falls back to
+      "Price on request" until the client supplies values. */
+  fromNetPP: z.number().positive().optional(),
+  currency: z.enum(['EUR', 'USD', 'ISK']).default('EUR'),
   featured: z.boolean().default(false),
 });
 

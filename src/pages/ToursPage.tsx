@@ -8,7 +8,7 @@ import Reveal from '@/components/motion/Reveal';
 import Marquee from '@/components/motion/Marquee';
 import Icon from '@/components/ui/Icon';
 import Pic from '@/components/ui/Pic';
-import { getRegions, getTours, lengthBucket, tourRegionIds } from '@/lib/packages';
+import { SEASONS, getRegions, getTours, lengthBucket, matchesSeason, tourRegionIds } from '@/lib/packages';
 
 const lengths = [
   { key: 'all', label: 'All lengths' },
@@ -26,17 +26,20 @@ export default function ToursPage() {
   const validRegions = new Set(regions.map((r) => r.id));
   const qRegion = params.get('region');
   const qLength = params.get('length');
+  const qSeason = params.get('season');
   const [selectedLength, setSelectedLength] = useState(['short', 'medium', 'long'].includes(qLength ?? '') ? qLength! : 'all');
   const [selectedRegion, setSelectedRegion] = useState(qRegion && validRegions.has(qRegion) ? qRegion : 'all');
+  const [selectedSeason, setSelectedSeason] = useState(SEASONS.some((s) => s.key === qSeason && s.key !== 'all') ? qSeason! : 'all');
 
   const visibleTours = useMemo(
     () =>
       tours.filter((tour) => {
         const okLength = selectedLength === 'all' || lengthBucket(tour) === selectedLength;
         const okRegion = selectedRegion === 'all' || tourRegionIds(tour).includes(selectedRegion);
-        return okLength && okRegion;
+        const okSeason = matchesSeason(tour, selectedSeason);
+        return okLength && okRegion && okSeason;
       }),
-    [selectedLength, selectedRegion, tours],
+    [selectedLength, selectedRegion, selectedSeason, tours],
   );
 
 
@@ -72,6 +75,17 @@ export default function ToursPage() {
                 {lengths.map((l) => (
                   <button key={l.key} type="button" className="fchip" data-value={l.key} aria-pressed={selectedLength === l.key} onClick={() => setSelectedLength(l.key)}>
                     {l.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="filter-group">
+              <span className="filter-label">Season</span>
+              <div className="chips" data-filter="season">
+                {SEASONS.map((s) => (
+                  <button key={s.key} type="button" className="fchip" data-value={s.key} aria-pressed={selectedSeason === s.key} onClick={() => setSelectedSeason(s.key)}>
+                    {s.label}
                   </button>
                 ))}
               </div>
@@ -115,6 +129,7 @@ export default function ToursPage() {
                 onClick={() => {
                   setSelectedLength('all');
                   setSelectedRegion('all');
+                  setSelectedSeason('all');
                 }}
               >
                 Reset filters

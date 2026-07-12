@@ -2382,6 +2382,14 @@ main {
   font-size: var(--text-2xl);
   margin-block-end: 1.5rem;
 }
+/* SectionHeading used inside the narrow article column: keep the block's
+   original heading scale and rhythm. */
+.block-heading {
+  margin-block-end: 1.5rem;
+}
+.block-heading h2 {
+  font-size: var(--text-2xl);
+}
 .intro p {
   color: var(--color-charcoal-soft);
   max-inline-size: 42rem;
@@ -2587,6 +2595,48 @@ main {
 .side-print {
   inline-size: 100%;
   margin-block-start: 0.6rem;
+}
+
+/* Twelve-month availability band in the side-card. */
+.season-band {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2px;
+  margin-block-end: 0.35rem;
+}
+.season-cell {
+  display: grid;
+  place-items: center;
+  block-size: 1.35rem;
+  border-radius: 4px;
+  background: var(--color-accent-100);
+  color: var(--color-accent-700);
+  font-size: 0.62rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.season-cell.is-off {
+  background: var(--color-beige);
+  color: color-mix(in srgb, var(--color-charcoal-soft) 55%, transparent);
+  text-decoration: line-through;
+}
+.season-caption {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--color-charcoal-soft);
+}
+
+/* Per-day driving chip — visible even when the day card is collapsed. */
+.day-km {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-accent-700);
+  background: var(--color-accent-50);
+  border: 1px solid var(--color-accent-100);
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-pill);
 }
 
 /* Social proof at the decision point. */
