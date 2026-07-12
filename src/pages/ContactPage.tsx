@@ -4,13 +4,14 @@ import Section from "@/components/layout/Section";
 import Icon from "@/components/ui/Icon";
 import Reveal from "@/components/motion/Reveal";
 import InquiryForm from "@/components/react/InquiryForm";
-import { getOffices } from "@/lib/content";
+import { getOffices, getTestimonials } from "@/lib/content";
 import Pic from "@/components/ui/Pic";
 import { getTours } from "@/lib/packages";
 import { site } from "@/config/site";
 
 export default function ContactPage() {
   const offices = getOffices();
+  const testimonial = getTestimonials()[0];
   const packages = getTours().map((t) => ({
     code: t.data.code,
     name: t.data.name,
@@ -87,6 +88,27 @@ export default function ContactPage() {
                   <span>{site.phoneKL} · Kuala Lumpur</span>
                 </a>
               </div>
+
+              {testimonial && (
+                <div className="c-trust">
+                  <blockquote className="c-trust-quote">
+                    “{testimonial.quote}”
+                  </blockquote>
+                  <p className="c-trust-author">
+                    {testimonial.author} · {testimonial.agency}
+                    {testimonial.country ? `, ${testimonial.country}` : ""}
+                  </p>
+                  <ul className="c-trust-promises">
+                    <li>
+                      <Icon name="clock" size={15} /> We reply within one
+                      business day
+                    </li>
+                    <li>
+                      <Icon name="tag" size={15} /> Net trade rates
+                    </li>
+                  </ul>
+                </div>
+              )}
 
               <div className="c-offices">
                 {offices.map((o, i) => (

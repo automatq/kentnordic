@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { submitInquiry, type InquiryPayload } from "@/lib/formProvider";
 
 interface PackageOption {
@@ -36,6 +37,16 @@ export default function InquiryForm({ packages, endpoint }: Props) {
   const [pkg, setPkg] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
+
+  // The submit button unmounts on success — move focus (and the viewport)
+  // to the confirmation so keyboard/SR users and mobile don't lose context.
+  useEffect(() => {
+    if (status === "success") {
+      successRef.current?.focus();
+      successRef.current?.scrollIntoView({ block: "center" });
+    }
+  }, [status]);
 
   // Pre-fill package from ?package=CODE
   useEffect(() => {
@@ -87,6 +98,10 @@ export default function InquiryForm({ packages, endpoint }: Props) {
     if (res.ok) {
       setStatus("success");
       formRef.current?.reset();
+      // reset() misses the controlled select — clear it so "Send another
+      // inquiry" starts from a genuinely blank form.
+      setPkg("");
+      setErrors({});
     } else {
       setStatus("error");
       setServerError(res.error || "Something went wrong.");
@@ -96,7 +111,9 @@ export default function InquiryForm({ packages, endpoint }: Props) {
   if (status === "success") {
     return (
       <div
-        className="rounded-xl border border-accent/25 bg-accent-50 p-8 text-center"
+        ref={successRef}
+        tabIndex={-1}
+        className="rounded-xl border border-accent/25 bg-accent-50 p-8 text-center outline-none"
         role="status"
       >
         <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-accent text-white">
@@ -119,6 +136,17 @@ export default function InquiryForm({ packages, endpoint }: Props) {
         <p className="mx-auto mt-2 max-w-md text-charcoal-soft">
           Our team will get back to you with a tailored quote, usually within
           one business day.
+        </p>
+        <p className="mx-auto mt-4 max-w-md text-sm text-charcoal-soft">
+          While you wait:{" "}
+          <Link to="/tours" viewTransition className="font-medium text-accent-700 underline underline-offset-2">
+            browse the six tour packages
+          </Link>{" "}
+          or{" "}
+          <Link to="/services" viewTransition className="font-medium text-accent-700 underline underline-offset-2">
+            see our ground services
+          </Link>
+          .
         </p>
         <button
           type="button"
@@ -173,12 +201,14 @@ export default function InquiryForm({ packages, endpoint }: Props) {
           label="Agency / company"
           required
           error={errors.agency}
+          autoComplete="organization"
         />
         <Field
           name="contact"
           label="Contact name"
           required
           error={errors.contact}
+          autoComplete="name"
         />
         <Field
           name="email"
@@ -186,9 +216,10 @@ export default function InquiryForm({ packages, endpoint }: Props) {
           type="email"
           required
           error={errors.email}
+          autoComplete="email"
         />
-        <Field name="phone" label="Phone" type="tel" />
-        <Field name="country" label="Country / market" />
+        <Field name="phone" label="Phone" type="tel" autoComplete="tel" />
+        <Field name="country" label="Country / market" autoComplete="country-name" />
         <div>
           <label htmlFor="packageCode" className={labelCls}>
             Package of interest
@@ -213,7 +244,7 @@ export default function InquiryForm({ packages, endpoint }: Props) {
           label="Preferred travel dates"
           placeholder="e.g. March 2026"
         />
-        <Field name="pax" label="Group size (pax)" placeholder="e.g. 25" />
+        <Field name="pax" label="Group size (pax)" placeholder="e.g. 25" inputMode="numeric" />
       </div>
 
       <div>
@@ -259,12 +290,16 @@ export default function InquiryForm({ packages, endpoint }: Props) {
           type="checkbox"
           name="consent"
           value="yes"
+          aria-invalid={!!errors.consent}
+          aria-describedby={errors.consent ? "err-consent" : undefined}
           className="mt-1 size-4 accent-[var(--color-accent)]"
         />
         <span>
           I agree to Idcibidci contacting me about this inquiry.
           {errors.consent && (
-            <span className="mt-1 block text-error">{errors.consent}</span>
+            <span id="err-consent" className="mt-1 block text-error">
+              {errors.consent}
+            </span>
           )}
         </span>
       </label>
@@ -282,6 +317,10 @@ export default function InquiryForm({ packages, endpoint }: Props) {
       >
         {status === "submitting" ? "Sending…" : "Send inquiry"}
       </button>
+      <p className="-mt-2 text-sm text-charcoal-soft">
+        We reply within 1 business day · Net rates for the trade · No
+        obligation
+      </p>
     </form>
   );
 }
@@ -293,6 +332,8 @@ function Field({
   required = false,
   error,
   placeholder,
+  autoComplete,
+  inputMode,
 }: {
   name: string;
   label: string;
@@ -300,6 +341,8 @@ function Field({
   required?: boolean;
   error?: string;
   placeholder?: string;
+  autoComplete?: string;
+  inputMode?: "numeric" | "tel" | "email" | "text";
 }) {
   return (
     <div>
@@ -312,6 +355,8 @@ function Field({
         type={type}
         required={required}
         placeholder={placeholder}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
         aria-invalid={!!error}
         aria-describedby={error ? `err-${name}` : undefined}
         className={inputCls}
