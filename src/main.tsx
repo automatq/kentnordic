@@ -1,8 +1,12 @@
 import '@fontsource-variable/hanken-grotesk';
-import '@fontsource-variable/newsreader';
-import '@fontsource-variable/newsreader/wght-italic.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
+/* Rounded geometric sans matching the idcibidci wordmark — the site's display
+   face (all headings + brand accents). Body/UI stays Hanken Grotesk. */
+import '@fontsource/m-plus-rounded-1c/400.css';
+import '@fontsource/m-plus-rounded-1c/500.css';
+import '@fontsource/m-plus-rounded-1c/700.css';
+import '@fontsource/m-plus-rounded-1c/800.css';
 import '@/styles/global.css';
 import '@/styles/components.css';
 

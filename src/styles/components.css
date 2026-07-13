@@ -996,7 +996,8 @@ main {
   color: var(--color-white);
   font-family: var(--font-display);
   font-size: 1.15rem;
-  font-weight: 600;
+  /* M PLUS Rounded 1c has no 600 master — pin to 700 for a crisp badge. */
+  font-weight: 700;
   box-shadow: var(--shadow-soft);
 }
 .day:not(.is-last) .day-rail::after {
@@ -2265,7 +2266,7 @@ main {
 .c-trust-quote {
   margin: 0;
   font-family: var(--font-accent-serif);
-  font-style: italic;
+  font-style: normal;
   font-size: 1.05rem;
   line-height: 1.55;
   color: var(--color-charcoal);
@@ -2907,7 +2908,7 @@ main {
 .side-quote blockquote {
   margin: 0;
   font-family: var(--font-accent-serif);
-  font-style: italic;
+  font-style: normal;
   font-size: 1.02rem;
   line-height: 1.55;
   color: var(--color-charcoal);
@@ -3186,6 +3187,33 @@ main {
   color: var(--color-ink);
 }
 
+/* Brand-accent chrome — eyebrows, section labels, nav and buttons in the
+   wordmark's rounded sans. Headings now share this face (via --font-display);
+   body/UI stays Hanken Grotesk. Kept as an explicit group so these labels
+   carry the brand voice even where a class would otherwise inherit body copy. */
+.u-eyebrow,
+.mega-eyebrow,
+.side-eyebrow,
+.fly-eyebrow,
+.footer-heading,
+.mega-column-title,
+.filter-label,
+.opt-label,
+.toggle-label,
+.incl-label,
+.rpanel-tours-label,
+.side-regions-label,
+.day-kicker,
+.quote-card-kicker,
+.thero-code,
+.crumbs,
+.office-hq,
+.nav-link,
+.mobile-link,
+.u-brand-type {
+  font-family: var(--font-brand);
+}
+
 /* Eyebrow — Scandinavian tracked small-caps label on a hairline pill, with a
    fjord-teal dot. Single source of truth (global.css defers to this). */
 .u-eyebrow {
@@ -3197,7 +3225,7 @@ main {
   border-radius: 999px;
   color: var(--color-accent-700);
   padding: 0.4rem 0.9rem;
-  font-family: var(--font-sans);
+  font-family: var(--font-brand);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -4943,7 +4971,7 @@ section.bg-ink {
 }
 .site-intro-tagline {
   font-family: var(--font-accent-serif);
-  font-style: italic;
+  font-style: normal;
   font-size: clamp(1.15rem, 3vw, 1.6rem);
   color: var(--color-aurora-mint);
   opacity: 0;

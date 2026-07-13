@@ -37,10 +37,10 @@
     font-family: var(--font-display);
     font-optical-sizing: auto;
     color: var(--color-ink);
-    /* Newsreader is a warm, lower-contrast humanist serif — it wants a touch
-       more weight and looser tracking than the old Playfair didone. */
+    /* M PLUS Rounded 1c (the wordmark face) — a rounded geometric sans wants
+       near-neutral tracking, not the tight negative a serif took. */
     font-weight: 500;
-    letter-spacing: -0.018em;
+    letter-spacing: -0.006em;
     text-wrap: balance;
   }
 
@@ -171,7 +171,8 @@
      the pale aurora tint. */
   .u-flourish {
     font-family: var(--font-accent-serif);
-    font-style: italic;
+    /* M PLUS has no true italic; the accent now reads via the teal colour. */
+    font-style: normal;
     color: var(--color-accent);
   }
   :is(.bg-ink, .home-cta, .pgallery) .u-flourish {

@@ -14,7 +14,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-pill font-medium tracking-wide transition-[background-color,color,border-color,transform] duration-200 ease-out-quint no-underline disabled:opacity-60 disabled:pointer-events-none active:translate-y-px';
+  'u-brand-type inline-flex items-center justify-center gap-2 rounded-pill font-medium tracking-wide transition-[background-color,color,border-color,transform] duration-200 ease-out-quint no-underline disabled:opacity-60 disabled:pointer-events-none active:translate-y-px';
 
 const variants = {
   primary: 'bg-accent text-white hover:bg-accent-600 shadow-soft',

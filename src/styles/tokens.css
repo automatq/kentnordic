@@ -73,9 +73,15 @@
     'Hanken Grotesk Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
     Helvetica, Arial, sans-serif;
   --font-copy: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Newsreader Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-  --font-accent-serif: 'Newsreader Variable', Georgia, serif;
+  /* Display face — the idcibidci wordmark's rounded geometric sans, on all
+     headings. Paired with the Hanken Grotesk body below. */
+  --font-display: 'M PLUS Rounded 1c', ui-rounded, 'Hiragino Maru Gothic ProN', 'Segoe UI', system-ui, sans-serif;
+  /* Heading-trailing flourish + quotes — same rounded face, differentiated by
+     colour/weight rather than the old serif italic. */
+  --font-accent-serif: 'M PLUS Rounded 1c', ui-rounded, 'Hiragino Maru Gothic ProN', 'Segoe UI', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* Rounded geometric sans echoing the idcibidci wordmark — brand-accent chrome. */
+  --font-brand: 'M PLUS Rounded 1c', ui-rounded, 'Hiragino Maru Gothic ProN', 'Segoe UI', system-ui, sans-serif;
 
   /* Fluid type scale */
   --text-xs: 0.75rem;
