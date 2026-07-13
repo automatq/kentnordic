@@ -146,6 +146,7 @@
   gap: 0.55rem;
 }
 .idc-edit-photo-actions button,
+.idc-edit-photo-trigger,
 .idc-edit-photo-status {
   appearance: none;
   border: 1px solid color-mix(in srgb, var(--color-line) 18%, white);
@@ -158,14 +159,18 @@
   line-height: 1;
   box-shadow: 0 10px 30px rgb(20 23 26 / 0.18);
 }
-.idc-edit-photo-actions button {
+.idc-edit-photo-actions button,
+.idc-edit-photo-trigger {
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
   transition:
     background-color 120ms ease,
     border-color 120ms ease,
     color 120ms ease;
 }
-.idc-edit-photo-actions button:hover {
+.idc-edit-photo-actions button:hover,
+.idc-edit-photo-trigger:hover {
   background: white;
   border-color: color-mix(in srgb, var(--color-accent-200) 60%, white);
 }
@@ -183,7 +188,16 @@
   border-color: rgb(255 255 255 / 0.14);
 }
 .idc-edit-photo-input {
-  display: none;
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 @media (max-width: 640px) {
   .idc-edit-toolbar {
@@ -214,6 +228,7 @@
     gap: 0.45rem;
   }
   .idc-edit-photo-actions button,
+  .idc-edit-photo-trigger,
   .idc-edit-photo-status {
     font-size: 0.72rem;
     padding: 0.4rem 0.68rem;

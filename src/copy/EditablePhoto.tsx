@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from "react";
+import { useId, useState } from "react";
 
 import Pic from "@/components/ui/Pic";
 import { useCopyContext } from "@/copy/CopyProvider";
@@ -30,12 +30,9 @@ export default function EditablePhoto({
 }: EditablePhotoProps) {
   const { get, isAdmin, editMode, savePhoto, resetPhoto } = useCopyContext();
   const [uploading, setUploading] = useState(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const inputId = useId();
   const overrideKey = photoOverrideKey(photoKey);
   const overrideUrl = overrideKey ? get(overrideKey, "") : "";
-
-  const openPicker = () => inputRef.current?.click();
 
   async function onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.currentTarget.files?.[0];
@@ -105,16 +102,15 @@ export default function EditablePhoto({
             <span className="idc-edit-photo-status">Uploading...</span>
           ) : (
             <>
-              <button
-                type="button"
+              <label
+                htmlFor={inputId}
+                className="idc-edit-photo-trigger"
                 onClick={(event) => {
-                  event.preventDefault();
                   event.stopPropagation();
-                  openPicker();
                 }}
               >
                 Replace
-              </button>
+              </label>
               {overrideUrl && (
                 <button
                   type="button"
@@ -130,7 +126,6 @@ export default function EditablePhoto({
       </span>
       <input
         id={inputId}
-        ref={inputRef}
         type="file"
         accept="image/jpeg,image/png,image/webp,image/avif"
         className="idc-edit-photo-input"
