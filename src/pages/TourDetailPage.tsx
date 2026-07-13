@@ -16,8 +16,8 @@ import SectionHeading from '@/components/ui/SectionHeading';
 import Reveal from '@/components/motion/Reveal';
 import TimelineRail from '@/components/motion/TimelineRail';
 import { getTestimonials, getTour } from '@/lib/content';
-import Pic from '@/components/ui/Pic';
 import SeasonBand from '@/components/tour/SeasonBand';
+import EditablePhoto from '@/copy/EditablePhoto';
 import EditableText from '@/copy/EditableText';
 import { useCopyContext } from '@/copy/CopyProvider';
 import { formatLength, getRegions, getTours, pickTestimonial, priceText, seasonalityText, totalDistanceKm, tourRegionIds } from '@/lib/packages';
@@ -87,10 +87,17 @@ export default function TourDetailPage() {
     },
   ];
 
-  return (
-    <BaseLayout title={`${tourName} - ${d.days}D/${d.nights}N Iceland Tour`} description={tourSummary} image="/og-default.jpg" jsonLd={jsonLd}>
+    return (
+      <BaseLayout title={`${tourName} - ${d.days}D/${d.nights}N Iceland Tour`} description={tourSummary} image="/og-default.jpg" jsonLd={jsonLd}>
       <section className="thero">
-        <Pic photoKey={d.heroImage} alt={d.heroAlt} className="thero-bg" loading="eager" fetchPriority="high" />
+        <EditablePhoto
+          photoKey={d.heroImage}
+          alt={d.heroAlt}
+          className="thero-bg"
+          frameClassName="thero-bg"
+          loading="eager"
+          fetchPriority="high"
+        />
         <div className="thero-scrim" />
         <Container className="thero-inner">
           <nav className="crumbs" aria-label="Breadcrumb">

@@ -17,6 +17,8 @@ interface CopyContextValue {
   get: (key: string, defaultValue: string) => string;
   save: (key: string, value: string) => Promise<void>;
   reset: (key: string) => Promise<void>;
+  savePhoto: (photoKey: string, file: File) => Promise<void>;
+  resetPhoto: (photoKey: string) => Promise<void>;
   isAdmin: boolean;
   editMode: boolean;
   toggleEditMode: () => void;
@@ -31,6 +33,13 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
   const [editMode, setEditMode] = useState(false);
   const [toast, setToast] = useState<CopyToast | null>(null);
   const toastTimer = useRef<number | null>(null);
+
+  const loadOverrides = useCallback(async () => {
+    const map = await fetch("/api/copy")
+      .then((res) => (res.ok ? res.json() : {}))
+      .catch(() => ({}));
+    setOverrides(map);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -102,13 +111,10 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
           }`,
           "err",
         );
-        const map = await fetch("/api/copy")
-          .then((res) => (res.ok ? res.json() : {}))
-          .catch(() => ({}));
-        setOverrides(map);
+        await loadOverrides();
       }
     },
-    [isAdmin, showToast],
+    [isAdmin, loadOverrides, showToast],
   );
 
   const reset = useCallback(
@@ -142,17 +148,97 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
     [isAdmin, showToast],
   );
 
+  const savePhoto = useCallback(
+    async (photoKey: string, file: File) => {
+      if (!isAdmin) return;
+      try {
+        const res = await fetch(
+          `/api/admin/photos/${encodeURIComponent(photoKey)}`,
+          {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": file.type || "application/octet-stream",
+              "X-Upload-Filename": file.name,
+            },
+            body: file,
+          },
+        );
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(data.error || `HTTP ${res.status}`);
+        }
+
+        const overrideKey = `photo.${photoKey}`;
+        setOverrides((current) => ({ ...current, [overrideKey]: data.url }));
+        showToast("Saved");
+      } catch (error) {
+        showToast(
+          `Save failed: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`,
+          "err",
+        );
+      }
+    },
+    [isAdmin, showToast],
+  );
+
+  const resetPhoto = useCallback(
+    async (photoKey: string) => {
+      if (!isAdmin) return;
+      const overrideKey = `photo.${photoKey}`;
+      const previous = overrides[overrideKey];
+      setOverrides((current) => {
+        const next = { ...current };
+        delete next[overrideKey];
+        return next;
+      });
+
+      try {
+        const res = await fetch(
+          `/api/admin/photos/${encodeURIComponent(photoKey)}`,
+          {
+            method: "DELETE",
+            credentials: "same-origin",
+            headers: { Accept: "application/json" },
+          },
+        );
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(data.error || `HTTP ${res.status}`);
+        }
+        showToast("Reset to default");
+      } catch (error) {
+        if (typeof previous === "string") {
+          setOverrides((current) => ({ ...current, [overrideKey]: previous }));
+        }
+        showToast(
+          `Reset failed: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`,
+          "err",
+        );
+      }
+    },
+    [isAdmin, overrides, showToast],
+  );
+
   const value = useMemo<CopyContextValue>(
     () => ({
       get,
       save,
       reset,
+      savePhoto,
+      resetPhoto,
       isAdmin,
       editMode,
       toggleEditMode: () => setEditMode((current) => !current),
       toast,
     }),
-    [editMode, get, isAdmin, reset, save, toast],
+    [editMode, get, isAdmin, reset, resetPhoto, save, savePhoto, toast],
   );
 
   return <CopyContext.Provider value={value}>{children}</CopyContext.Provider>;

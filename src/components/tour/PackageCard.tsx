@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTilt } from '@/lib/useTilt';
 import Icon from '@/components/ui/Icon';
-import Pic from '@/components/ui/Pic';
+import EditablePhoto from '@/copy/EditablePhoto';
 import { formatLength, lengthBucket, priceText, seasonalityText, tourRegionIds, type Tour } from '@/lib/packages';
 
 interface PackageCardProps {
@@ -18,7 +18,13 @@ export default function PackageCard({ tour, regionColors, regionNames }: Package
   return (
     <article ref={tiltRef} className="card" data-nights={d.nights} data-length={lengthBucket(tour)} data-regions={regionIds.join(',')}>
       <Link className="card-media" viewTransition to={`/tours/${tour.id}`} tabIndex={-1} aria-hidden="true">
-        <Pic photoKey={d.heroImage} alt={d.heroAlt} className="card-img" sizes="(min-width: 1024px) 30vw, 92vw" />
+        <EditablePhoto
+          photoKey={d.heroImage}
+          alt={d.heroAlt}
+          className="card-img"
+          frameClassName="card-img"
+          sizes="(min-width: 1024px) 30vw, 92vw"
+        />
         <span className="card-code">{d.code}</span>
         <span className="card-nights">{d.nights} nights</span>
       </Link>

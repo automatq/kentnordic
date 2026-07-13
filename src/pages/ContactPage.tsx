@@ -5,10 +5,10 @@ import Icon from "@/components/ui/Icon";
 import Reveal from "@/components/motion/Reveal";
 import RequestQuoteForm from "@/components/react/RequestQuoteForm";
 import { getOffices, getTestimonials } from "@/lib/content";
-import Pic from "@/components/ui/Pic";
 import { getTours } from "@/lib/packages";
 import { site } from "@/config/site";
 import CompanyCredentials from "@/components/company/CompanyCredentials";
+import EditablePhoto from "@/copy/EditablePhoto";
 import EditableText from "@/copy/EditableText";
 import { buildBreadcrumbJsonLd } from "@/lib/seo";
 
@@ -48,10 +48,11 @@ export default function ContactPage() {
       jsonLd={jsonLd}
     >
       <section className="chero">
-        <Pic
+        <EditablePhoto
           photoKey="hero-contact"
           alt="Quiet Icelandic coastline at first light"
           className="chero-bg"
+          frameClassName="chero-bg"
           loading="eager"
           fetchPriority="high"
         />

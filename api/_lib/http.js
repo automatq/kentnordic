@@ -1,8 +1,21 @@
-function collectStream(req) {
+function collectStream(req, options = {}) {
+  const { maxBytes = Infinity } = options;
   return new Promise((resolve, reject) => {
     const chunks = [];
-    req.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-    req.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+    let total = 0;
+    req.on("data", (chunk) => {
+      const part = Buffer.from(chunk);
+      total += part.length;
+      if (total > maxBytes) {
+        const error = new Error("Payload too large.");
+        error.code = "PAYLOAD_TOO_LARGE";
+        reject(error);
+        req.destroy(error);
+        return;
+      }
+      chunks.push(part);
+    });
+    req.on("end", () => resolve(Buffer.concat(chunks)));
     req.on("error", reject);
   });
 }
@@ -23,8 +36,31 @@ export async function readRequestBody(req) {
     );
   }
 
-  const raw = await collectStream(req);
+  const raw = (await collectStream(req)).toString("utf8");
   return parseBodyText(raw, req.headers["content-type"] || "");
+}
+
+export async function readRequestBuffer(req, options = {}) {
+  const { maxBytes = Infinity } = options;
+
+  if (typeof req.body === "string") {
+    const buffer = Buffer.from(req.body, "utf8");
+    enforceMaxBytes(buffer.length, maxBytes);
+    return buffer;
+  }
+
+  if (Buffer.isBuffer(req.body)) {
+    enforceMaxBytes(req.body.length, maxBytes);
+    return req.body;
+  }
+
+  if (req.body && typeof req.body === "object") {
+    const buffer = Buffer.from(JSON.stringify(req.body));
+    enforceMaxBytes(buffer.length, maxBytes);
+    return buffer;
+  }
+
+  return collectStream(req, { maxBytes });
 }
 
 export function json(res, status, payload) {
@@ -76,4 +112,11 @@ function parseBodyText(text, contentType) {
   }
 
   return {};
+}
+
+function enforceMaxBytes(size, maxBytes) {
+  if (size <= maxBytes) return;
+  const error = new Error("Payload too large.");
+  error.code = "PAYLOAD_TOO_LARGE";
+  throw error;
 }

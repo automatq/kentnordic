@@ -8,7 +8,7 @@ import Icon from '@/components/ui/Icon';
 import Reveal from '@/components/motion/Reveal';
 import CardDeckReveal from '@/components/motion/CardDeckReveal';
 import { getServices } from '@/lib/content';
-import Pic from '@/components/ui/Pic';
+import EditablePhoto from '@/copy/EditablePhoto';
 import EditableText from '@/copy/EditableText';
 import { buildBreadcrumbJsonLd } from '@/lib/seo';
 
@@ -26,7 +26,14 @@ export default function ServicesPage() {
       jsonLd={jsonLd}
     >
       <section className="shero">
-        <Pic photoKey="hero-services" alt="Coach touring a mountain road in the Icelandic highlands" className="shero-bg" loading="eager" fetchPriority="high" />
+        <EditablePhoto
+          photoKey="hero-services"
+          alt="Coach touring a mountain road in the Icelandic highlands"
+          className="shero-bg"
+          frameClassName="shero-bg"
+          loading="eager"
+          fetchPriority="high"
+        />
         <div className="shero-scrim" />
         <Container className="shero-inner">
           <EditableText copyKey="services.hero.eyebrow" defaultValue="Services" as="p" className="u-eyebrow text-white/80" />

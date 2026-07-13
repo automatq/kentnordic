@@ -50,6 +50,11 @@ export async function saveCopyOverride(key, value) {
   return map;
 }
 
+export async function getCopyOverride(key) {
+  const map = await listCopyOverrides();
+  return map[key];
+}
+
 export async function deleteCopyOverride(key) {
   const map = await listCopyOverrides();
   delete map[key];
