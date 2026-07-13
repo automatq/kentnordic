@@ -10,6 +10,7 @@
     "build": "tsc --noEmit && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/build-sitemap.mjs",
     "build:fast": "vite build",
     "preview": "vite preview",
+    "verify:colors": "node scripts/verify-color-system.mjs",
     "format": "prettier --write .",
     "gen:map": "node scripts/build-map.mjs"
   },

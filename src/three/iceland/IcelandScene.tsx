@@ -1,5 +1,6 @@
 import { ContactShadows } from '@react-three/drei';
 import { useMemo } from 'react';
+import { Color } from 'three';
 import PaperMap from '@/three/iceland/PaperMap';
 import PointMesh, { type PointInfo } from '@/three/iceland/PointMesh';
 import RegionMesh from '@/three/iceland/RegionMesh';
@@ -45,19 +46,31 @@ export default function IcelandScene({
 }: IcelandSceneProps) {
   const geo = useMemo(() => getIcelandGeometry(), []);
   const colorBySlug = useMemo(() => new Map(regions.map((r) => [r.id, r.color])), [regions]);
+  const palette = useMemo(() => {
+    const style = getComputedStyle(document.documentElement);
+    const read = (name: string, fallback: string) => style.getPropertyValue(name).trim() || fallback;
+    const white = read('--color-white', '#ffffff');
+    const gold = read('--color-brand-gold', '#fdc613');
+    return {
+      white,
+      ground: read('--color-line', '#e5d8cd'),
+      sunlight: new Color(gold).lerp(new Color(white), 0.82).getStyle(),
+      taupe: read('--color-brand-taupe', '#6d5b51'),
+    };
+  }, []);
 
   return (
     <>
-      <hemisphereLight args={['#ffffff', '#d8d2c8', 0.95]} />
+      <hemisphereLight args={[palette.white, palette.ground, 0.95]} />
       <directionalLight position={[1.6, 2.6, 1.2]} intensity={1.15} />
-      <directionalLight position={[-2, 1.5, -1]} intensity={0.25} color="#dce8f5" />
+      <directionalLight position={[-2, 1.5, -1]} intensity={0.25} color={palette.sunlight} />
       <PaperMap />
       {geo.regions.map((region) => (
         <RegionMesh
           key={region.slug}
           slug={region.slug}
           geometry={region.geometry}
-          color={colorBySlug.get(region.slug) ?? '#cccccc'}
+          color={colorBySlug.get(region.slug) ?? palette.taupe}
           active={activeRegion === region.slug}
           interactive={interactive}
           onSelect={onSelect}

@@ -11,8 +11,8 @@ import { useEffect, useMemo, useRef } from 'react';
 import { Color, type Group } from 'three';
 
 /*
- * The hero glacier crystal: a floating cluster of ice shards over the birch
- * paper, refracting the aurora-tinted environment. Loaded lazily behind
+ * The hero glacier crystal: a floating cluster of ice shards over warm paper,
+ * refracting the logo-spectrum environment. Loaded lazily behind
  * When3D — this module (and the three vendor chunks) never reach devices
  * that render the SVG cubes fallback.
  */
@@ -52,13 +52,13 @@ function CrystalCluster() {
   const pointerRef = useRef({ x: 0, y: 0 });
   const tints = useMemo(
     () => ({
-      ice: readToken('--color-accent-50', '#eff6f4'),
-      mint: readToken('--color-aurora-mint', '#a7dacf'),
-      periwinkle: readToken('--color-aurora-periwinkle', '#aab5cd'),
+      ice: readToken('--color-accent-50', '#fdf3f8'),
+      coral: readToken('--color-brand-coral', '#de7771'),
+      gold: readToken('--color-brand-gold', '#fdc613'),
       // The refraction buffer can't see the DOM behind the transparent
       // canvas — feed it the page paper colour so "through the ice" reads
       // as the hero background rather than black.
-      paper: new Color(readToken('--color-cream', '#f5f3ef')),
+      paper: new Color(readToken('--color-cream', '#fff9f3')),
     }),
     [],
   );
@@ -111,7 +111,7 @@ function CrystalCluster() {
               thickness={0.5}
               roughness={0.16}
               ior={1.31}
-              color={i % 2 === 0 ? tints.mint : tints.periwinkle}
+              color={i % 2 === 0 ? tints.coral : tints.gold}
               flatShading
             />
           </mesh>
@@ -124,9 +124,9 @@ function CrystalCluster() {
 export default function HeroCrystalScene({ frameloop, onReady }: HeroCrystalSceneProps) {
   const tints = useMemo(
     () => ({
-      mint: readToken('--color-aurora-mint', '#a7dacf'),
-      periwinkle: readToken('--color-aurora-periwinkle', '#aab5cd'),
-      lavender: readToken('--color-aurora-lavender', '#c7b9dd'),
+      gold: readToken('--color-brand-gold', '#fdc613'),
+      coral: readToken('--color-brand-coral', '#de7771'),
+      magenta: readToken('--color-brand-magenta', '#cc1782'),
     }),
     [],
   );
@@ -143,11 +143,11 @@ export default function HeroCrystalScene({ frameloop, onReady }: HeroCrystalScen
       <directionalLight position={[3, 4, 5]} intensity={1.1} />
       <CrystalCluster />
       <ContactShadows position={[0, -1.9, 0]} opacity={0.22} scale={7} blur={2.6} far={3} resolution={256} frames={1} />
-      {/* Aurora-tinted studio built from Lightformers — no runtime HDR fetch. */}
+      {/* Logo-spectrum studio built from Lightformers — no runtime HDR fetch. */}
       <Environment resolution={256} frames={1}>
-        <Lightformer intensity={2.2} color={tints.mint} position={[0, 3, 4]} scale={[6, 3, 1]} />
-        <Lightformer intensity={1.5} color={tints.periwinkle} position={[-4, 1, -2]} rotation-y={Math.PI / 2} scale={[5, 2, 1]} />
-        <Lightformer intensity={1.2} color={tints.lavender} position={[4, -1, 2]} rotation-y={-Math.PI / 2} scale={[4, 2, 1]} />
+        <Lightformer intensity={2.2} color={tints.gold} position={[0, 3, 4]} scale={[6, 3, 1]} />
+        <Lightformer intensity={1.5} color={tints.coral} position={[-4, 1, -2]} rotation-y={Math.PI / 2} scale={[5, 2, 1]} />
+        <Lightformer intensity={1.2} color={tints.magenta} position={[4, -1, 2]} rotation-y={-Math.PI / 2} scale={[4, 2, 1]} />
         <Lightformer intensity={1.6} color="#ffffff" position={[0, 5, 0]} rotation-x={Math.PI / 2} scale={[8, 8, 1]} />
       </Environment>
     </Canvas>

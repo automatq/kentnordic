@@ -4,69 +4,65 @@
  * class (bg-cream, text-ink, py-section…) AND as a CSS custom property
  * (var(--color-cream)) for scoped styles and the interactive SVG map.
  *
- * Nordic palette, harmonised with the map artwork ("the original obj"). The
- * brand is anchored on a cool FJORD TEAL accent deepened from the map's
- * mint/periwinkle family, over a neutral BIRCH-WHITE paper (warmed off the
- * old clinical cool-blue) so the warm-leaning map pastels sit naturally. The
- * eight map region colours are promoted to a first-class AURORA tint scale
- * (--color-aurora-*) usable site-wide for category dots, badge tints, and
- * section washes — the `regions` content collection stays authoritative and
- * still injects its exact hex inline on the map; the aliases point at the
- * same values so brand and map visually rhyme.
+ * Logo-derived palette. The wordmark's warm taupe anchors type and neutrals;
+ * its magenta is the single interaction colour; gold is reserved for dark-text
+ * highlights and decoration. Orange and coral bridge those endpoints in the
+ * signature rule/veil gradient. The eight map regions use distinct stops from
+ * the same spectrum so maps, 3D scenes and interface chrome share one brand.
  */
 
 @theme {
-  /* ---- Core palette (neutral birch white → warm charcoal) ---- */
+  /* ---- Brand primitives sampled from the approved logo ---- */
+  --color-brand-taupe: #6d5b51;
+  --color-brand-magenta: #cc1782;
+  --color-brand-gold: #fdc613;
+  --color-brand-orange: #eb994c;
+  --color-brand-coral: #de7771;
+  --color-brand-rose: #e65c97;
+  --color-brand-berry: #a92a73;
+
+  /* ---- Core palette (warm paper → deep logo-brown ink) ---- */
   --color-white: #ffffff;
-  --color-cream: #f5f3ef; /* neutral birch-white paper background */
-  --color-beige: #ece8e2; /* warm mist — secondary background / card wash */
-  --color-beige-deep: #ddd8d0; /* deeper layering */
-  --color-line: #ddd8d0; /* warm hairline — dividers, card borders */
-  --color-grey: #ddd8d0; /* alias of line, kept for existing call sites */
-  --color-grey-soft: #ece8e2;
-  --color-charcoal: #2b2a28; /* warm charcoal — body text, headings ("ink") */
-  --color-charcoal-soft: #6b6660; /* secondary text ("ink-muted") */
-  --color-ink: #2b2a28; /* warm near-black for display headings */
-  --color-ink-2: #1a1815; /* deepest panels (footer, CTA bands) */
+  --color-cream: #fff9f3; /* warm paper background */
+  --color-beige: #f6eee6; /* secondary background / card wash */
+  --color-beige-deep: #e5d8cd; /* deeper layering */
+  --color-line: #e5d8cd; /* warm hairline — dividers, card borders */
+  --color-grey: #e5d8cd; /* alias of line, kept for existing call sites */
+  --color-grey-soft: #f6eee6;
+  --color-charcoal: #3b312c; /* body text */
+  --color-charcoal-soft: #6d5b51; /* exact wordmark taupe; AA on paper */
+  --color-ink: #2c2421; /* display headings */
+  --color-ink-2: #1d1715; /* deepest panels (footer, CTA bands) */
 
-  /* ---- Accent: fjord teal (deepened from the map's mint/periwinkle) ---- */
-  --color-accent: #4a7e77; /* AA: white button text 4.6, UI on paper 4.2 */
-  --color-accent-600: #3f6b65; /* hover/active */
-  --color-accent-700: #345650; /* AA-contrast text on light surfaces */
-  --color-accent-300: #9fc6bf; /* accent-soft */
-  --color-accent-100: #dcebe8; /* tint backgrounds, badges */
-  --color-accent-50: #eff6f4; /* faintest tint */
+  /* ---- Interaction accent: logo magenta ---- */
+  --color-accent: #cc1782; /* white text contrast: 5.23:1 */
+  --color-accent-600: #ad0f6b; /* hover/active */
+  --color-accent-700: #8f0c59; /* high-contrast text on light surfaces */
+  --color-accent-300: #e68ebb; /* soft emphasis */
+  --color-accent-200: #f0bdd7; /* borders and focus halos */
+  --color-accent-100: #f8dfec; /* tint backgrounds, badges */
+  --color-accent-50: #fdf3f8; /* faintest tint */
 
-  /* ---- Natural support accents ---- */
-  --color-moss: #7c8a6b; /* aligns with the map's sage */
-  --color-moss-deep: #4f5a3e; /* AA-contrast text on light surfaces */
-  --color-lava: #5c6469; /* basalt-grey */
-  --color-sand: #ecd4a2; /* warm section wash (from golden-circle) */
-  --color-sand-deep: #8a6a30; /* AA-contrast text on light surfaces */
+  /* ---- Semantic/support accents ---- */
+  --color-moss: #4f7a5b; /* success/included only */
+  --color-moss-deep: #386045; /* AA-contrast success text */
+  --color-lava: #6d5b51; /* neutral metadata, drawn from the wordmark */
+  --color-sand: #fdc613; /* logo gold; decorative or paired with dark text */
+  --color-sand-deep: #705200; /* AA-contrast text on light surfaces */
 
   /* ---- Feedback ---- */
   --color-success: #4f7a5b;
   --color-error: #a4493f;
 
-  /* ---- Region colours (sampled from the map artwork; kept for the map) ---- */
-  --color-region-reykjavik: #e8908a;
-  --color-region-golden-circle: #ecd4a2;
-  --color-region-south-coast: #aecb9f;
-  --color-region-jokulsarlon: #e6a9d1;
-  --color-region-akureyri: #f0c39c;
-  --color-region-myvatn: #a7dacf;
-  --color-region-eastfjords: #aab5cd;
-  --color-region-snaefellsnes: #c7b9dd;
-
-  /* ---- Aurora tint scale (the map palette, promoted for site-wide brand use) ---- */
-  --color-aurora-coral: #e8908a;
-  --color-aurora-sand: #ecd4a2;
-  --color-aurora-sage: #aecb9f;
-  --color-aurora-orchid: #e6a9d1;
-  --color-aurora-peach: #f0c39c;
-  --color-aurora-mint: #a7dacf;
-  --color-aurora-periwinkle: #aab5cd;
-  --color-aurora-lavender: #c7b9dd;
+  /* ---- Region colours: eight distinct stops in the logo spectrum ---- */
+  --color-region-reykjavik: #cc1782;
+  --color-region-golden-circle: #fdc613;
+  --color-region-south-coast: #de7771;
+  --color-region-jokulsarlon: #e65c97;
+  --color-region-akureyri: #f0a34a;
+  --color-region-myvatn: #e98a65;
+  --color-region-eastfjords: #9b7c6e;
+  --color-region-snaefellsnes: #a92a73;
 
   /* ---- Typography — Scandinavian pairing: humanist serif + geometric grotesque ---- */
   --font-sans:
@@ -117,9 +113,9 @@
   --radius-pill: 999px;
 
   /* ---- Shadows (subtle — cards lean on --color-line borders, not shadow) ---- */
-  --shadow-soft: 0 1px 2px rgb(15 15 15 / 0.03), 0 4px 10px rgb(15 15 15 / 0.03);
-  --shadow-card: 0 1px 2px rgb(15 15 15 / 0.04), 0 6px 20px rgb(15 15 15 / 0.05);
-  --shadow-lift: 0 2px 6px rgb(15 15 15 / 0.05), 0 16px 36px rgb(15 15 15 / 0.09);
+  --shadow-soft: 0 1px 2px rgb(44 36 33 / 0.03), 0 4px 10px rgb(44 36 33 / 0.03);
+  --shadow-card: 0 1px 2px rgb(44 36 33 / 0.04), 0 6px 20px rgb(44 36 33 / 0.05);
+  --shadow-lift: 0 2px 6px rgb(44 36 33 / 0.05), 0 16px 36px rgb(44 36 33 / 0.09);
 
   /* ---- Motion ---- */
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
@@ -128,4 +124,14 @@
   /* ---- Layout ---- */
   --container-page: 80rem; /* 1280px content max */
   --container-prose: 44rem; /* readable measure */
+}
+
+:root {
+  --gradient-brand: linear-gradient(
+    90deg,
+    var(--color-brand-gold) 0%,
+    var(--color-brand-orange) 35%,
+    var(--color-brand-coral) 62%,
+    var(--color-brand-magenta) 100%
+  );
 }

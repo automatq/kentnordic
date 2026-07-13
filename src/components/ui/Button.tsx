@@ -19,8 +19,7 @@ const base =
 const variants = {
   primary: 'bg-accent text-white hover:bg-accent-600 shadow-soft',
   secondary: 'border border-charcoal/25 text-charcoal hover:border-charcoal hover:bg-charcoal hover:text-white',
-  // accent-700, not accent: --color-accent is only AA-safe as a UI/icon
-  // color (~4.2:1); text this size needs the 4.5:1 text threshold.
+  // Use the deeper brand shade so text links retain generous contrast on cream.
   ghost: 'text-accent-700 hover:text-accent-600',
   onDark: 'bg-white/95 text-ink hover:bg-white',
 };

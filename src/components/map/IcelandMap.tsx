@@ -176,7 +176,7 @@ export default function IcelandMap({ interactive = true, highlight = [], classNa
         blurb: d.blurb,
         x: d.coords.x,
         y: d.coords.y,
-        color: regionColorMap.get(d.region) ?? '#57717c',
+        color: regionColorMap.get(d.region) ?? '#6d5b51',
         tours: (tourMap.get(d.id) ?? []).map((t) => ({ slug: t.id, name: t.data.name, nights: nightsLabel(t) })),
       })),
     [destinations, regionColorMap, tourMap],

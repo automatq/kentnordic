@@ -77,7 +77,7 @@ export default function SiteIntro() {
         mod.default.regions.map((g: { slug: string; d: string }) => ({
           slug: g.slug,
           d: g.d,
-          color: colors.get(g.slug) ?? '#9fc6bf',
+          color: colors.get(g.slug) ?? '#e68ebb',
         })),
       );
     });

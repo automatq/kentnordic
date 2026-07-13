@@ -140,8 +140,8 @@
   }
 
   /* Eyebrow pill badge — the single authoritative definition lives in
-     components.css (loaded after this file) as a Scandinavian tracked
-     small-caps label with a fjord dot; see `.u-eyebrow` there. */
+     components.css (loaded after this file) as a tracked small-caps label
+     with a logo-magenta dot; see `.u-eyebrow` there. */
 
   /* Reveal-on-scroll initial state (activated by lib/motion.ts). Gated on the
      `.js` class so content is fully visible when JavaScript is unavailable. */
@@ -166,12 +166,11 @@
     }
   }
 
-  /* Italic accent-serif flourish word, trailing a heading. Fjord teal on
-     light surfaces (3:1+ at display sizes); dark sections lift it back to
-     the pale aurora tint. */
+  /* Rounded flourish word trailing a heading. Logo magenta on light
+     surfaces; dark sections lift it to the soft magenta tint. */
   .u-flourish {
     font-family: var(--font-accent-serif);
-    /* M PLUS has no true italic; the accent now reads via the teal colour. */
+    /* M PLUS has no true italic; the accent reads through brand colour. */
     font-style: normal;
     color: var(--color-accent);
   }

@@ -11,13 +11,13 @@ const CUBE_FACES = [
 ];
 
 const heroClusters: Array<{ x: number; y: number; fills: Array<string | null>; startDelay: number }> = [
-  // Top faces pick up soft aurora/fjord tints (the map palette) so the cluster
-  // reads as a pale glacier crystal; side faces stay neutral for structure.
+  // Top faces pick up the logo's gold/coral spectrum so the fallback carries
+  // the same brand as the WebGL crystal; side faces stay neutral for structure.
   { x: 0, y: 0, fills: ['accent-100', 'white', 'line'], startDelay: 0.2 },
-  { x: -50, y: 86.6, fills: ['aurora-mint', 'beige', 'white'], startDelay: 0.35 },
+  { x: -50, y: 86.6, fills: ['brand-coral', 'beige', 'white'], startDelay: 0.35 },
   { x: 100, y: 28.87, fills: ['white', 'line', 'beige'], startDelay: 0.5 },
   { x: 50, y: -86.6, fills: [null, 'beige', 'white'], startDelay: 0.65 },
-  { x: -100, y: -28.87, fills: ['aurora-periwinkle', 'cream', 'line'], startDelay: 0.75 },
+  { x: -100, y: -28.87, fills: ['brand-gold', 'cream', 'line'], startDelay: 0.75 },
 ];
 
 const heroLines = [

@@ -35,7 +35,7 @@ export default function PointMesh({ point, active, onSelect, onHover }: PointMes
   const scaleState = useRef({ v: 1 });
   const [hovered, setHovered] = useState(false);
   useCursor(hovered);
-  const color = useMemo(() => new Color(point.color).lerp(new Color('#14171a'), 0.32), [point.color]);
+  const color = useMemo(() => new Color(point.color).lerp(new Color('#2c2421'), 0.32), [point.color]);
   const position = useMemo(() => toWorld(point.x, point.y, POINT_LIFT), [point.x, point.y]);
 
   const raised = active || hovered;

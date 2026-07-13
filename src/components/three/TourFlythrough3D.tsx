@@ -17,7 +17,7 @@ interface TourFlythrough3DProps {
 
 function readAccent(): string {
   const v = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim();
-  return v || '#4a7e77';
+  return v || '#cc1782';
 }
 
 /**

@@ -13,13 +13,18 @@ interface AuroraVeilProps {
 }
 
 const VARIANT_DEFAULTS = { light: 0.28, dark: 0.85 } as const;
-const TOKENS = ['--color-aurora-mint', '--color-aurora-periwinkle', '--color-aurora-lavender', '--color-aurora-sage'];
+const TOKENS = [
+  '--color-brand-gold',
+  '--color-brand-orange',
+  '--color-brand-coral',
+  '--color-brand-magenta',
+];
 
 function readTokenColors(): [number, number, number][] {
   const styles = getComputedStyle(document.documentElement);
   return TOKENS.map((token) => {
     const hex = styles.getPropertyValue(token).trim().replace('#', '');
-    if (hex.length !== 6) return [0.65, 0.85, 0.81] as [number, number, number];
+    if (hex.length !== 6) return [0.87, 0.47, 0.44] as [number, number, number];
     return [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as unknown as [
       number,
       number,

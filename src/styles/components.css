@@ -14,7 +14,7 @@
   border-radius: 999px;
   background: rgb(255 255 255 / 0.94);
   color: var(--color-ink);
-  box-shadow: 0 18px 45px rgb(20 23 26 / 0.16);
+  box-shadow: 0 18px 45px rgb(44 36 33 / 0.16);
   backdrop-filter: blur(14px);
 }
 .idc-edit-dot {
@@ -22,7 +22,7 @@
   block-size: 0.6rem;
   border-radius: 999px;
   background: color-mix(in srgb, var(--color-charcoal-soft) 65%, white);
-  box-shadow: 0 0 0 0.22rem rgb(87 113 124 / 0.12);
+  box-shadow: 0 0 0 0.22rem rgb(109 91 81 / 0.12);
 }
 .idc-edit-dot.is-active {
   background: #2f7d53;
@@ -76,7 +76,7 @@
   border-radius: 1rem;
   background: rgb(33 55 46 / 0.96);
   color: white;
-  box-shadow: 0 18px 40px rgb(20 23 26 / 0.18);
+  box-shadow: 0 18px 40px rgb(44 36 33 / 0.18);
 }
 .idc-edit-toast.is-error {
   background: rgb(129 39 39 / 0.96);
@@ -89,13 +89,13 @@
   cursor: text;
 }
 .idc-editable:hover {
-  outline-color: rgb(87 113 124 / 0.42);
-  background-color: rgb(87 113 124 / 0.06);
+  outline-color: rgb(109 91 81 / 0.42);
+  background-color: rgb(109 91 81 / 0.06);
 }
 .idc-editable:focus {
-  outline-color: rgb(87 113 124 / 0.95);
+  outline-color: rgb(109 91 81 / 0.95);
   outline-style: solid;
-  background-color: rgb(87 113 124 / 0.08);
+  background-color: rgb(109 91 81 / 0.08);
 }
 .idc-edit-photo-frame {
   position: relative;
@@ -126,8 +126,8 @@
   padding: 0.85rem;
   background: linear-gradient(
     to top,
-    rgb(20 23 26 / 0.7),
-    rgb(20 23 26 / 0.14) 48%,
+    rgb(44 36 33 / 0.7),
+    rgb(44 36 33 / 0.14) 48%,
     transparent 72%
   );
   opacity: 0;
@@ -157,7 +157,7 @@
   font-size: 0.76rem;
   font-weight: 600;
   line-height: 1;
-  box-shadow: 0 10px 30px rgb(20 23 26 / 0.18);
+  box-shadow: 0 10px 30px rgb(44 36 33 / 0.18);
 }
 .idc-edit-photo-actions button,
 .idc-edit-photo-trigger {
@@ -183,7 +183,7 @@
   background: rgb(255 255 255 / 0.22);
 }
 .idc-edit-photo-status {
-  background: rgb(20 23 26 / 0.88);
+  background: rgb(44 36 33 / 0.88);
   color: white;
   border-color: rgb(255 255 255 / 0.14);
 }
@@ -299,7 +299,7 @@ main {
 /* When the header rides transparent over a dark hero, the brown wordmark
    would sink into the photo — a soft dark halo keeps it legible. */
 .site-header[data-overlay="true"]:not(.is-solid) .wordmark-logo {
-  filter: drop-shadow(0 1px 6px rgb(0 0 0 / 0.45));
+  filter: drop-shadow(0 1px 6px rgb(29 23 21 / 0.45));
 }
 
 .desktop-nav-shell {
@@ -393,9 +393,13 @@ main {
       color-mix(in srgb, var(--color-accent-50) 88%, white) 0%,
       transparent 28%
     ),
-    linear-gradient(180deg, rgb(255 255 255 / 0.98), rgb(245 247 248 / 0.98));
+    linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.98),
+      color-mix(in srgb, var(--color-cream) 98%, transparent)
+    );
   color: var(--color-ink);
-  box-shadow: 0 26px 60px rgb(20 23 26 / 0.12);
+  box-shadow: 0 26px 60px rgb(44 36 33 / 0.12);
 }
 .mega-menu[hidden] {
   display: none;
@@ -427,7 +431,7 @@ main {
 .mega-spotlight {
   justify-content: space-between;
   background:
-    linear-gradient(180deg, rgb(87 113 124 / 0.08), rgb(87 113 124 / 0.02)),
+    linear-gradient(180deg, rgb(109 91 81 / 0.08), rgb(109 91 81 / 0.02)),
     color-mix(in srgb, var(--color-white) 84%, var(--color-accent-50));
 }
 .mega-columns {
@@ -693,12 +697,12 @@ main {
   transition:
     r 0.2s var(--ease-out-quint),
     filter 0.2s var(--ease-out-quint);
-  filter: drop-shadow(0 2px 6px rgb(42 42 40 / 0.35));
+  filter: drop-shadow(0 2px 6px rgb(44 36 33 / 0.35));
 }
 .map-point:hover .map-point-dot,
 .map-point:focus-visible .map-point-dot,
 .map-point.is-active .map-point-dot {
-  filter: drop-shadow(0 4px 10px rgb(42 42 40 / 0.4));
+  filter: drop-shadow(0 4px 10px rgb(44 36 33 / 0.4));
 }
 .map-point:focus-visible .map-point-dot {
   stroke: var(--color-accent);
@@ -724,7 +728,7 @@ main {
   fill: color-mix(in srgb, var(--rc) 60%, white);
   fill-opacity: 0.55;
   stroke: var(--color-ink);
-  filter: drop-shadow(0 4px 10px rgb(42 42 40 / 0.25));
+  filter: drop-shadow(0 4px 10px rgb(44 36 33 / 0.25));
 }
 .hotspot:focus-visible path {
   stroke: var(--color-accent);
@@ -1450,9 +1454,9 @@ main {
   z-index: -1;
   background: linear-gradient(
     to top,
-    rgb(26 30 32 / 0.72),
-    rgb(26 30 32 / 0.15) 45%,
-    rgb(26 30 32 / 0.4)
+    rgb(29 23 21 / 0.72),
+    rgb(29 23 21 / 0.15) 45%,
+    rgb(29 23 21 / 0.4)
   );
 }
 .hero-inner {
@@ -1721,7 +1725,7 @@ main {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(120deg, rgb(23 33 36 / 0.9), rgb(23 33 36 / 0.7));
+  background: linear-gradient(120deg, rgb(29 23 21 / 0.9), rgb(29 23 21 / 0.7));
 }
 .cta-inner {
   text-align: center;
@@ -1770,9 +1774,9 @@ main {
   z-index: -1;
   background: linear-gradient(
     to top,
-    rgb(26 30 32 / 0.8),
-    rgb(26 30 32 / 0.15) 60%,
-    rgb(26 30 32 / 0.4)
+    rgb(29 23 21 / 0.8),
+    rgb(29 23 21 / 0.15) 60%,
+    rgb(29 23 21 / 0.4)
   );
 }
 .ahero-inner {
@@ -1965,9 +1969,9 @@ main {
   z-index: -1;
   background: linear-gradient(
     to top,
-    rgb(26 30 32 / 0.8),
-    rgb(26 30 32 / 0.15) 60%,
-    rgb(26 30 32 / 0.4)
+    rgb(29 23 21 / 0.8),
+    rgb(29 23 21 / 0.15) 60%,
+    rgb(29 23 21 / 0.4)
   );
 }
 .shero-inner {
@@ -2123,9 +2127,9 @@ main {
   z-index: -1;
   background: linear-gradient(
     to top,
-    rgb(26 30 32 / 0.8),
-    rgb(26 30 32 / 0.15) 60%,
-    rgb(26 30 32 / 0.4)
+    rgb(29 23 21 / 0.8),
+    rgb(29 23 21 / 0.15) 60%,
+    rgb(29 23 21 / 0.4)
   );
 }
 .dhero-inner {
@@ -2170,9 +2174,9 @@ main {
   z-index: -1;
   background: linear-gradient(
     to top,
-    rgb(26 30 32 / 0.8),
-    rgb(26 30 32 / 0.15) 60%,
-    rgb(26 30 32 / 0.4)
+    rgb(29 23 21 / 0.8),
+    rgb(29 23 21 / 0.15) 60%,
+    rgb(29 23 21 / 0.4)
   );
 }
 .chero-inner {
@@ -2433,9 +2437,9 @@ main {
   z-index: -1;
   background: linear-gradient(
     to top,
-    rgb(26 30 32 / 0.8),
-    rgb(26 30 32 / 0.15) 60%,
-    rgb(26 30 32 / 0.4)
+    rgb(29 23 21 / 0.8),
+    rgb(29 23 21 / 0.15) 60%,
+    rgb(29 23 21 / 0.4)
   );
 }
 .phero-inner {
@@ -2569,9 +2573,9 @@ main {
   z-index: -1;
   background: linear-gradient(
     to top,
-    rgb(26 30 32 / 0.82),
-    rgb(26 30 32 / 0.2) 55%,
-    rgb(26 30 32 / 0.4)
+    rgb(29 23 21 / 0.82),
+    rgb(29 23 21 / 0.2) 55%,
+    rgb(29 23 21 / 0.4)
   );
 }
 .thero-inner {
@@ -3001,7 +3005,8 @@ main {
 }
 
 .site-footer {
-  /* Faint aurora glow rising from the top edge, tying the footer to the map. */
+  position: relative;
+  /* Faint logo-spectrum glow rising from the top edge. */
   background:
     radial-gradient(
       60rem 22rem at 12% 0%,
@@ -3010,13 +3015,22 @@ main {
     ),
     radial-gradient(
       48rem 20rem at 92% 0%,
-      color-mix(in srgb, var(--color-aurora-periwinkle) 20%, transparent),
+      color-mix(in srgb, var(--color-brand-coral) 20%, transparent),
       transparent 66%
     ),
     var(--color-cream);
   border-block-start: 1px solid
     color-mix(in srgb, var(--color-line) 90%, transparent);
   color: var(--color-charcoal-soft);
+}
+.site-footer::before {
+  content: "";
+  position: absolute;
+  inset-block-start: -1px;
+  inset-inline: 0;
+  block-size: 2px;
+  background: var(--gradient-brand);
+  pointer-events: none;
 }
 
 .footer-brand {
@@ -3214,8 +3228,8 @@ main {
   font-family: var(--font-brand);
 }
 
-/* Eyebrow — Scandinavian tracked small-caps label on a hairline pill, with a
-   fjord-teal dot. Single source of truth (global.css defers to this). */
+/* Eyebrow — tracked small-caps label on a hairline pill, with the logo's
+   magenta dot. Single source of truth (global.css defers to this). */
 .u-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -3255,7 +3269,7 @@ main {
 
 .u-eyebrow.text-white\/80::before,
 .u-eyebrow.is-on-dark::before {
-  background: var(--color-accent-300);
+  background: var(--color-brand-gold);
 }
 
 /* The page heroes (.dhero/.thero/…) are light cream panels, but their eyebrow
@@ -3523,7 +3537,7 @@ section.bg-ink {
   backdrop-filter: blur(20px);
   border: 1px solid color-mix(in srgb, var(--color-white) 10%, transparent);
   border-radius: var(--radius-xl);
-  box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.5);
+  box-shadow: 0 30px 60px -20px rgb(29 23 21 / 0.5);
   will-change: transform;
 }
 .pgallery-img {
@@ -4076,8 +4090,8 @@ section.bg-ink {
   background: var(--color-cream);
   overflow: clip;
 }
-/* Soft aurora wash — a faint fjord/mint/periwinkle glow drifting off the art
-   side, echoing the map palette without competing with the copy. */
+/* Soft logo-spectrum wash drifting off the art side without competing with
+   the copy. Gold stays decorative; magenta remains the interaction colour. */
 .home-hero::before {
   content: "";
   position: absolute;
@@ -4087,12 +4101,12 @@ section.bg-ink {
   background-image:
     radial-gradient(
       40rem 32rem at 85% 12%,
-      color-mix(in srgb, var(--color-aurora-mint) 32%, transparent),
+      color-mix(in srgb, var(--color-brand-gold) 24%, transparent),
       transparent 70%
     ),
     radial-gradient(
       36rem 30rem at 100% 90%,
-      color-mix(in srgb, var(--color-aurora-periwinkle) 26%, transparent),
+      color-mix(in srgb, var(--color-brand-coral) 22%, transparent),
       transparent 72%
     ),
     radial-gradient(
@@ -4100,6 +4114,16 @@ section.bg-ink {
       color-mix(in srgb, var(--color-accent-100) 55%, transparent),
       transparent 70%
     );
+}
+.home-hero::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 2;
+  block-size: 3px;
+  background: var(--gradient-brand);
+  pointer-events: none;
 }
 .home-hero > * {
   position: relative;
@@ -4254,7 +4278,7 @@ section.bg-ink {
   inline-size: 0.45rem;
   block-size: 0.45rem;
   border-radius: 50%;
-  background: var(--color-accent-300);
+  background: var(--color-brand-gold);
 }
 .deck-title {
   display: flex;
@@ -4274,7 +4298,7 @@ section.bg-ink {
   background: color-mix(in srgb, var(--color-ink) 40%, transparent);
   backdrop-filter: blur(24px);
   border: 1px solid color-mix(in srgb, var(--color-white) 10%, transparent);
-  box-shadow: 0 0 40px rgb(0 0 0 / 0.3);
+  box-shadow: 0 0 40px rgb(29 23 21 / 0.3);
   color: var(--color-white);
 }
 .pgallery-title {
@@ -4558,13 +4582,13 @@ section.bg-ink {
   fill: var(--rc, var(--color-accent));
   stroke: var(--color-white);
   stroke-width: 6;
-  filter: drop-shadow(0 2px 4px rgb(20 23 26 / 0.35));
+  filter: drop-shadow(0 2px 4px rgb(44 36 33 / 0.35));
   transition:
     r 0.3s var(--ease-out-quint),
     filter 0.2s var(--ease-out-quint);
 }
 .walk-pin:hover .walk-pin-dot {
-  filter: drop-shadow(0 4px 8px rgb(20 23 26 / 0.45));
+  filter: drop-shadow(0 4px 8px rgb(44 36 33 / 0.45));
 }
 .walk-pin.is-visited .walk-pin-dot {
   fill: color-mix(
@@ -4944,13 +4968,13 @@ section.bg-ink {
   block-size: auto;
   /* The full-colour lockup is built for light paper; on the deep-ink curtain
      its brown wordmark would sink (~2.7:1). A soft luminous cream plate keeps
-     the brand's aurora colours while guaranteeing it reads. */
+     the logo spectrum intact while guaranteeing it reads. */
   padding: clamp(0.85rem, 2.5vw, 1.35rem) clamp(1.1rem, 3vw, 1.75rem);
   background: color-mix(in srgb, var(--color-cream) 94%, transparent);
   border-radius: var(--radius-lg);
   box-shadow:
     0 1px 0 rgb(255 255 255 / 0.5) inset,
-    0 18px 48px -18px rgb(0 0 0 / 0.55);
+    0 18px 48px -18px rgb(29 23 21 / 0.55);
   opacity: 0;
   animation: site-intro-rise 0.9s var(--ease-out-quint) 0.15s forwards;
 }
@@ -4973,7 +4997,7 @@ section.bg-ink {
   font-family: var(--font-accent-serif);
   font-style: normal;
   font-size: clamp(1.15rem, 3vw, 1.6rem);
-  color: var(--color-aurora-mint);
+  color: var(--color-brand-gold);
   opacity: 0;
   animation: site-intro-rise 0.9s var(--ease-out-quint) 1.7s forwards;
 }

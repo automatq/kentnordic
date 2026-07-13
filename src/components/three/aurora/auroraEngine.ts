@@ -1,7 +1,7 @@
 /*
  * Dependency-free WebGL1 aurora renderer (~4KB): a fullscreen triangle whose
  * fragment shader layers drifting fbm noise into vertical light curtains,
- * ramped across four brand aurora colours. Deliberately not three.js — the
+ * ramped across four colours from the logo spectrum. Deliberately not three.js — the
  * home hero should never pay the three vendor tax for a background veil.
  *
  * The canvas is always rendered OPAQUE at the blend-mode identity colour
@@ -10,7 +10,7 @@
  */
 
 export interface AuroraOptions {
-  /** Four colours as [r,g,b] in 0..1, typically the --color-aurora-* tokens. */
+  /** Four colours as [r,g,b] in 0..1, typically the logo-spectrum tokens. */
   colors: [number, number, number][];
   /** 0..1 — overall strength of the curtains. */
   intensity: number;
