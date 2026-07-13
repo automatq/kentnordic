@@ -111,9 +111,14 @@ export default function SiteIntro() {
     >
       <AuroraVeil variant="dark" className="site-intro-aurora" />
       <div className="site-intro-inner" aria-hidden="true">
-        <p className="site-intro-brand">
-          Idcibidci <span>DMC</span>
-        </p>
+        <img
+          src="/idcibidci-logo.png"
+          alt=""
+          className="site-intro-logo"
+          width={778}
+          height={612}
+          decoding="async"
+        />
         {paths && (
           /* Tight bbox of the region outlines (the artwork's own viewBox
              reserves bottom-right space for its legend, off-centering the

@@ -289,7 +289,9 @@ main {
 }
 .wordmark-logo {
   display: block;
-  block-size: clamp(3.5rem, 9vw, 4.25rem);
+  /* Horizontal wordmark crop (~3.5:1) — sized so the letters read large in
+     the 5rem header with breathing room, unlike the stacked full lockup. */
+  block-size: clamp(2.75rem, 6.5vw, 3.5rem);
   inline-size: auto;
   /* Lift the mark off the header's translucent cream when scrolled. */
   filter: drop-shadow(0 1px 1px rgb(23 22 20 / 0.06));
@@ -4908,19 +4910,21 @@ section.bg-ink {
   gap: clamp(1.25rem, 3vh, 2.25rem);
   padding: 2rem;
 }
-.site-intro-brand {
-  font-family: var(--font-sans);
-  font-size: clamp(1.3rem, 4vw, 2rem);
-  font-weight: 300;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-accent-300);
+.site-intro-logo {
+  display: block;
+  inline-size: clamp(11rem, 32vw, 16rem);
+  block-size: auto;
+  /* The full-colour lockup is built for light paper; on the deep-ink curtain
+     its brown wordmark would sink (~2.7:1). A soft luminous cream plate keeps
+     the brand's aurora colours while guaranteeing it reads. */
+  padding: clamp(0.85rem, 2.5vw, 1.35rem) clamp(1.1rem, 3vw, 1.75rem);
+  background: color-mix(in srgb, var(--color-cream) 94%, transparent);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.5) inset,
+    0 18px 48px -18px rgb(0 0 0 / 0.55);
   opacity: 0;
   animation: site-intro-rise 0.9s var(--ease-out-quint) 0.15s forwards;
-}
-.site-intro-brand span {
-  letter-spacing: -0.02em;
-  color: color-mix(in srgb, var(--color-white) 72%, transparent);
 }
 .site-intro-map {
   inline-size: min(78vw, 52rem);
