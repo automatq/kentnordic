@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Icon from '@/components/ui/Icon';
-import Pic from '@/components/ui/Pic';
+import EditablePhoto from '@/copy/EditablePhoto';
 import { cn } from '@/lib/classNames';
 
 export interface FlipCard {
@@ -105,7 +105,13 @@ export default function FlipCardCarousel({ cards, className }: FlipCardCarouselP
                   </span>
                 </div>
                 <div className="faq-card-back">
-                  <Pic photoKey={card.photoKey} alt="" className="faq-card-bg" sizes="26rem" />
+                  <EditablePhoto
+                    photoKey={card.photoKey}
+                    alt=""
+                    className="faq-card-bg"
+                    frameClassName="faq-card-bg"
+                    sizes="26rem"
+                  />
                   <div className="faq-card-scrim" />
                   <div className="faq-card-answer">
                     <h4>{card.heading}</h4>

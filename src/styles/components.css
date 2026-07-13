@@ -97,6 +97,94 @@
   outline-style: solid;
   background-color: rgb(87 113 124 / 0.08);
 }
+.idc-edit-photo-frame {
+  position: relative;
+  display: block;
+  isolation: isolate;
+}
+.idc-edit-photo-picture,
+.idc-edit-photo-picture img,
+.idc-edit-photo-media,
+.idc-edit-photo-fill {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+.idc-edit-photo-picture img,
+.idc-edit-photo-media,
+.idc-edit-photo-fill {
+  object-fit: cover;
+  border-radius: inherit;
+}
+.idc-edit-photo-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0.85rem;
+  background: linear-gradient(
+    to top,
+    rgb(20 23 26 / 0.7),
+    rgb(20 23 26 / 0.14) 48%,
+    transparent 72%
+  );
+  opacity: 0;
+  transition: opacity 140ms ease;
+  pointer-events: none;
+}
+.idc-edit-photo-frame:hover .idc-edit-photo-overlay,
+.idc-edit-photo-frame:focus-within .idc-edit-photo-overlay,
+.idc-edit-photo-overlay.is-visible {
+  opacity: 1;
+}
+.idc-edit-photo-actions {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.idc-edit-photo-actions button,
+.idc-edit-photo-status {
+  appearance: none;
+  border: 1px solid color-mix(in srgb, var(--color-line) 18%, white);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.94);
+  color: var(--color-ink);
+  padding: 0.45rem 0.78rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow: 0 10px 30px rgb(20 23 26 / 0.18);
+}
+.idc-edit-photo-actions button {
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+.idc-edit-photo-actions button:hover {
+  background: white;
+  border-color: color-mix(in srgb, var(--color-accent-200) 60%, white);
+}
+.idc-edit-photo-actions button.is-secondary {
+  background: rgb(255 255 255 / 0.14);
+  color: white;
+  border-color: rgb(255 255 255 / 0.24);
+}
+.idc-edit-photo-actions button.is-secondary:hover {
+  background: rgb(255 255 255 / 0.22);
+}
+.idc-edit-photo-status {
+  background: rgb(20 23 26 / 0.88);
+  color: white;
+  border-color: rgb(255 255 255 / 0.14);
+}
+.idc-edit-photo-input {
+  display: none;
+}
 @media (max-width: 640px) {
   .idc-edit-toolbar {
     inset-inline: 0.75rem;
@@ -118,6 +206,17 @@
     inset-inline: 0.75rem;
     inset-block-end: 5rem;
     max-inline-size: none;
+  }
+  .idc-edit-photo-overlay {
+    padding: 0.7rem;
+  }
+  .idc-edit-photo-actions {
+    gap: 0.45rem;
+  }
+  .idc-edit-photo-actions button,
+  .idc-edit-photo-status {
+    font-size: 0.72rem;
+    padding: 0.4rem 0.68rem;
   }
 }
 
@@ -804,6 +903,12 @@ main {
   block-size: 100%;
   object-fit: cover;
 }
+.rc-img > .idc-edit-photo-media,
+.rc-img picture img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
 .rc-band {
   position: absolute;
   inset-block-end: 0;
@@ -1198,7 +1303,16 @@ main {
   object-fit: cover;
   transition: transform 0.6s var(--ease-out-quint);
 }
-.card:hover .card-img {
+.card-img > .idc-edit-photo-media,
+.card-img picture img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out-quint);
+}
+.card:hover .card-img:not(.idc-edit-photo-frame),
+.card:hover .card-img > .idc-edit-photo-media,
+.card:hover .card-img picture img {
   transform: scale(1.05);
 }
 .card-code,
@@ -2961,6 +3075,16 @@ main {
   object-fit: cover;
   transform: rotate(2deg);
 }
+.idc-edit-photo-frame:is(
+  .ahero-bg,
+  .shero-bg,
+  .dhero-bg,
+  .chero-bg,
+  .phero-bg,
+  .thero-bg
+) {
+  z-index: 0;
+}
 
 :is(.ahero, .shero, .dhero, .chero, .phero, .thero)::before {
   content: "";
@@ -3017,6 +3141,8 @@ main {
   max-inline-size: 46rem;
   padding-block: 0;
   margin-inline: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 :is(
@@ -3388,6 +3514,13 @@ section.bg-ink {
   object-fit: cover;
   border-radius: var(--radius-lg);
 }
+.pgallery-img > .idc-edit-photo-media,
+.pgallery-img picture img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
 
 /* src/components/motion/CardDeckReveal.tsx */
 .deck-section {
@@ -3623,6 +3756,14 @@ section.bg-ink {
   block-size: 100%;
   object-fit: cover;
   z-index: 0;
+}
+.faq-card-bg > .idc-edit-photo-media,
+.faq-card-bg picture img {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
 }
 .faq-card-scrim {
   position: absolute;

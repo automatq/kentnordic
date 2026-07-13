@@ -6,8 +6,8 @@ import Button from '@/components/ui/Button';
 import Icon from '@/components/ui/Icon';
 import Reveal from '@/components/motion/Reveal';
 import { getOffices } from '@/lib/content';
-import Pic from '@/components/ui/Pic';
 import CompanyCredentials from '@/components/company/CompanyCredentials';
+import EditablePhoto from '@/copy/EditablePhoto';
 import EditableText from '@/copy/EditableText';
 import { buildBreadcrumbJsonLd } from '@/lib/seo';
 
@@ -39,7 +39,14 @@ export default function AboutPage() {
       jsonLd={jsonLd}
     >
       <section className="ahero">
-        <Pic photoKey="hero-about" alt="Turf-roofed Icelandic buildings beneath a mountain" className="ahero-bg" loading="eager" fetchPriority="high" />
+        <EditablePhoto
+          photoKey="hero-about"
+          alt="Turf-roofed Icelandic buildings beneath a mountain"
+          className="ahero-bg"
+          frameClassName="ahero-bg"
+          loading="eager"
+          fetchPriority="high"
+        />
         <div className="ahero-scrim" />
         <Container className="ahero-inner">
           <EditableText copyKey="about.hero.eyebrow" defaultValue="About us" as="p" className="u-eyebrow text-white/80" />

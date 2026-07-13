@@ -7,7 +7,7 @@ import PackageCard from '@/components/tour/PackageCard';
 import Reveal from '@/components/motion/Reveal';
 import Marquee from '@/components/motion/Marquee';
 import Icon from '@/components/ui/Icon';
-import Pic from '@/components/ui/Pic';
+import EditablePhoto from '@/copy/EditablePhoto';
 import EditableText from '@/copy/EditableText';
 import { SEASONS, getRegions, getTours, lengthBucket, matchesSeason, tourRegionIds } from '@/lib/packages';
 import { buildBreadcrumbJsonLd } from '@/lib/seo';
@@ -56,7 +56,14 @@ export default function ToursPage() {
       jsonLd={jsonLd}
     >
       <section className="phero">
-        <Pic photoKey="hero-tours" alt="Aerial view of an Icelandic Ring Road winding through mountains" className="phero-bg" loading="eager" fetchPriority="high" />
+        <EditablePhoto
+          photoKey="hero-tours"
+          alt="Aerial view of an Icelandic Ring Road winding through mountains"
+          className="phero-bg"
+          frameClassName="phero-bg"
+          loading="eager"
+          fetchPriority="high"
+        />
         <div className="phero-scrim" />
         <Container className="phero-inner">
           <EditableText copyKey="tours.hero.eyebrow" defaultValue="Tour Packages" as="p" className="u-eyebrow text-white/80" />

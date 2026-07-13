@@ -6,7 +6,7 @@ import IcelandMap from '@/components/map/IcelandMap';
 import RegionCards from '@/components/map/RegionCards';
 import TourWalkthrough from '@/components/map/TourWalkthrough';
 import Marquee from '@/components/motion/Marquee';
-import Pic from '@/components/ui/Pic';
+import EditablePhoto from '@/copy/EditablePhoto';
 import EditableText from '@/copy/EditableText';
 import { getRegions, getTours } from '@/lib/packages';
 import { buildBreadcrumbJsonLd } from '@/lib/seo';
@@ -26,7 +26,14 @@ export default function DestinationsPage() {
       jsonLd={jsonLd}
     >
       <section className="dhero">
-        <Pic photoKey="hero-destinations" alt="Map-like aerial view of Iceland's coastline and highlands" className="dhero-bg" loading="eager" fetchPriority="high" />
+        <EditablePhoto
+          photoKey="hero-destinations"
+          alt="Map-like aerial view of Iceland's coastline and highlands"
+          className="dhero-bg"
+          frameClassName="dhero-bg"
+          loading="eager"
+          fetchPriority="high"
+        />
         <div className="dhero-scrim" />
         <Container className="dhero-inner">
           <EditableText copyKey="destinations.hero.eyebrow" defaultValue="Destinations" as="p" className="u-eyebrow text-white/80" />
