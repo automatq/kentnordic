@@ -7,7 +7,32 @@
     <meta name="theme-color" content="#F4F1EA" />
     <script>
       document.documentElement.classList.add('js');
+      (() => {
+        if (window.location.pathname !== '/') return;
+        try {
+          const forced = new URLSearchParams(window.location.search).has('intro');
+          const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          const seen = window.sessionStorage.getItem('idc-intro-seen');
+          if (!reduced && (forced || !seen)) {
+            document.documentElement.classList.add('has-pending-intro');
+          }
+        } catch {}
+      })();
     </script>
+    <style>
+      html.has-pending-intro,
+      html.has-pending-intro body {
+        background: #1a1815;
+      }
+
+      html.has-pending-intro body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #1a1815;
+      }
+    </style>
     <title>Idcibidci · Iceland Destination Management Company</title>
   </head>
   <body>

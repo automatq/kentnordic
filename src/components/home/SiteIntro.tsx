@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import AuroraVeil from '@/components/three/AuroraVeil';
 import { getRegions } from '@/lib/packages';
 import { prefersReducedMotion } from '@/lib/useReducedMotion';
@@ -13,7 +13,14 @@ interface RegionPath {
 }
 
 const SEEN_KEY = 'idc-intro-seen';
+const BOOTSTRAP_CLASS = 'has-pending-intro';
 const AUTO_DISMISS_MS = 4600;
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
+function clearBootstrapCover() {
+  if (typeof document === 'undefined') return;
+  document.documentElement.classList.remove(BOOTSTRAP_CLASS);
+}
 
 /**
  * First-visit intro: the client's Iceland map sketches itself region by
@@ -37,10 +44,26 @@ export default function SiteIntro() {
       setState('playing');
       return;
     }
-    if (sessionStorage.getItem(SEEN_KEY)) return;
-    if (prefersReducedMotion()) return;
+    if (sessionStorage.getItem(SEEN_KEY)) {
+      clearBootstrapCover();
+      return;
+    }
+    if (prefersReducedMotion()) {
+      clearBootstrapCover();
+      return;
+    }
     setState('playing');
   }, []);
+
+  useIsomorphicLayoutEffect(() => {
+    if (state === 'done') return;
+    clearBootstrapCover();
+  }, [state]);
+
+  useEffect(() => {
+    if (state !== 'done') return;
+    clearBootstrapCover();
+  }, [state]);
 
   useEffect(() => {
     if (state !== 'playing') return;
