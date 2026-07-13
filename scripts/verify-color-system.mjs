@@ -37,6 +37,15 @@ function contrast(foreground, background) {
 
 await page.goto(`${base}/about`, { waitUntil: "networkidle", timeout: 45_000 });
 
+const themeColor = (
+  await page.locator('meta[name="theme-color"]').getAttribute("content")
+)?.toLowerCase();
+check(
+  themeColor === "#fff9f3",
+  "browser theme color uses brand cream",
+  themeColor,
+);
+
 const expectedTokens = {
   "--color-brand-taupe": "#6d5b51",
   "--color-brand-magenta": "#cc1782",

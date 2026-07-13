@@ -4,17 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#F4F1EA" />
+    <meta name="theme-color" content="#FFF9F3" />
     <script>
-      document.documentElement.classList.add('js');
+      document.documentElement.classList.add("js");
       (() => {
-        if (window.location.pathname !== '/') return;
+        if (window.location.pathname !== "/") return;
         try {
-          const forced = new URLSearchParams(window.location.search).has('intro');
-          const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          const seen = window.sessionStorage.getItem('idc-intro-seen');
+          const forced = new URLSearchParams(window.location.search).has(
+            "intro",
+          );
+          const reduced = window.matchMedia(
+            "(prefers-reduced-motion: reduce)",
+          ).matches;
+          const seen = window.sessionStorage.getItem("idc-intro-seen");
           if (!reduced && (forced || !seen)) {
-            document.documentElement.classList.add('has-pending-intro');
+            document.documentElement.classList.add("has-pending-intro");
           }
         } catch {}
       })();
@@ -22,15 +26,15 @@
     <style>
       html.has-pending-intro,
       html.has-pending-intro body {
-        background: #1a1815;
+        background: #1d1715;
       }
 
       html.has-pending-intro body::before {
-        content: '';
+        content: "";
         position: fixed;
         inset: 0;
         z-index: 9999;
-        background: #1a1815;
+        background: #1d1715;
       }
     </style>
     <title>Idcibidci · Iceland Destination Management Company</title>
