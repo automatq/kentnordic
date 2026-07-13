@@ -318,8 +318,14 @@ export default function Header({ overlay = false }: HeaderProps) {
     >
       <div className="u-container flex h-(--header-h) items-center justify-between gap-6">
         <Link to="/" className="wordmark" aria-label="Idcibidci - home">
-          <span className="wordmark-text">Idcibidci</span>
-          <span className="wordmark-sub">DMC</span>
+          <img
+            src="/idcibidci-logo.png"
+            alt=""
+            className="wordmark-logo"
+            width={778}
+            height={612}
+            decoding="async"
+          />
         </Link>
 
         <nav

@@ -35,7 +35,17 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="u-container grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
         <div className="max-w-sm">
-          <p className="footer-brand">Idcibidci <span>DMC</span></p>
+          <Link to="/" className="footer-brand" aria-label="Idcibidci - home">
+            <img
+              src="/idcibidci-logo.png"
+              alt="Idcibidci"
+              className="footer-logo"
+              width={778}
+              height={612}
+              decoding="async"
+              loading="lazy"
+            />
+          </Link>
           <EditableText
             copyKey="footer.description"
             defaultValue={site.description}

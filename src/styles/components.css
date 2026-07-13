@@ -283,42 +283,21 @@ main {
 
 .wordmark {
   display: inline-flex;
-  flex-direction: row;
-  align-items: baseline;
-  gap: 0.2rem;
-  line-height: 1;
+  align-items: center;
+  line-height: 0;
   text-decoration: none;
-  color: currentColor;
 }
-.wordmark-text {
-  font-family: var(--font-sans);
-  font-size: clamp(1.1rem, 3.8vw, 1.55rem);
-  font-weight: 300;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  /* Deep fjord: the pale aurora tint failed contrast on the birch paper. */
-  color: var(--color-accent-600);
+.wordmark-logo {
+  display: block;
+  block-size: clamp(3.5rem, 9vw, 4.25rem);
+  inline-size: auto;
+  /* Lift the mark off the header's translucent cream when scrolled. */
+  filter: drop-shadow(0 1px 1px rgb(23 22 20 / 0.06));
 }
-.wordmark-sub {
-  position: relative;
-  font-size: clamp(1rem, 3.4vw, 1.45rem);
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
-  color: currentColor;
-  opacity: 0.85;
-  margin-block-start: 0;
-}
-.wordmark-sub::after {
-  content: "";
-  position: absolute;
-  right: -0.35rem;
-  bottom: -0.42rem;
-  width: 2rem;
-  height: 2px;
-  background: currentColor;
-  opacity: 0.55;
-  border-radius: 999px;
-  transform: rotate(-5deg);
+/* When the header rides transparent over a dark hero, the brown wordmark
+   would sink into the photo — a soft dark halo keeps it legible. */
+.site-header[data-overlay="true"]:not(.is-solid) .wordmark-logo {
+  filter: drop-shadow(0 1px 6px rgb(0 0 0 / 0.45));
 }
 
 .desktop-nav-shell {
@@ -3038,17 +3017,15 @@ main {
 }
 
 .footer-brand {
-  font-family: var(--font-sans);
-  font-size: 1.35rem;
-  font-weight: 300;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-accent-300);
+  display: inline-flex;
+  line-height: 0;
+  text-decoration: none;
 }
 
-.footer-brand span {
-  letter-spacing: -0.04em;
-  color: var(--color-charcoal-soft);
+.footer-logo {
+  display: block;
+  block-size: 4rem;
+  inline-size: auto;
 }
 
 .footer-heading {
@@ -3397,10 +3374,6 @@ section.bg-ink {
 
   .wordmark {
     max-width: calc(100vw - 9.5rem);
-  }
-
-  .wordmark-text {
-    letter-spacing: 0.16em;
   }
 }
 
