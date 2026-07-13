@@ -30,7 +30,7 @@ export default function EditModeToolbar() {
           <span className="idc-edit-path">{location.pathname}</span>
         </span>
         <button type="button" onClick={toggleEditMode}>
-          {editMode ? "Pause" : "Resume"}
+          {editMode ? "Stop editing" : "Start editing"}
         </button>
         <button type="button" onClick={onLogout} className="is-secondary">
           Log out

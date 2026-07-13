@@ -59,10 +59,13 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
         if (cancelled) return;
         const authed = Boolean(session?.authenticated);
         setIsAdmin(authed);
-        if (authed) setEditMode(true);
+        if (!authed) setEditMode(false);
       })
       .catch(() => {
-        if (!cancelled) setIsAdmin(false);
+        if (!cancelled) {
+          setIsAdmin(false);
+          setEditMode(false);
+        }
       });
 
     return () => {
