@@ -22,6 +22,34 @@ function clearBootstrapCover() {
   document.documentElement.classList.remove(BOOTSTRAP_CLASS);
 }
 
+function isolatePageBehindIntro() {
+  const background = [
+    document.querySelector<HTMLElement>('.skip-link'),
+    document.querySelector<HTMLElement>('.site-header'),
+    ...document.querySelectorAll<HTMLElement>('#main > :not(.site-intro)'),
+    document.querySelector<HTMLElement>('.site-footer'),
+  ].filter((element): element is HTMLElement => Boolean(element));
+
+  const previous = background.map((element) => ({
+    element,
+    inert: element.inert,
+    ariaHidden: element.getAttribute('aria-hidden'),
+  }));
+
+  for (const element of background) {
+    element.inert = true;
+    element.setAttribute('aria-hidden', 'true');
+  }
+
+  return () => {
+    for (const snapshot of previous) {
+      snapshot.element.inert = snapshot.inert;
+      if (snapshot.ariaHidden === null) snapshot.element.removeAttribute('aria-hidden');
+      else snapshot.element.setAttribute('aria-hidden', snapshot.ariaHidden);
+    }
+  };
+}
+
 /**
  * First-visit intro: the client's Iceland map sketches itself region by
  * region in the artwork colours over deep ink, beneath the wordmark and an
@@ -36,6 +64,8 @@ export default function SiteIntro() {
   const [state, setState] = useState<IntroState>('done');
   const [paths, setPaths] = useState<RegionPath[] | null>(null);
   const dismissTimer = useRef<number | null>(null);
+  const skipRef = useRef<HTMLButtonElement>(null);
+  const isActive = state !== 'done';
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -64,6 +94,17 @@ export default function SiteIntro() {
     if (state !== 'done') return;
     clearBootstrapCover();
   }, [state]);
+
+  useEffect(() => {
+    if (!isActive) return;
+    const restorePage = isolatePageBehindIntro();
+    const focusFrame = window.requestAnimationFrame(() => skipRef.current?.focus({ preventScroll: true }));
+
+    return () => {
+      window.cancelAnimationFrame(focusFrame);
+      restorePage();
+    };
+  }, [isActive]);
 
   useEffect(() => {
     if (state !== 'playing') return;
@@ -104,6 +145,9 @@ export default function SiteIntro() {
   return (
     <div
       className={cn('site-intro', state === 'leaving' && 'is-leaving')}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Idcibidci introduction"
       onClick={dismiss}
       onTransitionEnd={(event) => {
         if (event.propertyName === 'transform' && state === 'leaving') setState('done');
@@ -137,8 +181,10 @@ export default function SiteIntro() {
         <p className="site-intro-tagline">{site.tagline}</p>
       </div>
       <button
+        ref={skipRef}
         type="button"
         className="site-intro-skip"
+        autoFocus
         onClick={(event) => {
           event.stopPropagation();
           dismiss();
