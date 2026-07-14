@@ -11,6 +11,7 @@
     "build:fast": "vite build",
     "preview": "vite preview",
     "verify:colors": "node scripts/verify-color-system.mjs",
+    "verify:mobile": "node scripts/verify-mobile-hardening.mjs",
     "format": "prettier --write .",
     "gen:map": "node scripts/build-map.mjs"
   },
