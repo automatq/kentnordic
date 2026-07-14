@@ -47,6 +47,7 @@ export default function LegalPage({ slug }: LegalPageProps) {
       <Section tone="cream">
         <Container className="max-w-4xl">
           <SectionHeading
+            as="h1"
             eyebrow="Legal"
             title={page.data.title}
             lead={page.data.description}
