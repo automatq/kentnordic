@@ -14,7 +14,12 @@ export default function Marquee<T>({ items, renderItem, keyFor, className }: Mar
       <div className="marquee-fade marquee-fade-start" aria-hidden="true" />
       <div className="marquee-fade marquee-fade-end" aria-hidden="true" />
       {[0, 1].map((group) => (
-        <div className="marquee-track" key={group} aria-hidden={group === 1 ? true : undefined}>
+        <div
+          className="marquee-track"
+          key={group}
+          aria-hidden={group === 1 ? true : undefined}
+          inert={group === 1 ? true : undefined}
+        >
           {items.map((item, i) => (
             <div className="marquee-item" key={keyFor(item, i)}>
               {renderItem(item, i)}
