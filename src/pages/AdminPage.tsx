@@ -310,7 +310,7 @@ export default function AdminPage() {
                     type="password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
-                    className="mt-1.5 w-full rounded-xl border border-charcoal/15 bg-white px-3.5 py-3 outline-none transition focus:border-accent focus:shadow-[0_0_0_3px_var(--color-accent-100)]"
+                    className="mt-1.5 w-full rounded-xl border border-charcoal/15 bg-white px-3.5 py-3 text-base outline-none transition focus:border-accent focus:shadow-[0_0_0_3px_var(--color-accent-100)]"
                     autoComplete="current-password"
                   />
                 </label>
