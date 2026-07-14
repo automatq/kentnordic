@@ -21,6 +21,8 @@ interface FlythroughSceneProps {
   playing: boolean;
   accent: string;
   frameloop: 'always' | 'never';
+  /** Freeze ambient motion (the settle-orbit drift) — user-driven moves only. */
+  reducedMotion?: boolean;
   pinColor: (pinId: string) => string;
   onSelectPin?: (pinId: string) => void;
   onArrive: () => void;
@@ -29,11 +31,15 @@ interface FlythroughSceneProps {
 
 const CRUISE_SPEED = 0.052; // u per second while playing
 const JUMP_SPEED = 0.14; // manual prev/next moves faster
-const CHASE_BACK = 0.24;
-const CHASE_UP = 0.165;
+/* Camera distances sit well above the first cut so the surrounding map stays
+   in frame — the flyover reads as a route across Iceland, not just terrain
+   streaming under the lens. CHASE_UP leads CHASE_BACK so the in-flight pitch
+   stays steep enough that ground, not sky, fills the frame. */
+const CHASE_BACK = 0.38;
+const CHASE_UP = 0.32;
 const LOOK_AHEAD = 0.035;
-const ORBIT_RADIUS = 0.4;
-const ORBIT_HEIGHT = 0.3;
+const ORBIT_RADIUS = 0.58;
+const ORBIT_HEIGHT = 0.44;
 
 const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1);
 
@@ -41,12 +47,14 @@ function Rig({
   runtime,
   targetU,
   playing,
+  reducedMotion,
   uRef,
   onArrive,
 }: {
   runtime: TrailRuntime;
   targetU: number;
   playing: boolean;
+  reducedMotion: boolean;
   uRef: React.RefObject<number>;
   onArrive: () => void;
 }) {
@@ -76,8 +84,9 @@ function Rig({
     const { cam, look: lookT } = scratch.current;
 
     if (atTarget) {
-      // Settled at a stop: drift around it slowly.
-      orbit.current += dt * 0.14;
+      // Settled at a stop: drift around it slowly — unless the user prefers
+      // reduced motion, in which case hold a static high shot.
+      if (!reducedMotion) orbit.current += dt * 0.14;
       cam.set(p.x + Math.cos(orbit.current) * ORBIT_RADIUS, p.y + ORBIT_HEIGHT, p.z + Math.sin(orbit.current) * ORBIT_RADIUS);
       lookT.copy(p);
     } else {
@@ -104,7 +113,7 @@ function ReadySignal({ onReady }: { onReady: () => void }) {
   return null;
 }
 
-export default function FlythroughScene({ regions, trail, dayIdx, playing, accent, frameloop, pinColor, onSelectPin, onArrive, onReady }: FlythroughSceneProps) {
+export default function FlythroughScene({ regions, trail, dayIdx, playing, accent, frameloop, reducedMotion = false, pinColor, onSelectPin, onArrive, onReady }: FlythroughSceneProps) {
   const runtime = useMemo(() => buildTrailRuntime(trail), [trail]);
   const uRef = useRef(0);
   if (!runtime) return null;
@@ -116,7 +125,7 @@ export default function FlythroughScene({ regions, trail, dayIdx, playing, accen
       <IcelandScene regions={regions} interactive={false}>
         <RouteTrail3D trail={trail} runtime={runtime} uRef={uRef} pinColor={pinColor} accent={accent} onSelectPin={onSelectPin} />
       </IcelandScene>
-      <Rig runtime={runtime} targetU={targetU} playing={playing} uRef={uRef} onArrive={onArrive} />
+      <Rig runtime={runtime} targetU={targetU} playing={playing} reducedMotion={reducedMotion} uRef={uRef} onArrive={onArrive} />
     </Canvas>
   );
 }

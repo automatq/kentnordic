@@ -413,3 +413,169 @@
     stroke-dashoffset: 0;
   }
 }
+
+/* ---- Fullscreen map + legend ------------------------------------------- */
+.walk-stage-wrap {
+  position: relative;
+}
+
+/* Expand/collapse control — a sibling of the aria-hidden .walk-stage so the
+   focusable button never sits inside aria-hidden. */
+.walk-fs-btn {
+  position: absolute;
+  inset-block-start: 0.75rem;
+  inset-inline-end: 0.75rem;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.4rem;
+  block-size: 2.4rem;
+  padding: 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-white) 86%, transparent);
+  backdrop-filter: blur(6px);
+  color: var(--color-charcoal-soft);
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background-color 0.2s;
+}
+.walk-fs-btn:hover {
+  color: var(--color-ink);
+  border-color: var(--color-accent-300);
+  background: var(--color-white);
+}
+
+/* Legend — only rendered in fullscreen; a card in the map's SW corner (ocean,
+   so it never masks the island). */
+.walk-legend {
+  position: absolute;
+  inset-block-end: 1rem;
+  inset-inline-start: 1rem;
+  z-index: 4;
+  inline-size: max-content;
+  max-inline-size: 14rem;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-cream) 90%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px -18px rgb(23 22 20 / 0.45);
+}
+.walk-legend-title {
+  font-family: var(--font-brand);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--color-charcoal-soft);
+  margin-block-end: 0.45rem;
+}
+.walk-legend ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.walk-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.82rem;
+  color: var(--color-ink);
+}
+.walk-legend-swatch {
+  inline-size: 0.85rem;
+  block-size: 0.85rem;
+  flex: none;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgb(23 22 20 / 0.1);
+}
+.walk-legend-pin {
+  inline-size: 0.8rem;
+  block-size: 0.8rem;
+  flex: none;
+  border-radius: 50%;
+}
+.walk-legend-pin.is-current {
+  background: var(--color-accent);
+}
+.walk-legend-pin.is-visited {
+  background: color-mix(in srgb, var(--color-charcoal-soft) 55%, white);
+}
+.walk-legend-pin.is-future {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--color-beige-deep);
+}
+.walk-legend-line {
+  inline-size: 1.2rem;
+  block-size: 0;
+  flex: none;
+  border-radius: 2px;
+  border-block-start: 2.5px solid var(--color-accent);
+}
+
+/* Fullscreen overlay — native requestFullscreen fills the screen; this fixed
+   layout is the fallback and also styles the native-fullscreen element (its
+   default backdrop is black). */
+.walk.is-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  margin: 0;
+  padding: clamp(0.9rem, 2vw, 1.75rem);
+  background: var(--color-cream);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.walk.is-fullscreen .walk-tours {
+  flex: none;
+  margin-block-end: 1rem;
+}
+.walk.is-fullscreen .walk-grid {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  align-items: stretch;
+}
+.walk.is-fullscreen .walk-stage-wrap {
+  min-block-size: 0;
+  display: flex;
+}
+.walk.is-fullscreen .walk-stage {
+  aspect-ratio: auto;
+  inline-size: 100%;
+  block-size: 100%;
+}
+.walk.is-fullscreen .walk-panel {
+  overflow-y: auto;
+  max-block-size: 100%;
+}
+@container (min-width: 56rem) {
+  .walk.is-fullscreen .walk-grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+/* Narrow (phones): the single-column grid gives the map no height, so switch
+   to a flex column — map takes a fixed slice, the panel scrolls beneath. */
+@container (max-width: 55.999rem) {
+  .walk.is-fullscreen .walk-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .walk.is-fullscreen .walk-stage-wrap {
+    flex: none;
+    block-size: 50vh;
+  }
+  .walk.is-fullscreen .walk-panel {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow-y: auto;
+  }
+}

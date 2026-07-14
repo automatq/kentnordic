@@ -5,6 +5,8 @@ import { useInViewport } from '@/lib/useInViewport';
 import { cn } from '@/lib/classNames';
 import { getRegions } from '@/lib/packages';
 import { getTrail, getWalkthrough } from '@/lib/tourRoute';
+import { useFullscreen } from '@/lib/useFullscreen';
+import { prefersReducedMotion, useReducedMotion } from '@/lib/useReducedMotion';
 import type { Tour } from '@/lib/content';
 
 const FlythroughScene = lazy(() => import('@/three/iceland/FlythroughScene'));
@@ -29,8 +31,12 @@ export default function TourFlythrough3D({ tour }: TourFlythrough3DProps) {
   const [hostRef, inView] = useInViewport<HTMLDivElement>('25%');
   const [ready, setReady] = useState(false);
   const [dayIdx, setDayIdx] = useState(0);
-  const [playing, setPlaying] = useState(true);
+  // Mounting is an explicit opt-in, but auto-playing the flight is not —
+  // reduced-motion users start paused and drive the camera themselves.
+  const [playing, setPlaying] = useState(() => !prefersReducedMotion());
+  const reducedMotion = useReducedMotion();
   const dwellTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(hostRef);
 
   const walk = useMemo(() => getWalkthrough(tour), [tour]);
   const trail = useMemo(() => getTrail(walk), [walk]);
@@ -104,9 +110,12 @@ export default function TourFlythrough3D({ tour }: TourFlythrough3DProps) {
   );
 
   return (
-    <div ref={hostRef} className="fly" onKeyDown={onKeyDown}>
+    <div ref={hostRef} className={cn('fly', isFullscreen && 'is-fullscreen')} onKeyDown={onKeyDown}>
       <div className="fly-stage">
-        <When3D tier="heavy" fallback={<div className="fly-loading">3D flyover unavailable on this device.</div>}>
+        {/* tier="light": the flyover is an explicit click-through, so any WebGL
+            qualifies (software renderers run this scene fine); the boundary
+            degrades to the fallback if boot genuinely fails. */}
+        <When3D tier="light" motionOptIn fallback={<div className="fly-loading">3D flyover unavailable on this device.</div>}>
           {(inView || ready) && (
             <div className={cn('fly-canvas', ready && 'is-ready')} aria-hidden="true">
               <FlythroughScene
@@ -116,6 +125,7 @@ export default function TourFlythrough3D({ tour }: TourFlythrough3DProps) {
                 playing={playing}
                 accent={accent}
                 frameloop={inView ? 'always' : 'never'}
+                reducedMotion={reducedMotion}
                 pinColor={pinColor}
                 onSelectPin={(pinId) => goTo(firstVisitDay.get(pinId) ?? dayIdx)}
                 onArrive={onArrive}
@@ -125,6 +135,14 @@ export default function TourFlythrough3D({ tour }: TourFlythrough3DProps) {
           )}
         </When3D>
         {!ready && <div className="fly-loading">Preparing 3D flyover…</div>}
+        <button
+          type="button"
+          className="fly-fs-btn"
+          onClick={toggleFullscreen}
+          aria-label={isFullscreen ? 'Exit fullscreen flyover' : 'View flyover fullscreen'}
+        >
+          <Icon name={isFullscreen ? 'minimize' : 'expand'} size={18} />
+        </button>
       </div>
 
       <div className="fly-hud">

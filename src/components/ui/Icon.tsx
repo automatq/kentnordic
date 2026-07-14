@@ -52,6 +52,8 @@ const paths: Record<string, string> = {
   waterfall: '<path d="M6 3v6c0 1 .5 2 1.5 2.5"/><path d="M12 3v5c0 1.3.7 2.4 1.8 3"/><path d="M18 3v4c0 1.6.9 3 2 3.5"/><path d="M4 21c1-4 2.5-9 4-9s2 5 4 5 2-6 4-6 2.5 6 4 6"/>',
   printer: '<path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7"/>',
   droplet: '<path d="M12 2.5c3 4 6 8 6 12a6 6 0 0 1-12 0c0-4 3-8 6-12z"/><path d="M9.5 15.5a2.5 2.5 0 0 0 2.5 2.5"/>',
+  expand: '<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>',
+  minimize: '<path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/>',
 };
 
 export default function Icon({ name, size = 24, className = '', title }: IconProps) {

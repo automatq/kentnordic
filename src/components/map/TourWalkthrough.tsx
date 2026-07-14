@@ -8,6 +8,7 @@ import Badge from '@/components/ui/Badge';
 import { cn } from '@/lib/classNames';
 import { getRegions, type Tour } from '@/lib/packages';
 import { getTrail, getWalkthrough, trailPath } from '@/lib/tourRoute';
+import { useFullscreen } from '@/lib/useFullscreen';
 
 interface TourWalkthroughProps {
   /** One tour = fixed walkthrough; several = a tour selector is shown. */
@@ -25,6 +26,7 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
   const [playing, setPlaying] = useState(false);
   const [countdownMs, setCountdownMs] = useState(AUTOPLAY_MS);
   const rootRef = useRef<HTMLDivElement>(null);
+  const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(rootRef);
 
   const tour = tours.find((t) => t.id === tourId) ?? tours[0];
   const regions = getRegions();
@@ -145,7 +147,7 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
   if (!tour || !day) return null;
 
   return (
-    <div className={cn('walk', className)} ref={rootRef} onKeyDown={onKeyDown}>
+    <div className={cn('walk', isFullscreen && 'is-fullscreen', className)} ref={rootRef} onKeyDown={onKeyDown}>
       {tours.length > 1 && (
         <div className="walk-tours" role="tablist" aria-label="Choose a tour to walk through">
           {tours.map((t) => (
@@ -165,6 +167,7 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
       )}
 
       <div className="walk-grid">
+        <div className="walk-stage-wrap">
         <div className="walk-stage" aria-hidden="true">
           <div className="map-base" dangerouslySetInnerHTML={{ __html: baseSvg }} />
           <svg className="walk-overlay" viewBox={mapData.viewBox}>
@@ -223,6 +226,34 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
               );
             })}
           </svg>
+        </div>
+          <button
+            type="button"
+            className="walk-fs-btn"
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? 'Exit fullscreen map' : 'View map fullscreen'}
+          >
+            <Icon name={isFullscreen ? 'minimize' : 'expand'} size={18} />
+          </button>
+          {isFullscreen && (
+            <div className="walk-legend" role="group" aria-label="Map key">
+              <p className="walk-legend-title">Key</p>
+              <ul>
+                <li>
+                  <span className="walk-legend-pin is-current" /> Today&apos;s stop
+                </li>
+                <li>
+                  <span className="walk-legend-pin is-visited" /> Visited
+                </li>
+                <li>
+                  <span className="walk-legend-pin is-future" /> Upcoming
+                </li>
+                <li>
+                  <span className="walk-legend-line" /> Today&apos;s route
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
 
         <aside className="walk-panel" aria-live="polite">

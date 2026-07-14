@@ -6,6 +6,12 @@ interface When3DProps {
   tier: SceneTier;
   fallback: ReactNode;
   children: ReactNode;
+  /**
+   * The scene only mounts on an explicit user action (e.g. clicking a "3D"
+   * tab), so reduced motion doesn't block it — user-initiated motion is
+   * WCAG-compatible. The host is responsible for not auto-playing.
+   */
+  motionOptIn?: boolean;
 }
 
 interface BoundaryProps {
@@ -33,13 +39,15 @@ class SceneErrorBoundary extends Component<BoundaryProps, { failed: boolean }> {
  * The single gate every 3D surface mounts through. Renders the 2D fallback
  * unless the device qualifies (see capabilities.ts) and the user has not
  * asked for reduced motion — the latter is live, so flipping the OS setting
- * mid-session tears the scene down on the spot. Children are expected to be
+ * mid-session tears the scene down on the spot. Ambient scenes (aurora, hero
+ * crystal, map) keep that strict default; explicitly user-invoked scenes pass
+ * `motionOptIn` so only the device gate applies. Children are expected to be
  * React.lazy scenes; the Suspense fallback keeps the 2D content on screen
  * while a chunk streams in.
  */
-export default function When3D({ tier, fallback, children }: When3DProps) {
+export default function When3D({ tier, fallback, children, motionOptIn = false }: When3DProps) {
   const reducedMotion = useReducedMotion();
-  if (reducedMotion || !canRender3D(tier)) return <>{fallback}</>;
+  if ((reducedMotion && !motionOptIn) || !canRender3D(tier)) return <>{fallback}</>;
   return (
     <SceneErrorBoundary fallback={fallback}>
       <Suspense fallback={fallback}>{children}</Suspense>

@@ -3875,13 +3875,21 @@ section.bg-ink {
     color 0.2s,
     box-shadow 0.2s;
 }
-.rx-tab:hover {
+.rx-tab:hover:not(:disabled) {
   color: var(--color-ink);
 }
 .rx-tab.is-active {
   background: var(--color-white);
   color: var(--color-ink);
   box-shadow: var(--shadow-soft);
+}
+/* Gated 3D: the tab stays visible for discoverability but reads inert. */
+.rx-tab:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.rx-tab:disabled .rx-tab-badge {
+  background: var(--color-charcoal-soft);
 }
 .rx-tab-badge {
   font-size: 0.62rem;
@@ -3891,6 +3899,12 @@ section.bg-ink {
   border-radius: var(--radius-pill);
   background: var(--color-accent);
   color: var(--color-white);
+}
+/* Why-the-3D-tab-is-disabled note, under the toggle. */
+.rx-note {
+  margin: -0.5rem 0 1.25rem;
+  font-size: var(--text-sm);
+  color: var(--color-charcoal-soft);
 }
 
 /* Cinematic flyover (tour detail) */
@@ -3933,6 +3947,59 @@ section.bg-ink {
   color: var(--color-charcoal-soft);
   font-size: var(--text-sm);
   letter-spacing: 0.04em;
+}
+/* Expand/collapse control — sibling of the aria-hidden .fly-canvas, mirroring
+   the 2D walkthrough's .walk-fs-btn. */
+.fly-fs-btn {
+  position: absolute;
+  inset-block-start: 0.75rem;
+  inset-inline-end: 0.75rem;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.4rem;
+  block-size: 2.4rem;
+  padding: 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-white) 86%, transparent);
+  backdrop-filter: blur(6px);
+  color: var(--color-charcoal-soft);
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background-color 0.2s;
+}
+.fly-fs-btn:hover {
+  color: var(--color-ink);
+  border-color: var(--color-accent-300);
+  background: var(--color-white);
+}
+/* Fullscreen flyover — native requestFullscreen fills the screen; this fixed
+   layout is the fallback and also styles the native-fullscreen element. */
+.fly.is-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(0.9rem, 2vw, 1.75rem);
+  background: var(--color-cream);
+  overflow: hidden;
+}
+.fly.is-fullscreen .fly-stage {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  aspect-ratio: auto;
+}
+.fly.is-fullscreen .fly-hud {
+  flex: none;
+  margin-block-start: 0;
+  max-block-size: 34vh;
+  overflow-y: auto;
 }
 .fly-hud {
   display: flex;
