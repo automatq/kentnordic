@@ -4780,28 +4780,54 @@ section.bg-ink {
 .walk-dots {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.125rem;
   flex: 1;
   justify-content: center;
 }
 .walk-dot {
-  inline-size: 0.6rem;
-  block-size: 0.6rem;
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: var(--color-beige-deep);
+  background: transparent;
   cursor: pointer;
+}
+.walk-dot::before {
+  content: '';
+  inline-size: 0.6rem;
+  block-size: 0.6rem;
+  border-radius: 50%;
+  background: var(--color-beige-deep);
   transition:
     background-color 0.2s,
     transform 0.2s;
 }
-.walk-dot.is-done {
+.walk-dot.is-done::before {
   background: var(--color-accent-300);
 }
-.walk-dot.is-active {
+.walk-dot.is-active::before {
   background: var(--color-accent);
   transform: scale(1.35);
+}
+@container (max-width: 24rem) {
+  .walk-controls {
+    gap: 0.25rem;
+  }
+}
+@container (max-width: 20rem) {
+  .walk-controls {
+    display: grid;
+    grid-template-columns: 2.4rem minmax(0, 1fr) 2.4rem;
+    gap: 0.5rem;
+  }
+  .walk-play {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
 }
 .walk-status {
   min-block-size: 1.5rem;
