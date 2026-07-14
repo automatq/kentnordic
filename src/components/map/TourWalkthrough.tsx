@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import '@/styles/tour-walkthrough.css';
 import baseSvg from '@/data/map-base.svg?raw';
 import mapData from '@/data/map-regions.json';
 import Icon from '@/components/ui/Icon';

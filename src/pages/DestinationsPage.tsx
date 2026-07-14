@@ -1,15 +1,18 @@
+import { lazy } from 'react';
 import BaseLayout from '@/layouts/BaseLayout';
 import Container from '@/components/layout/Container';
 import Section from '@/components/layout/Section';
 import SectionHeading from '@/components/ui/SectionHeading';
 import IcelandMap from '@/components/map/IcelandMap';
 import RegionCards from '@/components/map/RegionCards';
-import TourWalkthrough from '@/components/map/TourWalkthrough';
+import DeferredContent from '@/components/performance/DeferredContent';
 import Marquee from '@/components/motion/Marquee';
 import EditablePhoto from '@/copy/EditablePhoto';
 import EditableText from '@/copy/EditableText';
 import { getRegions, getTours } from '@/lib/packages';
 import { buildBreadcrumbJsonLd } from '@/lib/seo';
+
+const TourWalkthrough = lazy(() => import('@/components/map/TourWalkthrough'));
 
 export default function DestinationsPage() {
   const regions = getRegions();
@@ -67,7 +70,9 @@ export default function DestinationsPage() {
             flourish={<EditableText copyKey="destinations.walkthrough.flourish" defaultValue="day by day" as="span" />}
             lead={<EditableText copyKey="destinations.walkthrough.lead" defaultValue="Pick an itinerary and step through it on the map - every stop, drive and overnight, exactly as your clients will travel it." as="span" />}
           />
-          <TourWalkthrough tours={tours} className="mt-10" />
+          <DeferredContent className="mt-10">
+            <TourWalkthrough tours={tours} />
+          </DeferredContent>
         </Container>
       </Section>
 

@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link, useParams } from 'react-router-dom';
 import BaseLayout from '@/layouts/BaseLayout';
@@ -8,7 +9,7 @@ import Icon from '@/components/ui/Icon';
 import Badge from '@/components/ui/Badge';
 import ItineraryDay from '@/components/tour/ItineraryDay';
 import PackageCard from '@/components/tour/PackageCard';
-import RouteExperience from '@/components/tour/RouteExperience';
+import DeferredContent from '@/components/performance/DeferredContent';
 import QuoteBar from '@/components/tour/QuoteBar';
 import DayJumpNav from '@/components/tour/DayJumpNav';
 import PrintItineraryButton from '@/components/tour/PrintItineraryButton';
@@ -22,6 +23,8 @@ import EditableText from '@/copy/EditableText';
 import { useCopyContext } from '@/copy/CopyProvider';
 import { formatLength, getRegions, getTours, pickTestimonial, priceText, seasonalityText, totalDistanceKm, tourRegionIds } from '@/lib/packages';
 import { site } from '@/config/site';
+
+const RouteExperience = lazy(() => import('@/components/tour/RouteExperience'));
 
 export default function TourDetailPage() {
   const { slug } = useParams();
@@ -168,7 +171,9 @@ export default function TourDetailPage() {
                   className="block-heading"
                 />
                 <div className="route-map">
-                  <RouteExperience tour={tour} />
+                  <DeferredContent>
+                    <RouteExperience tour={tour} />
+                  </DeferredContent>
                 </div>
               </div>
 
