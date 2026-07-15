@@ -5,14 +5,14 @@ import path from "node:path";
 import YAML from "yaml";
 
 import type { ContentKind } from "../shared/admin-contracts";
-import { validateContent } from "../api/_lib/admin-content";
+import { validateContent } from "../api_routes/_lib/admin-content";
 import {
   closeLocalDatabase,
   migrateConfiguredDatabase,
   withDatabase,
   type DatabaseSession,
-} from "../api/_lib/database";
-import { ensureAdminSeeded } from "../api/_lib/admin-crm";
+} from "../api_routes/_lib/database";
+import { ensureAdminSeeded } from "../api_routes/_lib/admin-crm";
 
 interface SeedEntry {
   key: string;

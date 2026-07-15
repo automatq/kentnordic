@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import { closeLocalDatabase, withDatabase } from "../api/_lib/database";
+import { closeLocalDatabase, withDatabase } from "../api_routes/_lib/database";
 
 interface EntryRow extends Record<string, unknown> {
   key: string;

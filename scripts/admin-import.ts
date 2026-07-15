@@ -1,17 +1,17 @@
 import crypto from "node:crypto";
 
-import { ensureAdminSeeded } from "../api/_lib/admin-crm";
+import { ensureAdminSeeded } from "../api_routes/_lib/admin-crm";
 import {
   closeLocalDatabase,
   migrateConfiguredDatabase,
   withDatabase,
   type DatabaseSession,
-} from "../api/_lib/database";
+} from "../api_routes/_lib/database";
 import {
   listLegacySubmissions,
   readLegacyCopyOverrides,
   type LegacySubmission,
-} from "../api/_lib/legacy-storage";
+} from "../api_routes/_lib/legacy-storage";
 
 const apply = process.argv.includes("--apply");
 

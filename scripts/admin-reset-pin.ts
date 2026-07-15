@@ -5,7 +5,7 @@ import {
   closeLocalDatabase,
   migrateConfiguredDatabase,
   withDatabase,
-} from "../api/_lib/database";
+} from "../api_routes/_lib/database";
 
 const scrypt = promisify(crypto.scrypt);
 

@@ -2,7 +2,7 @@ import {
   closeLocalDatabase,
   databaseDriver,
   migrateConfiguredDatabase,
-} from "../api/_lib/database";
+} from "../api_routes/_lib/database";
 
 async function main() {
   console.log(`Applying admin migrations with ${databaseDriver()}…`);
