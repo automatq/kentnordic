@@ -5,6 +5,7 @@ import mapData from '@/data/map-regions.json';
 import Icon from '@/components/ui/Icon';
 import IcelandMap3D from '@/components/three/IcelandMap3D';
 import { cn } from '@/lib/classNames';
+import { TYPE_ICON, TYPE_LABEL } from '@/lib/destinationTypes';
 import { destinationTourMap, getDestinationPoints, getRegions, nightsLabel, toursForRegion } from '@/lib/packages';
 
 interface IcelandMapProps {
@@ -24,32 +25,6 @@ interface PointRow {
   tours: Array<{ slug: string; name: string; nights: string }>;
 }
 
-/** Best-fit existing glyph per destination type — see Icon.tsx for the registry. */
-const TYPE_ICON: Record<string, string> = {
-  city: 'compass',
-  airport: 'route',
-  landmark: 'map-pin',
-  canyon: 'mountain',
-  crater: 'mountain',
-  glacier: 'snowflake',
-  waterfall: 'waterfall',
-  lagoon: 'droplet',
-  beach: 'droplet',
-  geothermal: 'droplet',
-};
-
-const TYPE_LABEL: Record<string, string> = {
-  city: 'City',
-  airport: 'Airport',
-  landmark: 'Landmark',
-  canyon: 'Canyon',
-  crater: 'Crater',
-  glacier: 'Glacier',
-  waterfall: 'Waterfall',
-  lagoon: 'Lagoon',
-  beach: 'Beach',
-  geothermal: 'Geothermal area',
-};
 
 interface SvgStageProps {
   regionData: Array<{ id: string; name: string; color: string; tours: unknown[] }>;

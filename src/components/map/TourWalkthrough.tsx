@@ -6,6 +6,8 @@ import mapData from '@/data/map-regions.json';
 import Icon from '@/components/ui/Icon';
 import Badge from '@/components/ui/Badge';
 import { cn } from '@/lib/classNames';
+import type { Destination } from '@/lib/content';
+import { TYPE_ICON, TYPE_LABEL } from '@/lib/destinationTypes';
 import { getRegions, type Tour } from '@/lib/packages';
 import { getTrail, getWalkthrough, trailPath } from '@/lib/tourRoute';
 import { useFullscreen } from '@/lib/useFullscreen';
@@ -25,6 +27,7 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
   const [dayIdx, setDayIdx] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [countdownMs, setCountdownMs] = useState(AUTOPLAY_MS);
+  const [hoverPin, setHoverPin] = useState<Destination | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(rootRef);
 
@@ -47,6 +50,8 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
     setTourId(id);
     setDayIdx(0);
     setPlaying(false);
+    // Pins swap without a mouseleave firing — drop any stale tooltip.
+    setHoverPin(null);
   }, []);
 
   const goTo = useCallback(
@@ -214,6 +219,8 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
                   transform={`translate(${pin.coords.x}, ${pin.coords.y})`}
                   style={{ '--rc': regionColor.get(pin.region) } as React.CSSProperties}
                   onClick={() => goTo(first)}
+                  onMouseEnter={() => setHoverPin(pin)}
+                  onMouseLeave={() => setHoverPin((current) => (current?.id === pin.id ? null : current))}
                 >
                   {isCurrent && <circle className="walk-pin-pulse" r="46" />}
                   <circle className="walk-pin-dot" r={isCurrent ? 26 : 17} />
@@ -252,6 +259,35 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
                   <span className="walk-legend-line" /> Today&apos;s route
                 </li>
               </ul>
+            </div>
+          )}
+          {hoverPin && (
+            /* The frame mirrors the SVG's xMidYMid-meet letterboxing so the
+               percentage anchor stays glued to the pin in fullscreen too. */
+            <div className="walk-tip-layer" aria-hidden="true">
+              <div className="walk-tip-frame">
+                <div
+                  className="walk-tip"
+                  data-flip={hoverPin.coords.y < 460 ? 'true' : undefined}
+                  data-edge={hoverPin.coords.x < 300 ? 'left' : hoverPin.coords.x > 2700 ? 'right' : undefined}
+                  style={
+                    {
+                      left: `${(hoverPin.coords.x / 3000) * 100}%`,
+                      top: `${(hoverPin.coords.y / 2100) * 100}%`,
+                      '--rc': regionColor.get(hoverPin.region),
+                    } as React.CSSProperties
+                  }
+                >
+                  <p className="walk-tip-name">
+                    <Icon name={TYPE_ICON[hoverPin.type] ?? 'map-pin'} size={14} /> {hoverPin.name}
+                  </p>
+                  {hoverPin.blurb && <p className="walk-tip-blurb">{hoverPin.blurb}</p>}
+                  <p className="walk-tip-meta">
+                    <span className="walk-tip-dot" />
+                    {TYPE_LABEL[hoverPin.type] ?? 'Stop'} · Day {walk.days[firstVisitDay.get(hoverPin.id) ?? 0]?.day}
+                  </p>
+                </div>
+              </div>
             </div>
           )}
         </div>

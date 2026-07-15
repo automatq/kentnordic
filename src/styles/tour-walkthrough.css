@@ -412,6 +412,111 @@
     animation: none;
     stroke-dashoffset: 0;
   }
+  .walk-tip {
+    animation: none;
+  }
+}
+
+/* ---- Pin hover tooltip -------------------------------------------------- */
+/* The layer + frame reproduce the SVG's xMidYMid-meet letterboxing, so a
+   percentage position inside the frame lands on the pin in both the embedded
+   (exact-aspect) and fullscreen (stretched, letterboxed) stages. */
+.walk-tip-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 5;
+}
+.walk-tip-frame {
+  position: relative;
+  aspect-ratio: 3000 / 2100;
+  inline-size: 100%;
+  max-block-size: 100%;
+}
+.walk-tip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 1.1rem));
+  inline-size: max-content;
+  max-inline-size: 15rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-cream) 92%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px -18px rgb(23 22 20 / 0.45);
+  animation: walk-tip-in 0.15s var(--ease-out-quint);
+}
+.walk-tip[data-flip='true'] {
+  transform: translate(-50%, 1.6rem);
+}
+.walk-tip[data-edge='left'] {
+  transform: translate(-12%, calc(-100% - 1.1rem));
+}
+.walk-tip[data-edge='right'] {
+  transform: translate(-88%, calc(-100% - 1.1rem));
+}
+.walk-tip[data-flip='true'][data-edge='left'] {
+  transform: translate(-12%, 1.6rem);
+}
+.walk-tip[data-flip='true'][data-edge='right'] {
+  transform: translate(-88%, 1.6rem);
+}
+@keyframes walk-tip-in {
+  from {
+    opacity: 0;
+    margin-block-start: 4px;
+  }
+  to {
+    opacity: 1;
+    margin-block-start: 0;
+  }
+}
+.walk-tip-name {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+.walk-tip-name svg {
+  flex: none;
+  color: color-mix(in srgb, var(--rc, var(--color-accent)) 55%, var(--color-ink));
+}
+.walk-tip-blurb {
+  margin-block-start: 0.2rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--color-charcoal-soft);
+}
+.walk-tip-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-block-start: 0.35rem;
+  font-family: var(--font-brand);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-charcoal-soft);
+}
+.walk-tip-dot {
+  inline-size: 0.55rem;
+  block-size: 0.55rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--rc, var(--color-accent));
+}
+
+/* Touch devices have no hover — keep tap-to-jump with no tooltip flash. */
+@media (hover: none) {
+  .walk-tip-layer {
+    display: none;
+  }
 }
 
 /* ---- Fullscreen map + legend ------------------------------------------- */
