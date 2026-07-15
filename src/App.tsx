@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
+import { useCopyContext } from "@/copy/CopyProvider";
 import RouteEffects from "@/router/RouteEffects";
 
 /*
@@ -20,13 +21,14 @@ const TourDetailPage = lazy(() => import("@/pages/TourDetailPage"));
 const ToursPage = lazy(() => import("@/pages/ToursPage"));
 
 export default function App() {
+  const { previewVersion } = useCopyContext();
   return (
     <>
       <RouteEffects />
       <Suspense fallback={null}>
-        <Routes>
+        <Routes key={previewVersion}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/*" element={<AdminPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/destinations" element={<DestinationsPage />} />

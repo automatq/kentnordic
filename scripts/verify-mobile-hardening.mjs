@@ -129,6 +129,31 @@ async function loadWalkthrough(page, route) {
 
 async function checkWalkthrough(page, route, width) {
   await loadWalkthrough(page, route);
+
+  if (route === "/destinations") {
+    const slider = page.locator(".walk-tour-slider");
+    const sliderHeight = await slider.evaluate(
+      (element) => element.getBoundingClientRect().height,
+    );
+    check(
+      sliderHeight <= 40,
+      `${route} uses a compact mobile trip selector at ${width}px`,
+      `${sliderHeight}px`,
+    );
+    const selectedBefore = await slider
+      .locator(".walk-tour-current-code")
+      .textContent();
+    await slider.getByRole("button", { name: /Next tour:/ }).click();
+    const selectedAfter = await slider
+      .locator(".walk-tour-current-code")
+      .textContent();
+    check(
+      selectedBefore !== selectedAfter,
+      `${route} mobile trip selector changes tours`,
+      `${selectedBefore?.trim()} → ${selectedAfter?.trim()}`,
+    );
+  }
+
   const sizes = await page.locator(".walk-dot").evaluateAll((dots) =>
     dots.map((dot) => {
       const rect = dot.getBoundingClientRect();
@@ -165,6 +190,22 @@ async function checkWalkthrough(page, route, width) {
 
   await page.getByRole("button", { name: "View map fullscreen" }).click();
   await page.locator(".walk.is-fullscreen").waitFor({ state: "visible" });
+  if (route === "/destinations") {
+    const fullscreenSpace = await page.evaluate(() => ({
+      selectorHeight:
+        document.querySelector(".walk-tour-slider")?.getBoundingClientRect()
+          .height ?? 0,
+      itineraryHeight:
+        document.querySelector(".walk-panel")?.getBoundingClientRect().height ??
+        0,
+    }));
+    check(
+      fullscreenSpace.selectorHeight <= 40 &&
+        fullscreenSpace.itineraryHeight >= 160,
+      `${route} fullscreen trip selector preserves itinerary space at ${width}px`,
+      `selector ${fullscreenSpace.selectorHeight}px / itinerary ${fullscreenSpace.itineraryHeight}px`,
+    );
+  }
   const fullscreenLayout = await page.evaluate(() => {
     const map = document.querySelector(".walk-stage")?.getBoundingClientRect();
     const legend = document

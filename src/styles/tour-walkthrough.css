@@ -42,6 +42,86 @@
   opacity: 0.75;
 }
 
+.walk-tour-slider {
+  display: none;
+  grid-template-columns: 2.4rem minmax(0, 1fr) 2.4rem;
+  align-items: center;
+  gap: 0.5rem;
+  margin-block-end: 0.75rem;
+}
+.walk-tour-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.4rem;
+  block-size: 2.4rem;
+  padding: 0;
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-charcoal-soft);
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background-color 0.2s;
+}
+.walk-tour-nav:hover,
+.walk-tour-nav:focus-visible {
+  color: var(--color-accent-700);
+  border-color: var(--color-accent-300);
+  background: var(--color-accent-50);
+}
+.walk-tour-current {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  block-size: 2.4rem;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+.walk-tour-current-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent-700);
+}
+.walk-tour-current-dot {
+  inline-size: 0.45rem;
+  block-size: 0.45rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+.walk-tour-current-name {
+  overflow: hidden;
+  font-size: 0.8rem;
+  color: var(--color-charcoal-soft);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.walk-tour-count {
+  font-size: 0.68rem;
+  color: var(--color-charcoal-soft);
+}
+
+@container (max-width: 55.999rem) {
+  .walk-tours {
+    display: none;
+  }
+  .walk-tour-slider {
+    display: grid;
+  }
+}
+
 .walk-grid {
   display: grid;
   gap: 2rem;
@@ -642,6 +722,10 @@
 .walk.is-fullscreen .walk-tours {
   flex: none;
   margin-block-end: 1rem;
+}
+.walk.is-fullscreen .walk-tour-slider {
+  flex: none;
+  margin-block-end: 0.625rem;
 }
 .walk.is-fullscreen .walk-grid {
   flex: 1 1 auto;
