@@ -162,6 +162,32 @@ async function checkWalkthrough(page, route, width) {
       `${route} day navigation remains interactive`,
     );
   }
+
+  await page.getByRole("button", { name: "View map fullscreen" }).click();
+  await page.locator(".walk.is-fullscreen").waitFor({ state: "visible" });
+  const fullscreenLayout = await page.evaluate(() => {
+    const map = document.querySelector(".walk-stage")?.getBoundingClientRect();
+    const legend = document
+      .querySelector(".walk-legend")
+      ?.getBoundingClientRect();
+    if (!map || !legend) return null;
+    const overlaps = !(
+      legend.right <= map.left ||
+      legend.left >= map.right ||
+      legend.bottom <= map.top ||
+      legend.top >= map.bottom
+    );
+    return { mapBottom: map.bottom, legendTop: legend.top, overlaps };
+  });
+  check(
+    fullscreenLayout !== null && !fullscreenLayout.overlaps,
+    `${route} fullscreen legend does not cover the map at ${width}px`,
+    fullscreenLayout
+      ? `map bottom ${fullscreenLayout.mapBottom}px / legend top ${fullscreenLayout.legendTop}px`
+      : "map or legend missing",
+  );
+  await page.getByRole("button", { name: "Exit fullscreen map" }).click();
+  await page.locator(".walk.is-fullscreen").waitFor({ state: "detached" });
 }
 
 async function checkInputsAndHeadings(page) {
@@ -308,9 +334,11 @@ async function checkFallbacks(browser) {
   await reducedPage.locator(".deferred-content").scrollIntoViewIfNeeded();
   await reducedPage.locator(".walk").waitFor({ state: "visible" });
   check(
-    (await reducedPage.locator(".rx-toggle").count()) === 0 &&
+    (await reducedPage
+      .getByRole("tab", { name: "Day-by-day map" })
+      .getAttribute("aria-selected")) === "true" &&
       (await reducedPage.locator(".walk").count()) === 1,
-    "reduced-motion tour fallback uses the 2D walkthrough",
+    "reduced-motion tours start in the 2D walkthrough",
   );
   await reducedContext.close();
 
