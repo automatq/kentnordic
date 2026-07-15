@@ -4,9 +4,9 @@ import {
   AssignmentRuleSchema,
   RetentionSettingSchema,
   WorkspaceSettingSchema,
-} from "../../shared/admin-contracts";
-import { requireCsrf, requireProfile } from "../_lib/admin-auth";
-import { getAdminSettings, updateSetting } from "../_lib/admin-settings";
+} from "../../shared/admin-contracts.js";
+import { requireCsrf, requireProfile } from "../_lib/admin-auth.js";
+import { getAdminSettings, updateSetting } from "../_lib/admin-settings.js";
 import {
   apiError,
   json,
@@ -14,7 +14,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 const SettingInput = z.discriminatedUnion("key", [
   z.object({ key: z.literal("workspace"), value: WorkspaceSettingSchema }),

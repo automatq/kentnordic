@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { requireCsrf, requireProfile } from "../_lib/admin-auth";
-import { listSavedViews, saveView } from "../_lib/admin-settings";
+import { requireCsrf, requireProfile } from "../_lib/admin-auth.js";
+import { listSavedViews, saveView } from "../_lib/admin-settings.js";
 import {
   apiError,
   json,
@@ -9,7 +9,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 const ViewInput = z.object({
   name: z.string().trim().min(1).max(80),

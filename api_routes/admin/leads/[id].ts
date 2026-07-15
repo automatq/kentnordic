@@ -1,6 +1,6 @@
-import { LeadPatchSchema } from "../../../shared/admin-contracts";
-import { requireCsrf, requireProfile } from "../../_lib/admin-auth";
-import { getLeadDetail, trashLead, updateLead } from "../../_lib/admin-crm";
+import { LeadPatchSchema } from "../../../shared/admin-contracts.js";
+import { requireCsrf, requireProfile } from "../../_lib/admin-auth.js";
+import { getLeadDetail, trashLead, updateLead } from "../../_lib/admin-crm.js";
 import {
   apiError,
   json,
@@ -8,7 +8,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../../_lib/http";
+} from "../../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

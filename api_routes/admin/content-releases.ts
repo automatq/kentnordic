@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { requireCsrf, requireProfile } from "../_lib/admin-auth";
-import { listContentReleases, publishContent } from "../_lib/admin-content";
+import { requireCsrf, requireProfile } from "../_lib/admin-auth.js";
+import { listContentReleases, publishContent } from "../_lib/admin-content.js";
 import {
   apiError,
   json,
@@ -9,7 +9,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 const PublishInput = z.object({ note: z.string().trim().max(500).default("") });
 

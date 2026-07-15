@@ -4,7 +4,7 @@ import {
   businessMinutesBetween,
   nextBusinessDay,
   workspaceSchedule,
-} from "./business-time";
+} from "./business-time.js";
 
 describe("business time", () => {
   it("counts only configured weekday windows", () => {

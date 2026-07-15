@@ -1,12 +1,12 @@
-import { requireProfile } from "../_lib/admin-auth";
-import { emailConfiguration, listEmailTemplates } from "../_lib/admin-email";
+import { requireProfile } from "../_lib/admin-auth.js";
+import { emailConfiguration, listEmailTemplates } from "../_lib/admin-email.js";
 import {
   apiError,
   json,
   methodNotAllowed,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

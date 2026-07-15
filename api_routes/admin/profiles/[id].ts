@@ -1,9 +1,9 @@
-import { ProfileUpdateSchema } from "../../../shared/admin-contracts";
+import { ProfileUpdateSchema } from "../../../shared/admin-contracts.js";
 import {
   requireCsrf,
   requireProfile,
   updateProfile,
-} from "../../_lib/admin-auth";
+} from "../../_lib/admin-auth.js";
 import {
   apiError,
   json,
@@ -11,7 +11,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../../_lib/http";
+} from "../../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

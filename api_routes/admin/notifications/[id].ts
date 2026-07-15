@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { requireCsrf, requireProfile } from "../../_lib/admin-auth";
-import { updateNotification } from "../../_lib/admin-crm";
+import { requireCsrf, requireProfile } from "../../_lib/admin-auth.js";
+import { updateNotification } from "../../_lib/admin-crm.js";
 import {
   apiError,
   json,
@@ -9,7 +9,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../../_lib/http";
+} from "../../_lib/http.js";
 
 const NotificationPatch = z.object({
   action: z.enum(["read", "unread", "dismiss"]),

@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 
-import { processPostmarkEvent } from "../_lib/admin-email";
+import { processPostmarkEvent } from "../_lib/admin-email.js";
 import {
   HttpError,
   apiError,
@@ -9,7 +9,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

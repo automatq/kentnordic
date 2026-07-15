@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { requireCsrf, requireProfile } from "../_lib/admin-auth";
-import { listCustomFields, saveCustomField } from "../_lib/admin-settings";
+import { requireCsrf, requireProfile } from "../_lib/admin-auth.js";
+import { listCustomFields, saveCustomField } from "../_lib/admin-settings.js";
 import {
   apiError,
   json,
@@ -9,7 +9,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 const FieldInput = z.object({
   id: z.string().uuid().optional(),

@@ -1,13 +1,13 @@
 import crypto from "node:crypto";
 
-import { runNotificationJobs } from "../_lib/admin-notification-jobs";
+import { runNotificationJobs } from "../_lib/admin-notification-jobs.js";
 import {
   apiError,
   json,
   methodNotAllowed,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

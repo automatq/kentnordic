@@ -1,10 +1,10 @@
 import { get, put } from "@vercel/blob";
 import sharp from "sharp";
 
-import type { AdminProfile, MediaAsset } from "../../shared/admin-contracts";
-import { audit } from "./admin-auth";
-import { withDatabase, type DatabaseSession } from "./database";
-import { HttpError } from "./http";
+import type { AdminProfile, MediaAsset } from "../../shared/admin-contracts.js";
+import { audit } from "./admin-auth.js";
+import { withDatabase, type DatabaseSession } from "./database.js";
+import { HttpError } from "./http.js";
 
 interface MediaRow extends Record<string, unknown> {
   id: string;

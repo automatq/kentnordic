@@ -5,10 +5,10 @@ import type {
   ContentEntry,
   ContentKind,
   ContentRelease,
-} from "../../shared/admin-contracts";
-import { audit } from "./admin-auth";
-import { withDatabase, type DatabaseSession } from "./database";
-import { HttpError } from "./http";
+} from "../../shared/admin-contracts.js";
+import { audit } from "./admin-auth.js";
+import { withDatabase, type DatabaseSession } from "./database.js";
+import { HttpError } from "./http.js";
 
 interface ContentRow extends Record<string, unknown> {
   id: string;

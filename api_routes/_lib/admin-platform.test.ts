@@ -7,7 +7,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
   InquiryInputSchema,
   ProfileCreateSchema,
-} from "../../shared/admin-contracts";
+} from "../../shared/admin-contracts.js";
 import {
   createProfile,
   getAdminSession,
@@ -15,7 +15,7 @@ import {
   requireCsrf,
   unlockProfile,
   updateProfile,
-} from "./admin-auth";
+} from "./admin-auth.js";
 import {
   addLeadEvent,
   createLeadFromInquiry,
@@ -27,19 +27,19 @@ import {
   neutralizeCsv,
   nextBusinessDay,
   updateLead,
-} from "./admin-crm";
+} from "./admin-crm.js";
 import {
   getContentEntry,
   saveContentDraft,
   validateContent,
-} from "./admin-content";
-import { retryLeadEmail, saveLeadEmailDraft } from "./admin-email";
+} from "./admin-content.js";
+import { retryLeadEmail, saveLeadEmailDraft } from "./admin-email.js";
 import {
   closeLocalDatabase,
   migrateConfiguredDatabase,
   withDatabase,
-} from "./database";
-import type { ApiRequest, ApiResponse } from "./http";
+} from "./database.js";
+import type { ApiRequest, ApiResponse } from "./http.js";
 
 const databaseDirectory = path.resolve(
   process.cwd(),

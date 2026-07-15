@@ -1,12 +1,12 @@
-import { requireProfile } from "../_lib/admin-auth";
-import { exportLeadsCsv } from "../_lib/admin-crm";
+import { requireProfile } from "../_lib/admin-auth.js";
+import { exportLeadsCsv } from "../_lib/admin-crm.js";
 import {
   apiError,
   methodNotAllowed,
   requestUrl,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

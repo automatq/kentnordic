@@ -1,12 +1,12 @@
-import { requireProfile } from "../_lib/admin-auth";
-import { getDashboard } from "../_lib/admin-crm";
+import { requireProfile } from "../_lib/admin-auth.js";
+import { getDashboard } from "../_lib/admin-crm.js";
 import {
   apiError,
   json,
   methodNotAllowed,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

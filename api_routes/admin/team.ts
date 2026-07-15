@@ -1,11 +1,11 @@
-import { listProfiles, requireProfile } from "../_lib/admin-auth";
+import { listProfiles, requireProfile } from "../_lib/admin-auth.js";
 import {
   apiError,
   json,
   methodNotAllowed,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

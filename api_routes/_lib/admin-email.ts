@@ -2,10 +2,13 @@ import crypto from "node:crypto";
 
 import { ServerClient } from "postmark";
 
-import type { AdminProfile, EmailMessage } from "../../shared/admin-contracts";
-import { audit } from "./admin-auth";
-import { withDatabase } from "./database";
-import { HttpError } from "./http";
+import type {
+  AdminProfile,
+  EmailMessage,
+} from "../../shared/admin-contracts.js";
+import { audit } from "./admin-auth.js";
+import { withDatabase } from "./database.js";
+import { HttpError } from "./http.js";
 
 interface MessageRow extends Record<string, unknown> {
   id: string;

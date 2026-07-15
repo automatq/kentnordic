@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-import { requireCsrf, requireProfile } from "../../../_lib/admin-auth";
+import { requireCsrf, requireProfile } from "../../../_lib/admin-auth.js";
 import {
   retryLeadEmail,
   saveLeadEmailDraft,
   sendLeadEmail,
-} from "../../../_lib/admin-email";
+} from "../../../_lib/admin-email.js";
 import {
   apiError,
   json,
@@ -13,7 +13,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../../../_lib/http";
+} from "../../../_lib/http.js";
 
 const EmailInput = z.union([
   z.object({

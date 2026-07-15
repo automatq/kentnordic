@@ -1,5 +1,5 @@
-import { requireProfile } from "../_lib/admin-auth";
-import { getAnalytics } from "../_lib/admin-crm";
+import { requireProfile } from "../_lib/admin-auth.js";
+import { getAnalytics } from "../_lib/admin-crm.js";
 import {
   apiError,
   json,
@@ -7,7 +7,7 @@ import {
   requestUrl,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

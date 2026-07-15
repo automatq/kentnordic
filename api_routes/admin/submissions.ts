@@ -1,8 +1,8 @@
-import { requireProfile } from "../_lib/admin-auth";
+import { requireProfile } from "../_lib/admin-auth.js";
 import {
   legacyStorageDriver,
   listLegacySubmissions,
-} from "../_lib/legacy-storage";
+} from "../_lib/legacy-storage.js";
 import {
   apiError,
   json,
@@ -10,7 +10,7 @@ import {
   requestUrl,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 // Kept read-only during the 30-day migration window as an emergency audit view.
 export default async function handler(

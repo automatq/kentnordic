@@ -3,11 +3,11 @@ import crypto from "node:crypto";
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { z } from "zod";
 
-import { requireCsrf, requireProfile } from "../_lib/admin-auth";
+import { requireCsrf, requireProfile } from "../_lib/admin-auth.js";
 import {
   registerAndProcessUpload,
   type UploadTokenPayload,
-} from "../_lib/admin-media";
+} from "../_lib/admin-media.js";
 import {
   apiError,
   json,
@@ -15,7 +15,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 const ClientPayload = z.object({
   alt: z.string().trim().min(1).max(500),

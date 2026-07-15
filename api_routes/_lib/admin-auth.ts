@@ -5,8 +5,12 @@ import type {
   AdminProfile,
   AdminSession,
   ProfileRole,
-} from "../../shared/admin-contracts";
-import { databaseDriver, isDatabaseConfigured, withDatabase } from "./database";
+} from "../../shared/admin-contracts.js";
+import {
+  databaseDriver,
+  isDatabaseConfigured,
+  withDatabase,
+} from "./database.js";
 import {
   HttpError,
   getClientIp,
@@ -15,7 +19,7 @@ import {
   serializeCookie,
   type ApiRequest,
   type ApiResponse,
-} from "./http";
+} from "./http.js";
 
 const GATEWAY_COOKIE = "idc_admin_gateway";
 const PROFILE_COOKIE = "idc_admin_profile";
@@ -446,7 +450,7 @@ export async function updateProfile(
 }
 
 export async function audit(
-  database: import("./database").DatabaseSession,
+  database: import("./database.js").DatabaseSession,
   profileId: string | null,
   action: string,
   entityType: string,

@@ -1,8 +1,8 @@
 import { ServerClient } from "postmark";
 
-import { businessMinutesBetween, workspaceSchedule } from "./business-time";
-import { withDatabase } from "./database";
-import { emailConfiguration } from "./admin-email";
+import { businessMinutesBetween, workspaceSchedule } from "./business-time.js";
+import { withDatabase } from "./database.js";
+import { emailConfiguration } from "./admin-email.js";
 
 export async function runNotificationJobs() {
   const created = await withDatabase(

@@ -1,1 +1,1 @@
-export { default } from "./form-submissions";
+export { default } from "./form-submissions.js";

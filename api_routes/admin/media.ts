@@ -1,5 +1,5 @@
-import { requireProfile } from "../_lib/admin-auth";
-import { listMedia } from "../_lib/admin-media";
+import { requireProfile } from "../_lib/admin-auth.js";
+import { listMedia } from "../_lib/admin-media.js";
 import {
   apiError,
   json,
@@ -7,7 +7,7 @@ import {
   requestUrl,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

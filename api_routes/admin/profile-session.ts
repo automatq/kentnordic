@@ -1,5 +1,9 @@
-import { ProfileUnlockSchema } from "../../shared/admin-contracts";
-import { lockProfile, requireGateway, unlockProfile } from "../_lib/admin-auth";
+import { ProfileUnlockSchema } from "../../shared/admin-contracts.js";
+import {
+  lockProfile,
+  requireGateway,
+  unlockProfile,
+} from "../_lib/admin-auth.js";
 import {
   apiError,
   json,
@@ -7,7 +11,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

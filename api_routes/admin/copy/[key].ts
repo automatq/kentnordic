@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { requireCsrf, requireProfile } from "../../_lib/admin-auth";
-import { resetCopyDraft, saveCopyDraft } from "../../_lib/admin-content";
+import { requireCsrf, requireProfile } from "../../_lib/admin-auth.js";
+import { resetCopyDraft, saveCopyDraft } from "../../_lib/admin-content.js";
 import {
   apiError,
   json,
@@ -9,7 +9,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../../_lib/http";
+} from "../../_lib/http.js";
 
 const CopyInput = z.object({ value: z.string().max(30_000) });
 

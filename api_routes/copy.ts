@@ -1,10 +1,10 @@
-import { readLegacyCopyOverrides } from "./_lib/legacy-storage";
+import { readLegacyCopyOverrides } from "./_lib/legacy-storage.js";
 import {
   apiError,
   methodNotAllowed,
   type ApiRequest,
   type ApiResponse,
-} from "./_lib/http";
+} from "./_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

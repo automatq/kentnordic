@@ -1,12 +1,12 @@
-import { requireCsrf, requireProfile } from "../../_lib/admin-auth";
-import { confirmContentRelease } from "../../_lib/admin-content";
+import { requireCsrf, requireProfile } from "../../_lib/admin-auth.js";
+import { confirmContentRelease } from "../../_lib/admin-content.js";
 import {
   apiError,
   json,
   methodNotAllowed,
   type ApiRequest,
   type ApiResponse,
-} from "../../_lib/http";
+} from "../../_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

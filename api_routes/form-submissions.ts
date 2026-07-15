@@ -1,11 +1,14 @@
 import crypto from "node:crypto";
 
-import { InquiryInputSchema } from "../shared/admin-contracts";
-import { checkIntakeRateLimit, createLeadFromInquiry } from "./_lib/admin-crm";
+import { InquiryInputSchema } from "../shared/admin-contracts.js";
+import {
+  checkIntakeRateLimit,
+  createLeadFromInquiry,
+} from "./_lib/admin-crm.js";
 import {
   saveLegacySubmission,
   type LegacySubmission,
-} from "./_lib/legacy-storage";
+} from "./_lib/legacy-storage.js";
 import {
   HttpError,
   apiError,
@@ -17,7 +20,7 @@ import {
   wantsHtml,
   type ApiRequest,
   type ApiResponse,
-} from "./_lib/http";
+} from "./_lib/http.js";
 
 export default async function handler(
   request: ApiRequest,

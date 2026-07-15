@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { requireCsrf, requireProfile } from "../../_lib/admin-auth";
-import { updateTask } from "../../_lib/admin-crm";
+import { requireCsrf, requireProfile } from "../../_lib/admin-auth.js";
+import { updateTask } from "../../_lib/admin-crm.js";
 import {
   apiError,
   json,
@@ -9,7 +9,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../../_lib/http";
+} from "../../_lib/http.js";
 
 const TaskPatch = z.object({
   status: z.enum(["open", "completed", "cancelled"]).optional(),

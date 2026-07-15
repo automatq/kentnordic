@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-import { requireCsrf, requireProfile } from "../_lib/admin-auth";
-import { listPipelineStages } from "../_lib/admin-crm";
-import { savePipeline } from "../_lib/admin-settings";
+import { requireCsrf, requireProfile } from "../_lib/admin-auth.js";
+import { listPipelineStages } from "../_lib/admin-crm.js";
+import { savePipeline } from "../_lib/admin-settings.js";
 import {
   apiError,
   json,
@@ -10,7 +10,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../_lib/http";
+} from "../_lib/http.js";
 
 const PipelineInput = z.object({
   stages: z

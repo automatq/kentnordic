@@ -3,6 +3,7 @@
     "src",
     "shared",
     "api/**/*.ts",
+    "api_routes/**/*.ts",
     "scripts/**/*.ts",
     "drizzle.config.ts",
     "vite.config.ts"

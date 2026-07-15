@@ -1,10 +1,10 @@
 import crypto from "node:crypto";
 
-import type { AdminProfile, SavedView } from "../../shared/admin-contracts";
-import { audit } from "./admin-auth";
-import { ensureAdminSeeded } from "./admin-crm";
-import { withDatabase } from "./database";
-import { HttpError } from "./http";
+import type { AdminProfile, SavedView } from "../../shared/admin-contracts.js";
+import { audit } from "./admin-auth.js";
+import { ensureAdminSeeded } from "./admin-crm.js";
+import { withDatabase } from "./database.js";
+import { HttpError } from "./http.js";
 
 export async function getAdminSettings(profileId: string) {
   await ensureAdminSeeded();

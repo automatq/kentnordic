@@ -13,16 +13,16 @@ import {
   type LeadEvent,
   type LeadPriority,
   type Task,
-} from "../../shared/admin-contracts";
-import { audit } from "./admin-auth";
+} from "../../shared/admin-contracts.js";
+import { audit } from "./admin-auth.js";
 import {
   businessMinutesBetween,
   nextBusinessDay as scheduledNextBusinessDay,
   workspaceSchedule,
   type WorkspaceSchedule,
-} from "./business-time";
-import { withDatabase, type DatabaseSession } from "./database";
-import { HttpError } from "./http";
+} from "./business-time.js";
+import { withDatabase, type DatabaseSession } from "./database.js";
+import { HttpError } from "./http.js";
 
 interface LeadRow extends Record<string, unknown> {
   id: string;

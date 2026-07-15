@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { requireCsrf, requireProfile } from "../../_lib/admin-auth";
-import { trashMedia, updateMedia } from "../../_lib/admin-media";
+import { requireCsrf, requireProfile } from "../../_lib/admin-auth.js";
+import { trashMedia, updateMedia } from "../../_lib/admin-media.js";
 import {
   apiError,
   json,
@@ -9,7 +9,7 @@ import {
   readRequestBody,
   type ApiRequest,
   type ApiResponse,
-} from "../../_lib/http";
+} from "../../_lib/http.js";
 
 const MediaPatch = z.object({
   alt: z.string().max(500).optional(),
