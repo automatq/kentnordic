@@ -1,13 +1,38 @@
-import { defineConfig } from 'vite';
+import fs from 'node:fs';
+import path from 'node:path';
+
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { imagetools } from 'vite-imagetools';
 
+const generatedContent = path.resolve(process.cwd(), '.context/generated-content-release.ts');
+const emptyContent = path.resolve(process.cwd(), 'src/content/empty-release.ts');
+
+function contentVersionAsset(): Plugin {
+  return {
+    name: 'idcibidci-content-version',
+    generateBundle() {
+      const metadata = path.resolve(process.cwd(), '.context/content-version.json');
+      this.emitFile({
+        type: 'asset',
+        fileName: 'content-version.json',
+        source: fs.existsSync(metadata)
+          ? fs.readFileSync(metadata, 'utf8')
+          : JSON.stringify({ releaseId: null, releaseNumber: null }),
+      });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), tailwindcss(), imagetools()],
+  plugins: [react(), tailwindcss(), imagetools(), contentVersionAsset()],
   resolve: {
     alias: {
       '@': '/src',
+      '@admin-content-release': fs.existsSync(generatedContent)
+        ? generatedContent
+        : emptyContent,
     },
   },
   ssr: {

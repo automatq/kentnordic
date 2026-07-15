@@ -7,6 +7,13 @@ import {
   useRef,
   useState,
 } from "react";
+import { upload } from "@vercel/blob/client";
+import {
+  clearAdminContentPreview,
+  getPublishedCopyOverrides,
+  hasPublishedContentRelease,
+  setAdminContentPreview,
+} from "@/lib/content";
 
 interface CopyToast {
   message: string;
@@ -21,6 +28,9 @@ interface CopyContextValue {
   resetPhoto: (photoKey: string) => Promise<void>;
   isAdmin: boolean;
   editMode: boolean;
+  previewMode: boolean;
+  previewEntryId: string | null;
+  previewVersion: number;
   toggleEditMode: () => void;
   toast: CopyToast | null;
 }
@@ -28,37 +38,93 @@ interface CopyContextValue {
 const CopyContext = createContext<CopyContextValue | null>(null);
 
 export function CopyProvider({ children }: { children: React.ReactNode }) {
-  const [overrides, setOverrides] = useState<Record<string, string>>({});
+  const [overrides, setOverrides] = useState<Record<string, string>>(
+    getPublishedCopyOverrides,
+  );
   const [isAdmin, setIsAdmin] = useState(false);
+  const [csrfToken, setCsrfToken] = useState("");
   const [editMode, setEditMode] = useState(false);
+  const [previewMode, setPreviewMode] = useState(false);
+  const [previewEntryId, setPreviewEntryId] = useState<string | null>(null);
+  const [previewVersion, setPreviewVersion] = useState(0);
   const [toast, setToast] = useState<CopyToast | null>(null);
   const toastTimer = useRef<number | null>(null);
 
   const loadOverrides = useCallback(async () => {
+    if (hasPublishedContentRelease()) {
+      setOverrides(getPublishedCopyOverrides());
+      return;
+    }
     const map = await fetch("/api/copy")
       .then((res) => (res.ok ? res.json() : {}))
       .catch(() => ({}));
-    setOverrides(map);
+    setOverrides({ ...getPublishedCopyOverrides(), ...map });
+  }, []);
+
+  useEffect(() => {
+    const parameters = new URLSearchParams(window.location.search);
+    const entryId = parameters.get("entry");
+    if (parameters.get("preview") !== "admin" || !entryId) return;
+    let cancelled = false;
+
+    fetch(`/api/admin/content/${encodeURIComponent(entryId)}`, {
+      credentials: "same-origin",
+      headers: { Accept: "application/json" },
+    })
+      .then(async (response) => {
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || "Unable to load the draft preview.");
+        return data;
+      })
+      .then((result) => {
+        if (cancelled) return;
+        const entry = result?.detail?.entry;
+        if (!entry || typeof entry.key !== "string" || !entry.draft || typeof entry.draft !== "object") {
+          throw new Error("The draft preview response is incomplete.");
+        }
+        setAdminContentPreview(entry.key, entry.draft as Record<string, unknown>);
+        setOverrides(getPublishedCopyOverrides());
+        setPreviewEntryId(entry.id);
+        setPreviewMode(true);
+        setPreviewVersion((version) => version + 1);
+      })
+      .catch((error) => {
+        if (!cancelled) setToast({ message: error instanceof Error ? error.message : "Unable to load draft preview.", kind: "err" });
+      });
+
+    return () => {
+      cancelled = true;
+      clearAdminContentPreview();
+    };
   }, []);
 
   useEffect(() => {
     let cancelled = false;
 
-    fetch("/api/copy")
-      .then((res) => (res.ok ? res.json() : {}))
-      .then((map) => {
-        if (!cancelled) setOverrides(map);
-      })
-      .catch(() => {
-        // Best-effort; defaults still render.
-      });
+    if (!hasPublishedContentRelease()) {
+      fetch("/api/copy")
+        .then((res) => (res.ok ? res.json() : {}))
+        .then((map) => {
+          if (!cancelled)
+            setOverrides({ ...getPublishedCopyOverrides(), ...map });
+        })
+        .catch(() => {
+          // Best-effort; repository defaults still render.
+        });
+    }
 
     fetch("/api/admin/session", { credentials: "same-origin" })
       .then((res) => (res.ok ? res.json() : { authenticated: false }))
       .then((session) => {
         if (cancelled) return;
-        const authed = Boolean(session?.authenticated);
+        const roles = Array.isArray(session?.profile?.roles)
+          ? session.profile.roles
+          : [];
+        const authed =
+          Boolean(session?.authenticated) &&
+          (roles.includes("editor") || roles.includes("owner"));
         setIsAdmin(authed);
+        setCsrfToken(typeof session?.csrfToken === "string" ? session.csrfToken : "");
         if (!authed) setEditMode(false);
       })
       .catch(() => {
@@ -99,6 +165,7 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
+            "X-Admin-CSRF": csrfToken,
           },
           body: JSON.stringify({ value }),
         });
@@ -117,7 +184,7 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
         await loadOverrides();
       }
     },
-    [isAdmin, loadOverrides, showToast],
+    [csrfToken, isAdmin, loadOverrides, showToast],
   );
 
   const reset = useCallback(
@@ -132,7 +199,10 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
         const res = await fetch(`/api/admin/copy/${encodeURIComponent(key)}`, {
           method: "DELETE",
           credentials: "same-origin",
-          headers: { Accept: "application/json" },
+          headers: {
+            Accept: "application/json",
+            "X-Admin-CSRF": csrfToken,
+          },
         });
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
@@ -148,35 +218,44 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
         );
       }
     },
-    [isAdmin, showToast],
+    [csrfToken, isAdmin, showToast],
   );
 
   const savePhoto = useCallback(
     async (photoKey: string, file: File) => {
       if (!isAdmin) return;
       try {
-        const res = await fetch(
-          `/api/admin/photos/${encodeURIComponent(photoKey)}`,
+        const blob = await upload(
+          `media/originals/${safeFilename(file.name)}`,
+          file,
           {
-            method: "POST",
+            access: "public",
+            handleUploadUrl: "/api/admin/media-upload",
+            clientPayload: JSON.stringify({
+              alt: humanizePhotoKey(photoKey),
+              filename: file.name,
+            }),
+            headers: { "X-Admin-CSRF": csrfToken },
+          },
+        );
+        const overrideKey = `photo.${photoKey}`;
+        const response = await fetch(
+          `/api/admin/copy/${encodeURIComponent(overrideKey)}`,
+          {
+            method: "PUT",
             credentials: "same-origin",
             headers: {
               Accept: "application/json",
-              "Content-Type": file.type || "application/octet-stream",
-              "X-Upload-Filename": file.name,
+              "Content-Type": "application/json",
+              "X-Admin-CSRF": csrfToken,
             },
-            body: file,
+            body: JSON.stringify({ value: blob.url }),
           },
         );
-
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) {
-          throw new Error(data.error || `HTTP ${res.status}`);
-        }
-
-        const overrideKey = `photo.${photoKey}`;
-        setOverrides((current) => ({ ...current, [overrideKey]: data.url }));
-        showToast("Saved");
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+        setOverrides((current) => ({ ...current, [overrideKey]: blob.url }));
+        showToast("Image saved as a draft");
       } catch (error) {
         showToast(
           `Save failed: ${
@@ -186,7 +265,7 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
         );
       }
     },
-    [isAdmin, showToast],
+    [csrfToken, isAdmin, showToast],
   );
 
   const resetPhoto = useCallback(
@@ -202,18 +281,21 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
 
       try {
         const res = await fetch(
-          `/api/admin/photos/${encodeURIComponent(photoKey)}`,
+          `/api/admin/copy/${encodeURIComponent(overrideKey)}`,
           {
             method: "DELETE",
             credentials: "same-origin",
-            headers: { Accept: "application/json" },
+            headers: {
+              Accept: "application/json",
+              "X-Admin-CSRF": csrfToken,
+            },
           },
         );
         const data = await res.json().catch(() => ({}));
         if (!res.ok) {
           throw new Error(data.error || `HTTP ${res.status}`);
         }
-        showToast("Reset to default");
+        showToast("Image draft reset");
       } catch (error) {
         if (typeof previous === "string") {
           setOverrides((current) => ({ ...current, [overrideKey]: previous }));
@@ -226,7 +308,7 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
         );
       }
     },
-    [isAdmin, overrides, showToast],
+    [csrfToken, isAdmin, overrides, showToast],
   );
 
   const value = useMemo<CopyContextValue>(
@@ -238,10 +320,13 @@ export function CopyProvider({ children }: { children: React.ReactNode }) {
       resetPhoto,
       isAdmin,
       editMode,
+      previewMode,
+      previewEntryId,
+      previewVersion,
       toggleEditMode: () => setEditMode((current) => !current),
       toast,
     }),
-    [editMode, get, isAdmin, reset, resetPhoto, save, savePhoto, toast],
+    [editMode, get, isAdmin, previewEntryId, previewMode, previewVersion, reset, resetPhoto, save, savePhoto, toast],
   );
 
   return <CopyContext.Provider value={value}>{children}</CopyContext.Provider>;
@@ -253,4 +338,12 @@ export function useCopyContext() {
     throw new Error("useCopyContext must be used within CopyProvider.");
   }
   return context;
+}
+
+function safeFilename(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9._-]+/g, "-").replace(/^-+|-+$/g, "") || "image";
+}
+
+function humanizePhotoKey(value: string) {
+  return value.replace(/[._-]+/g, " ").replace(/\b\w/g, (character) => character.toUpperCase());
 }

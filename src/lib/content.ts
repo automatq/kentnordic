@@ -1,5 +1,6 @@
 import YAML from 'yaml';
 import { z } from 'zod';
+import contentRelease from '@admin-content-release';
 
 import destinationsJson from '@/content/destinations/destinations.json';
 import faqJson from '@/content/faq/faq.json';
@@ -229,66 +230,231 @@ function parseMarkdown<S extends z.ZodTypeAny>(path: string, raw: string, schema
   };
 }
 
-const tours: Tour[] = Object.entries(tourModules)
+const repositoryTours: Tour[] = Object.entries(tourModules)
   .map(([path, raw]) => parseMarkdown(path, raw, tourSchema))
   .sort((a, b) => a.data.order - b.data.order);
 
-const regions: Region[] = Object.entries(regionModules)
+const repositoryRegions: Region[] = Object.entries(regionModules)
   .map(([path, data]) => ({
     id: idFromPath(path),
     data: regionSchema.parse(data),
   }))
   .sort((a, b) => a.data.order - b.data.order);
 
-const services: Service[] = Object.entries(serviceModules)
+const repositoryServices: Service[] = Object.entries(serviceModules)
   .map(([path, raw]) => parseMarkdown(path, raw, serviceSchema))
   .sort((a, b) => a.data.order - b.data.order);
 
-const legalPages: LegalPage[] = Object.entries(legalModules)
+const repositoryLegalPages: LegalPage[] = Object.entries(legalModules)
   .map(([path, raw]) => parseMarkdown(path, raw, legalPageSchema))
   .sort((a, b) => a.data.order - b.data.order);
 
-const destinations = z.array(destinationSchema).parse(destinationsJson);
-const testimonials = z.array(testimonialSchema).parse(testimonialsJson).sort((a, b) => a.order - b.order);
-const faqs = z.array(faqSchema).parse(faqJson).sort((a, b) => a.order - b.order);
-const offices = z.array(officeSchema).parse(officesJson).sort((a, b) => a.order - b.order);
+const tours = mergeMarkdownCollection(repositoryTours, 'tour', tourSchema).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const regions = mergeDataCollection(repositoryRegions, 'region', regionSchema).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const services = mergeMarkdownCollection(repositoryServices, 'service', serviceSchema).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const legalPages = mergeMarkdownCollection(repositoryLegalPages, 'legal', legalPageSchema).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const destinations = mergeFlatCollection(
+  z.array(destinationSchema).parse(destinationsJson),
+  'destination',
+  destinationSchema,
+);
+const testimonials = mergeFlatCollection(
+  z.array(testimonialSchema).parse(testimonialsJson),
+  'testimonial',
+  testimonialSchema,
+).sort((a, b) => a.order - b.order);
+const faqs = mergeFlatCollection(
+  z.array(faqSchema).parse(faqJson),
+  'faq',
+  faqSchema,
+).sort((a, b) => a.order - b.order);
+const offices = mergeFlatCollection(
+  z.array(officeSchema).parse(officesJson),
+  'office',
+  officeSchema,
+).sort((a, b) => a.order - b.order);
+
+let adminPreviewEntry: { key: string; data: Record<string, unknown> } | null = null;
+
+export function setAdminContentPreview(key: string, data: Record<string, unknown>) {
+  adminPreviewEntry = { key, data };
+}
+
+export function clearAdminContentPreview() {
+  adminPreviewEntry = null;
+}
+
+function releaseEntries(prefix: string) {
+  return Object.entries(contentRelease.entries).filter(([key]) =>
+    key.startsWith(`${prefix}:`),
+  );
+}
+
+function mergeMarkdownCollection<
+  T extends { id: string; data: z.output<S>; body: string },
+  S extends z.ZodTypeAny,
+>(repository: T[], prefix: string, schema: S): T[] {
+  const merged = new Map(repository.map((entry) => [entry.id, entry]));
+  for (const [key, release] of releaseEntries(prefix)) {
+    const id = key.slice(prefix.length + 1);
+    const raw = release.data as { data?: unknown; body?: unknown };
+    try {
+      merged.set(id, {
+        id,
+        data: schema.parse(raw.data),
+        body: typeof raw.body === 'string' ? raw.body : '',
+      } as T);
+    } catch (error) {
+      if (import.meta.env.DEV) console.warn(`Ignoring invalid published ${key}.`, error);
+    }
+  }
+  return [...merged.values()];
+}
+
+function mergeDataCollection<
+  T extends { id: string; data: z.output<S> },
+  S extends z.ZodTypeAny,
+>(repository: T[], prefix: string, schema: S): T[] {
+  const merged = new Map(repository.map((entry) => [entry.id, entry]));
+  for (const [key, release] of releaseEntries(prefix)) {
+    const id = key.slice(prefix.length + 1);
+    try {
+      merged.set(id, { id, data: schema.parse(release.data) } as T);
+    } catch (error) {
+      if (import.meta.env.DEV) console.warn(`Ignoring invalid published ${key}.`, error);
+    }
+  }
+  return [...merged.values()];
+}
+
+function mergeFlatCollection<T extends { id: string }, S extends z.ZodTypeAny>(
+  repository: T[],
+  prefix: string,
+  schema: S,
+): T[] {
+  const merged = new Map(repository.map((entry) => [entry.id, entry]));
+  for (const [key, release] of releaseEntries(prefix)) {
+    const id = key.slice(prefix.length + 1);
+    try {
+      merged.set(id, schema.parse(release.data) as T);
+    } catch (error) {
+      if (import.meta.env.DEV) console.warn(`Ignoring invalid published ${key}.`, error);
+    }
+  }
+  return [...merged.values()];
+}
+
+export function getPublishedCopyOverrides(): Record<string, string> {
+  const published = Object.fromEntries(
+    releaseEntries('copy').flatMap(([key, release]) => {
+      const value = release.data.value;
+      return typeof value === 'string' ? [[key.slice(5), value]] : [];
+    }),
+  );
+  if (adminPreviewEntry?.key.startsWith('copy:') && typeof adminPreviewEntry.data.value === 'string') {
+    published[adminPreviewEntry.key.slice(5)] = adminPreviewEntry.data.value;
+  }
+  return published;
+}
+
+export function hasPublishedContentRelease(): boolean {
+  return typeof contentRelease.releaseId === 'string' && contentRelease.releaseId.length > 0;
+}
 
 export function getTours(): Tour[] {
-  return tours;
+  return previewMarkdownCollection(tours, 'tour', tourSchema);
 }
 
 export function getTour(slug: string | undefined): Tour | undefined {
-  return slug ? tours.find((tour) => tour.id === slug) : undefined;
+  return slug ? getTours().find((tour) => tour.id === slug) : undefined;
 }
 
 export function getRegions(): Region[] {
-  return regions;
+  return previewDataCollection(regions, 'region', regionSchema);
 }
 
 export function getServices(): Service[] {
-  return services;
+  return previewMarkdownCollection(services, 'service', serviceSchema);
 }
 
 export function getLegalPages(): LegalPage[] {
-  return legalPages;
+  return previewMarkdownCollection(legalPages, 'legal', legalPageSchema);
 }
 
 export function getLegalPage(slug: string | undefined): LegalPage | undefined {
-  return slug ? legalPages.find((page) => page.id === slug) : undefined;
+  return slug ? getLegalPages().find((page) => page.id === slug) : undefined;
 }
 
 export function getDestinations(): Destination[] {
-  return destinations;
+  return previewFlatCollection(destinations, 'destination', destinationSchema);
 }
 
 export function getTestimonials(): Testimonial[] {
-  return testimonials;
+  return previewFlatCollection(testimonials, 'testimonial', testimonialSchema).sort((a, b) => a.order - b.order);
 }
 
 export function getFaq(): Faq[] {
-  return faqs;
+  return previewFlatCollection(faqs, 'faq', faqSchema).sort((a, b) => a.order - b.order);
 }
 
 export function getOffices(): Office[] {
-  return offices;
+  return previewFlatCollection(offices, 'office', officeSchema).sort((a, b) => a.order - b.order);
+}
+
+function previewMarkdownCollection<
+  T extends { id: string; data: z.output<S>; body: string },
+  S extends z.ZodTypeAny,
+>(collection: T[], prefix: string, schema: S): T[] {
+  if (!adminPreviewEntry?.key.startsWith(`${prefix}:`)) return collection;
+  const id = adminPreviewEntry.key.slice(prefix.length + 1);
+  const raw = adminPreviewEntry.data as { data?: unknown; body?: unknown };
+  try {
+    const preview = { id, data: schema.parse(raw.data), body: typeof raw.body === 'string' ? raw.body : '' } as T;
+    return replacePreviewEntry(collection, preview);
+  } catch (error) {
+    if (import.meta.env.DEV) console.warn(`Ignoring invalid draft preview ${adminPreviewEntry.key}.`, error);
+    return collection;
+  }
+}
+
+function previewDataCollection<
+  T extends { id: string; data: z.output<S> },
+  S extends z.ZodTypeAny,
+>(collection: T[], prefix: string, schema: S): T[] {
+  if (!adminPreviewEntry?.key.startsWith(`${prefix}:`)) return collection;
+  const id = adminPreviewEntry.key.slice(prefix.length + 1);
+  try {
+    return replacePreviewEntry(collection, { id, data: schema.parse(adminPreviewEntry.data) } as T);
+  } catch (error) {
+    if (import.meta.env.DEV) console.warn(`Ignoring invalid draft preview ${adminPreviewEntry.key}.`, error);
+    return collection;
+  }
+}
+
+function previewFlatCollection<T extends { id: string }, S extends z.ZodTypeAny>(
+  collection: T[],
+  prefix: string,
+  schema: S,
+): T[] {
+  if (!adminPreviewEntry?.key.startsWith(`${prefix}:`)) return collection;
+  const id = adminPreviewEntry.key.slice(prefix.length + 1);
+  try {
+    return replacePreviewEntry(collection, schema.parse({ ...adminPreviewEntry.data, id }) as T);
+  } catch (error) {
+    if (import.meta.env.DEV) console.warn(`Ignoring invalid draft preview ${adminPreviewEntry.key}.`, error);
+    return collection;
+  }
+}
+
+function replacePreviewEntry<T extends { id: string }>(collection: T[], preview: T) {
+  const found = collection.some((entry) => entry.id === preview.id);
+  return found ? collection.map((entry) => entry.id === preview.id ? preview : entry) : [...collection, preview];
 }

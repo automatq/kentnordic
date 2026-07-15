@@ -1,6 +1,6 @@
 export type SubmissionStatus = "new" | "contacted" | "archived";
 
-// Keep in sync with api/_lib/submissions.js SUBMISSION_STATUSES.
+// Legacy inbox compatibility statuses; the new CRM uses pipeline stages.
 export const SUBMISSION_STATUSES: SubmissionStatus[] = [
   "new",
   "contacted",

@@ -54,6 +54,23 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
     setHoverPin(null);
   }, []);
 
+  const tourIndex = Math.max(
+    0,
+    tours.findIndex((candidate) => candidate.id === tour.id),
+  );
+  const selectAdjacentTour = useCallback(
+    (offset: number) => {
+      if (tours.length < 2) return;
+      const currentIndex = Math.max(
+        0,
+        tours.findIndex((candidate) => candidate.id === tourId),
+      );
+      const nextIndex = (currentIndex + offset + tours.length) % tours.length;
+      selectTour(tours[nextIndex].id);
+    },
+    [selectTour, tourId, tours],
+  );
+
   const goTo = useCallback(
     (idx: number, viaAutoplay = false) => {
       setDayIdx(Math.max(0, Math.min(lastIdx, idx)));
@@ -154,21 +171,70 @@ export default function TourWalkthrough({ tours, initialTourId, className }: Tou
   return (
     <div className={cn('walk', isFullscreen && 'is-fullscreen', className)} ref={rootRef} onKeyDown={onKeyDown}>
       {tours.length > 1 && (
-        <div className="walk-tours" role="tablist" aria-label="Choose a tour to walk through">
-          {tours.map((t) => (
+        <>
+          <div className="walk-tours" role="tablist" aria-label="Choose a tour to walk through">
+            {tours.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                role="tab"
+                aria-selected={t.id === tour.id}
+                className={cn('walk-tour-chip', t.id === tour.id && 'is-active')}
+                onClick={() => selectTour(t.id)}
+              >
+                <span className="walk-tour-code tnum">{t.data.code}</span>
+                {t.data.name}
+              </button>
+            ))}
+          </div>
+          <div
+            className="walk-tour-slider"
+            role="group"
+            aria-label="Choose a tour to walk through"
+            onKeyDown={(event) => {
+              event.stopPropagation();
+              if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                event.preventDefault();
+                selectAdjacentTour(event.key === 'ArrowLeft' ? -1 : 1);
+              }
+            }}
+          >
             <button
-              key={t.id}
               type="button"
-              role="tab"
-              aria-selected={t.id === tour.id}
-              className={cn('walk-tour-chip', t.id === tour.id && 'is-active')}
-              onClick={() => selectTour(t.id)}
+              className="walk-tour-nav"
+              aria-label={`Previous tour: ${tours[(tourIndex - 1 + tours.length) % tours.length].data.name}`}
+              onClick={() => selectAdjacentTour(-1)}
             >
-              <span className="walk-tour-code tnum">{t.data.code}</span>
-              {t.data.name}
+              <Icon name="arrow" size={15} className="rotate-180" />
             </button>
-          ))}
-        </div>
+            <div
+              className="walk-tour-current"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              <span className="walk-tour-current-code tnum">
+                <span className="walk-tour-current-dot" aria-hidden="true" />
+                {tour.data.code}
+              </span>
+              <span className="walk-tour-current-name">{tour.data.name}</span>
+              <span
+                className="walk-tour-count tnum"
+                aria-label={`Tour ${tourIndex + 1} of ${tours.length}`}
+              >
+                {tourIndex + 1}/{tours.length}
+              </span>
+            </div>
+            <button
+              type="button"
+              className="walk-tour-nav"
+              aria-label={`Next tour: ${tours[(tourIndex + 1) % tours.length].data.name}`}
+              onClick={() => selectAdjacentTour(1)}
+            >
+              <Icon name="arrow" size={15} />
+            </button>
+          </div>
+        </>
       )}
 
       <div className="walk-grid">

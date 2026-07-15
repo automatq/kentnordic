@@ -17,6 +17,10 @@ export interface InquiryPayload {
   message: string;
   consent?: string;
   sourcePage?: string;
+  consentVersion?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
   /** Honeypot — must stay empty. */
   botField?: string;
 }
@@ -36,13 +40,27 @@ export async function submitInquiry(
   if (payload.botField) return { ok: true };
 
   try {
+    const query = new URLSearchParams(
+      typeof window === "undefined" ? "" : window.location.search,
+    );
+    const idempotencyKey =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     const res = await fetch(site.form.endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        "Idempotency-Key": idempotencyKey,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        ...payload,
+        consentVersion: payload.consentVersion || "2026-07",
+        utmSource: payload.utmSource || query.get("utm_source") || "",
+        utmMedium: payload.utmMedium || query.get("utm_medium") || "",
+        utmCampaign: payload.utmCampaign || query.get("utm_campaign") || "",
+      }),
     });
     const data = await res.json().catch(() => ({}) as Record<string, unknown>);
     if (res.ok && data.ok !== false) return { ok: true };
