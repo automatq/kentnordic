@@ -174,6 +174,10 @@ function matchRoute(path: string): RouteMatch | null {
 
 function routePath(request: ApiRequest) {
   const url = new URL(request.url || "/", "http://localhost");
+  const rewrittenPath = url.searchParams.get("__path");
+  if (rewrittenPath) {
+    return rewrittenPath.replace(/^\/+|\/+$/g, "").replace(/\/{2,}/g, "/");
+  }
   return url.pathname
     .replace(/^\/api\/?/, "")
     .replace(/^\/+|\/+$/g, "")
