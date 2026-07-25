@@ -42,9 +42,9 @@ export const site = {
   ] as NavItem[],
 
   /** Where inquiry submissions are delivered. Set PUBLIC_INQUIRY_EMAIL in .env. */
-  inquiryEmail: import.meta.env.PUBLIC_INQUIRY_EMAIL || "sales@idcibidci.is",
-  phone: "+354 555 0100",
-  phoneKL: "+60 3-2856 0100",
+  inquiryEmail: import.meta.env.PUBLIC_INQUIRY_EMAIL || "info@idcibidci.com",
+  phone: "+354 833 2045",
+  phoneKL: "+6018 667 2826",
 
   company: {
     registrationNumber:
@@ -88,11 +88,11 @@ export const site = {
   /** Trust-marquee chrome on the homepage - presentation copy, not editorial content. */
   trustBullets: [
     { icon: "shield", label: "Iceland Destination Management" },
-    { icon: "map-pin", label: "Reykjavik-Based Operations" },
+    { icon: "map-pin", label: "Locally Based in Reykjavik" },
     { icon: "compass", label: "Asia Pacific Sales Desk" },
-    { icon: "tag", label: "Net Rates For The Trade" },
-    { icon: "calendar", label: "Six Ready-To-Sell Tours" },
-    { icon: "route", label: "End-To-End Ground Handling" },
+    { icon: "tag", label: "Competitive Rates for Mutual Benefit" },
+    { icon: "calendar", label: "Popular Itineraries Ready to Sell" },
+    { icon: "route", label: "One-Stop Iceland Ground Handling" },
   ],
 
   seo: {

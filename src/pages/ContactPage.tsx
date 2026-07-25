@@ -58,9 +58,9 @@ export default function ContactPage() {
         />
         <div className="chero-scrim" />
         <Container className="chero-inner">
-          <EditableText copyKey="contact.hero.eyebrow" defaultValue="Contact" as="p" className="u-eyebrow text-white/80" />
-          <EditableText copyKey="contact.hero.title" defaultValue="Let's build an itinerary" as="h1" className="chero-title" />
-          <EditableText copyKey="contact.hero.lead" defaultValue="Tell us about your group and we'll come back with a tailored, net-rate quote - usually within one business day." as="p" multiline className="chero-lead" />
+          <EditableText copyKey="contact.hero.eyebrow" defaultValue="Request a Quote" as="p" className="u-eyebrow text-white/80" />
+          <EditableText copyKey="contact.hero.title" defaultValue="Tell us your brief or share your itinerary" as="h1" className="chero-title" />
+          <EditableText copyKey="contact.hero.lead" defaultValue="Share your dates, headcount, budget, hotel category, travel style and preferred sights or activities. We will give you honest local advice, show the possibilities in Iceland and quote the best available rates." as="p" multiline className="chero-lead" />
         </Container>
       </section>
 

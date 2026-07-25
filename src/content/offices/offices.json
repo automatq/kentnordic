@@ -1,27 +1,25 @@
 [
   {
     "id": "reykjavik",
-    "name": "Reykjavik — Head Office",
+    "name": "Reykjavik — HQ",
     "isHQ": true,
     "role": "Operations & ground handling",
-    "addressLines": [],
+    "addressLines": ["Suðurhraun 10", "105 Reykjavik"],
     "city": "Reykjavik",
     "country": "Iceland",
-    "phone": "+354 555 0100",
-    "email": "reykjavik@idcibidci.is",
+    "phone": "+354 833 2045",
     "hours": "Mon–Fri, 09:00–17:00 GMT",
     "order": 1
   },
   {
     "id": "kuala-lumpur",
-    "name": "Kuala Lumpur — Sales Office",
+    "name": "Kuala Lumpur — Marketing",
     "isHQ": false,
-    "role": "Asia Pacific sales & partnerships",
-    "addressLines": [],
+    "role": "Asia Pacific marketing & partnerships",
+    "addressLines": ["8-6, Union Tower", "Jalan Desa Bakti", "58000 Kuala Lumpur"],
     "city": "Kuala Lumpur",
     "country": "Malaysia",
-    "phone": "+60 3-2856 0100",
-    "email": "asia@idcibidci.is",
+    "phone": "+6018 667 2826",
     "hours": "Mon–Fri, 09:00–18:00 MYT",
     "order": 2
   }

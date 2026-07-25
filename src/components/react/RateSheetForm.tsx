@@ -5,15 +5,40 @@ import { site } from "@/config/site";
 
 type Status = "idle" | "submitting" | "done" | "error";
 
+type CaptureKind = "rate-sheet" | "fare-list-updates";
+
+const captureContent = {
+  "rate-sheet": {
+    label: "Get our trade rate sheet",
+    requestedItem: "the rate sheet",
+    message: "Please send the trade rate sheet.",
+    success: "Thanks — our sales team will send the rate sheet to your inbox.",
+    agency: "Rate sheet request",
+  },
+  "fare-list-updates": {
+    label: "Subscribe for Fare List and Iceland Latest Update",
+    requestedItem: "the Fare List and Iceland updates",
+    message: "Please send the Fare List and Iceland latest updates.",
+    success: "Thanks — our sales team will add you to the Fare List and Iceland updates list.",
+    agency: "Fare List and updates request",
+  },
+} as const;
+
+interface RateSheetFormProps {
+  kind?: CaptureKind;
+}
+
 /**
  * Low-commitment capture for agents not ready to send a full brief: one
  * email field requesting the trade rate sheet. Reuses the inquiry provider —
  * the API requires the full field set, so the non-email fields are synthetic
  * and the admin inbox distinguishes these by message + #rate-sheet source.
  */
-export default function RateSheetForm() {
+export default function RateSheetForm({ kind = "rate-sheet" }: RateSheetFormProps) {
   const [status, setStatus] = useState<Status>("idle");
   const [email, setEmail] = useState("");
+  const content = captureContent[kind];
+  const inputId = `${kind}-email`;
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -24,12 +49,12 @@ export default function RateSheetForm() {
     const fd = new FormData(e.currentTarget);
     setStatus("submitting");
     const res = await submitInquiry({
-      agency: "Rate sheet request",
+      agency: content.agency,
       contact: email.split("@")[0],
       email,
-      message: "Please send the trade rate sheet.",
+      message: content.message,
       consent: "yes",
-      sourcePage: `${window.location.pathname}#rate-sheet`,
+      sourcePage: `${window.location.pathname}#${kind}`,
       botField: (fd.get("company_website") as string) ?? "",
     });
     setStatus(res.ok ? "done" : "error");
@@ -38,19 +63,19 @@ export default function RateSheetForm() {
   if (status === "done") {
     return (
       <p className="rate-sheet-done" role="status">
-        Thanks — our sales team will send the rate sheet to your inbox.
+        {content.success}
       </p>
     );
   }
 
   return (
     <form className="rate-sheet" onSubmit={onSubmit} noValidate>
-      <label htmlFor="rate-sheet-email" className="rate-sheet-label">
-        Get our trade rate sheet
+      <label htmlFor={inputId} className="rate-sheet-label">
+        {content.label}
       </label>
       <div className="rate-sheet-row">
         <input
-          id="rate-sheet-email"
+          id={inputId}
           type="email"
           autoComplete="email"
           placeholder="you@agency.com"
@@ -73,7 +98,7 @@ export default function RateSheetForm() {
         </p>
       )}
       <p className="rate-sheet-note">
-        By requesting the rate sheet you agree to be contacted by our sales
+        By requesting {content.requestedItem} you agree to be contacted by our sales
         team and accept our{" "}
         <Link to={site.legal.privacyHref} viewTransition>
           Privacy Policy

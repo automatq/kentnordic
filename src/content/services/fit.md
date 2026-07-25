@@ -1,5 +1,5 @@
 ---
-name: FIT — Independent Travel
+name: Private Tour (FIT)
 slug: fit
 order: 1
 icon: car
@@ -18,10 +18,6 @@ subServices:
       on call throughout. Freedom to explore, backed by local support.
 ---
 
-Our Free Independent Traveller service is for agencies whose clients want Iceland
-on their own terms. We handle the vehicle, the accommodation, the activities and
-the contingencies — you keep the relationship with your traveller.
-
-Every FIT programme is quoted to order. Share the dates, party size and interests
-and we will return a costed day-by-day plan, with optional add-ons such as ice
-caves, glacier walks and Northern Lights hunts priced separately.
+We help travel agents meet the growing demand for private and personalised tours.
+We handle every detail, from itinerary planning and bookings to on-the-ground
+support, delivering premium Iceland experiences for your private-tour clients.

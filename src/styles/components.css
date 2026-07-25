@@ -2302,6 +2302,9 @@ main {
 }
 
 /* Footer rate-sheet capture. */
+.rate-sheet + .rate-sheet {
+  margin-block-start: 1.5rem;
+}
 .rate-sheet-label {
   display: block;
   font-size: 0.82rem;
@@ -3056,7 +3059,7 @@ main {
 
 .footer-logo {
   display: block;
-  block-size: 4rem;
+  block-size: clamp(5rem, 8vw, 6.5rem);
   inline-size: auto;
 }
 
@@ -4269,6 +4272,13 @@ section.bg-ink {
   color: var(--color-charcoal-soft);
   max-inline-size: 34rem;
   margin-block-start: 1.5rem;
+}
+.home-hero-partner {
+  color: var(--color-charcoal-soft);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  max-inline-size: 36rem;
+  margin-block-start: 1rem;
 }
 .home-hero-actions {
   display: flex;

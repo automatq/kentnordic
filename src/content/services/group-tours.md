@@ -1,5 +1,5 @@
 ---
-name: Group Tours
+name: Group Tour
 slug: group-tours
 order: 2
 icon: group
@@ -21,5 +21,6 @@ Group travel is the heart of what we do. We run comfortable, dependable coach
 tours with experienced driver-guides, a vetted hotel network and a clear split
 between included sightseeing and optional add-on activities.
 
-Our published packages — see [Tour Packages](/tours) — are a starting point. Tell
-us your group size, budget and season and we will build the departure around them.
+We create tailor-made Iceland itineraries for groups of 10 to 200+ guests, featuring
+iconic sights, Icelandic culture, WOW moments and unique local experiences. With
+dedicated local support, we ensure a seamless travel experience for every client.

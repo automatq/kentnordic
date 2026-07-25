@@ -1,29 +1,56 @@
 [
   {
-    "id": "quote-speed",
-    "question": "How quickly can you quote?",
-    "heading": "Timeline",
-    "answer": "Share dates, group size, budget, hotel level and preferred route. We usually return a structured proposal quickly, then refine it around availability, seasonality and partner feedback.",
+    "id": "best-time-to-travel",
+    "question": "When is the best time to send a group to Iceland?",
+    "heading": "Seasonality",
+    "answer": "Every season has a different selling point: summer offers long days and easy Ring Road travel, winter brings Northern Lights and ice-cave experiences, while spring and autumn balance scenery, value and quieter roads. We will recommend the right route and pace for your dates.",
     "icon": "calendar",
     "photoKey": "tour-std02r7",
     "order": 1
   },
   {
-    "id": "package-inclusions",
-    "question": "What is included in a package?",
-    "heading": "Inclusions",
-    "answer": "Published itineraries can include coach, driver-guide, accommodation, key sightseeing and selected meals. We keep optional activities, upgrades and extensions separate so your agency can sell clearly.",
-    "icon": "tag",
+    "id": "booking-lead-time",
+    "question": "How far ahead should we request a quote and book?",
+    "heading": "Planning ahead",
+    "answer": "Send a brief as early as possible, especially for summer, festive periods and large incentives. We will check hotel, vehicle, guide and activity availability, then give you practical alternatives if a preferred date or property is already tight.",
+    "icon": "clock",
     "photoKey": "tour-std02s6",
     "order": 2
   },
   {
-    "id": "tailoring",
-    "question": "Can itineraries be adjusted?",
-    "heading": "Tailoring",
-    "answer": "Yes. We can adjust length, hotel tier, seasonality, meal plans, optional activities and route direction. Our team will flag where weather, daylight or driving time makes a request impractical.",
+    "id": "group-sizes",
+    "question": "What group sizes can you operate?",
+    "heading": "Groups of every scale",
+    "answer": "We build programmes for groups from 10 guests to 200+ travellers. Coach capacity, guide support, hotel allocations, dining and activities are matched to the group so the itinerary remains comfortable and operationally sound.",
+    "icon": "group",
+    "photoKey": "tour-std02s4",
+    "order": 3
+  },
+  {
+    "id": "custom-itineraries",
+    "question": "Can a ready-to-sell itinerary be customised?",
+    "heading": "Tailored locally",
+    "answer": "Yes. Use our published itineraries as a starting point, then adjust the route, number of nights, hotel category, meals, activities and travel style. We will advise where daylight, driving times or seasonal access make a request impractical.",
     "icon": "pen",
     "photoKey": "tour-std02r8",
-    "order": 3
+    "order": 4
+  },
+  {
+    "id": "quote-inclusions",
+    "question": "What is included in a ground-handling quote?",
+    "heading": "Clear trade scope",
+    "answer": "Our proposals clearly separate hotels, coach and driver-guide services, sightseeing, meals and optional add-ons. You receive practical net-rate information and a day-by-day scope your team can confidently present to clients.",
+    "icon": "tag",
+    "photoKey": "tour-std02s5",
+    "order": 5
+  },
+  {
+    "id": "weather-operations",
+    "question": "How do weather and daylight affect an Iceland itinerary?",
+    "heading": "Weather-aware operations",
+    "answer": "Iceland is at its best when plans are realistic. Our Reykjavik operations team designs routes around the season and monitors local conditions, helping protect the guest experience with sensible timing, alternatives and on-the-ground support.",
+    "icon": "route",
+    "photoKey": "tour-std02r8-a",
+    "order": 6
   }
 ]

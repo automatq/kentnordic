@@ -847,6 +847,7 @@ function MoreLeadFilters({
               <option value="">Any form</option>
               <option value="inquiry">Inquiry</option>
               <option value="rate-sheet">Rate sheet</option>
+              <option value="fare-list-updates">Fare List & updates</option>
             </select>
           </FormField>
           <FormField label="Country / market">
@@ -4834,6 +4835,7 @@ export function SettingsPage() {
                       <option value="">Choose a form</option>
                       <option value="inquiry">Inquiry</option>
                       <option value="rate-sheet">Rate sheet</option>
+                      <option value="fare-list-updates">Fare List & updates</option>
                     </select>
                   ) : (
                     <input

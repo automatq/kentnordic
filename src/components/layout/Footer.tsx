@@ -48,7 +48,7 @@ export default function Footer() {
           </Link>
           <EditableText
             copyKey="footer.description"
-            defaultValue={site.description}
+            defaultValue="Idcibidci ehf is a licensed travel agent by the Icelandic Tourist Board and a local Icelandic destination management company crafting amazing, reliable and memorable tours for international travel agents."
             as="p"
             multiline
             className="mt-4 text-sm leading-relaxed text-charcoal-soft"
@@ -62,6 +62,7 @@ export default function Footer() {
           </Button>
           <div className="mt-6">
             <RateSheetForm />
+            <RateSheetForm kind="fare-list-updates" />
           </div>
           {site.socials.length > 0 && (
             <div className="mt-6 flex gap-4">
@@ -113,7 +114,7 @@ export default function Footer() {
           />
           {tours.map((t) => (
             <Link key={t.id} to={`/tours/${t.id}`} viewTransition className="footer-link">
-              <span className="tnum">{t.data.code}</span> · {t.data.name}
+              {t.data.name}
             </Link>
           ))}
         </nav>
@@ -131,6 +132,15 @@ export default function Footer() {
               <p className="text-charcoal-soft">
                 {o.city}, {o.country}
               </p>
+              {o.addressLines.length > 0 && (
+                <address className="mt-1 not-italic text-charcoal-soft">
+                  {o.addressLines.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </address>
+              )}
               {o.phone && (
                 <a href={`tel:${o.phone.replace(/\s/g, '')}`} className="footer-link mt-1 inline-flex items-center gap-1.5">
                   <Icon name="phone" size={15} />
@@ -145,6 +155,17 @@ export default function Footer() {
               )}
             </div>
           ))}
+          <a href={`mailto:${site.inquiryEmail}`} className="footer-link">
+            {site.inquiryEmail}
+          </a>
+          <a
+            href="https://www.idcibidci.com"
+            className="footer-link"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            www.idcibidci.com
+          </a>
         </div>
       </div>
 

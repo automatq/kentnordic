@@ -129,7 +129,7 @@ export default function HomePage() {
           <div className="home-hero-copy">
             <EditableText
               copyKey="home.hero.eyebrow"
-              defaultValue="Iceland Destination Management"
+              defaultValue="Iceland Destination Management Company (DMC)"
               as="span"
               className="u-eyebrow"
             />
@@ -144,6 +144,13 @@ export default function HomePage() {
               as="p"
               multiline
               className="home-hero-lead"
+            />
+            <EditableText
+              copyKey="home.hero.partner"
+              defaultValue="Your local Icelandic partner. We craft memorable experiences, interesting itineraries and smooth-flowing tours for international travel agencies and MICE planners."
+              as="p"
+              multiline
+              className="home-hero-partner"
             />
             <div className="home-hero-actions">
               <Button href="/contact#inquiry" magnetic>
@@ -181,9 +188,9 @@ export default function HomePage() {
           eyebrow={
             <div className="deck-badges">
               <span className="deck-dot" />
-              <EditableText copyKey="home.deck.badge1" defaultValue="Not a Reseller" as="span" />
+              <EditableText copyKey="home.deck.badge1" defaultValue="Your Iceland Partner" as="span" />
               <span className="deck-dot" />
-              <EditableText copyKey="home.deck.badge2" defaultValue="Trade Only" as="span" />
+              <EditableText copyKey="home.deck.badge2" defaultValue="Our Services for You" as="span" />
             </div>
           }
           heading={
@@ -216,7 +223,7 @@ export default function HomePage() {
           </h2>
           <EditableText
             copyKey="home.destinations.lead"
-            defaultValue="Eight regions, six ready-to-sell itineraries and the local judgement to adapt each route around weather, season and group pace."
+            defaultValue="From the South Coast to the Round Island / Ring Road, our ready-to-sell itineraries span 4 to 11 nights. They are fully customisable, with activities adapted to the season, daylight and your clients’ preferred pace."
             as="p"
             multiline
             className="pgallery-lead"
@@ -228,15 +235,15 @@ export default function HomePage() {
         <Container>
           <div className="quote-section">
             <div>
-              <EditableText copyKey="home.quote.eyebrow" defaultValue="Quote Workflow" as="span" className="u-eyebrow" />
+              <EditableText copyKey="home.quote.eyebrow" defaultValue="Request a Quote" as="span" className="u-eyebrow" />
               <h2 className="quote-title">
-                <EditableText copyKey="home.quote.title1" defaultValue="Share the brief." as="span" />
-                <EditableText copyKey="home.quote.title2" defaultValue="Get a costed" as="span" />
-                <EditableText copyKey="home.quote.title3" defaultValue="day-by-day plan." as="span" className="u-flourish" />
+                <EditableText copyKey="home.quote.title1" defaultValue="Tell us your brief." as="span" />
+                <EditableText copyKey="home.quote.title2" defaultValue="Or share your" as="span" />
+                <EditableText copyKey="home.quote.title3" defaultValue="itinerary." as="span" className="u-flourish" />
               </h2>
               <EditableText
                 copyKey="home.quote.lead"
-                defaultValue="Tell us dates, pax, budget and travel style. We return a practical itinerary with hotels, coach, driver-guide, sightseeing and optional add-ons clearly separated."
+                defaultValue="Tell us your dates, headcount, budget, hotel category, travel style and preferred sights or activities. If you already have an itinerary, share it with us."
                 as="p"
                 multiline
                 className="quote-lead"
@@ -342,7 +349,7 @@ export default function HomePage() {
           <Reveal delay={100}>
             <EditableText
               copyKey="home.cta.lead"
-              defaultValue="Send your dates, pax and preferred route. We will come back with a clear, costed proposal your agency can sell with confidence."
+              defaultValue="Your trusted Iceland partner. From planning and pricing to bookings, operations and local support, we take care of everything in Iceland so you can focus on selling unforgettable Icelandic experiences."
               as="p"
               multiline
               className="home-cta-lead"

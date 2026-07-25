@@ -14,6 +14,7 @@ import {
   type LeadPriority,
   type Task,
 } from "../../shared/admin-contracts.js";
+import { formTypeFromSourcePage } from "../../shared/form-type.js";
 import { audit } from "./admin-auth.js";
 import {
   businessMinutesBetween,
@@ -1054,9 +1055,7 @@ export async function createLeadFromInquiry(options: {
         new Date(),
         workspaceRows[0]?.value,
       );
-      const formType = input.sourcePage.endsWith("#rate-sheet")
-        ? "rate-sheet"
-        : "inquiry";
+      const formType = formTypeFromSourcePage(input.sourcePage);
       const source = input.utmSource || "website";
 
       await database.query(
@@ -1270,9 +1269,7 @@ async function resolveAssignment(
       rule.field === "country"
         ? input.country
         : rule.field === "formType"
-          ? input.sourcePage.endsWith("#rate-sheet")
-            ? "rate-sheet"
-            : "inquiry"
+          ? formTypeFromSourcePage(input.sourcePage)
           : rule.field === "packageCode"
             ? input.packageCode
             : "";

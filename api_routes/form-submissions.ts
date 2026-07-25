@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 
 import { InquiryInputSchema } from "../shared/admin-contracts.js";
+import { formTypeFromSourcePage } from "../shared/form-type.js";
 import {
   checkIntakeRateLimit,
   createLeadFromInquiry,
@@ -68,9 +69,7 @@ export default async function handler(
 
     if (process.env.ADMIN_V2_ENABLED === "false") {
       const id = deterministicUuid(idempotencyKey);
-      const formType = parsed.data.sourcePage.endsWith("#rate-sheet")
-        ? "rate-sheet"
-        : "inquiry";
+      const formType = formTypeFromSourcePage(parsed.data.sourcePage);
       const packageLabel = parsed.data.packageCode || "General inquiry";
       const submission: LegacySubmission = {
         id,

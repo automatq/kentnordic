@@ -1,5 +1,5 @@
 ---
-name: MICE & Incentives
+name: Incentive Travel & MICE
 slug: mice
 order: 3
 icon: sparkles
@@ -17,9 +17,6 @@ subServices:
       coordinated by a single on-the-ground team.
 ---
 
-For corporate and incentive planners, Iceland is a destination that sells itself —
-and one where reliable ground handling is everything. We manage the moving parts
-so your delegates experience only the highlights.
-
-From airport arrivals to farewell dinners, our team plans, books and runs the
-programme end to end, with the flexibility to adapt as Icelandic weather demands.
+This is our forte. Incentive travel and MICE are our speciality. We deliver
+exceptional Iceland programmes with unique experiences, seamless logistics and
+flawless on-site execution to create unforgettable events.

@@ -153,7 +153,7 @@ async function readContentEntries(): Promise<SeedEntry[]> {
     data: {
       brandName: "Idcibidci",
       tagline: "Your ground partner in Iceland",
-      inquiryEmail: process.env.PUBLIC_INQUIRY_EMAIL || "sales@idcibidci.is",
+      inquiryEmail: process.env.PUBLIC_INQUIRY_EMAIL || "info@idcibidci.com",
       seo: {
         defaultTitle: "Idcibidci · Iceland Destination Management Company",
       },
